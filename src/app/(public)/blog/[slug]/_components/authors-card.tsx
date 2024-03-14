@@ -35,7 +35,7 @@ const AuthorsCard = ({
                         <div key={author.fullName} className="flex flex-col md:flex-row gap-3 md:gap-6">
                             {author.profilePicture && <Image src={
                                 // @ts-ignore
-                                `${PAYLOAD_BACKEND_URL}${author.profilePicture.url}`} alt={author.profilePicture.alt} width={58} height={58} className="rounded-full" 
+                                `${PAYLOAD_BACKEND_URL}${author.profilePicture.url}`} alt={author.profilePicture.alt} width={58} height={58} className="rounded-full w-[58px] h-[58px]" 
                             />}
                             <div>
                                 <p className="text-base leading-6 font-medium text-gray-700">{author.fullName}</p>
@@ -54,7 +54,7 @@ const AuthorsCard = ({
                 </div>
                 <div>
                     <p className="text-base leading-6 font-medium text-gray-700">Massive Online Marketing</p>
-                    <p className="text-sm leading-5 font-normal text-gray-500 ">Ik ben Julian en ik heb dit artikel getikt met mijn toetsenbord, artificial inteligentie en dit online geplaats</p>
+                    <p className="text-sm leading-5 font-normal text-gray-500 ">Streeft ernaar om de norm te stellen voor wat mogelijk is in de wereld van online marketing en om zowel onszelf als onze klanten naar nieuwe hoogten te tillen, met behulp van innovatieve oplossingen en hoogwaardige diensten.</p>
                 </div>
             </div>
         </div>
