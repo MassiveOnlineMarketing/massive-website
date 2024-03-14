@@ -1,0 +1,49 @@
+.legal {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.legal p{
+    font-size: 1.2rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.legal h2{
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.legal h3{
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.legal ul{
+    margin-bottom: 1.5rem;
+    list-style: disc;
+}
+.legal ol{
+    margin-bottom: 1.5rem;
+    list-style: decimal;
+}
+
+.legal li{
+    font-size: 1.2rem;
+    line-height: 1.5;
+    text-align: justify;
+    text-justify: inter-word;
+    margin-left: 1.5rem;
+}
+
+.gegevens p {
+    margin-bottom: 0;
+}
+.gegevens p:last-child {
+    margin-bottom: 1.5rem;
+}
