@@ -71,7 +71,7 @@ export default async function BlogPage({ params }: pageProps) {
             <NavbarWithTopbar />
             <ProgressBar />
             <main className={`pt-[70px] md:pt-[140px] pb-40`}>
-                <div className={`${container.maxWidthGutter}`}>
+                <div className={`${container.maxWidthGutter} relative z-10`}>
                     <section className={`py-12 flex text-center flex-col gap-6`}>
                         <GenerateBreadCrumb blogPost={blogData} />
                         <Heading level='h1' size='5xl' >{blogData.title}</Heading>
