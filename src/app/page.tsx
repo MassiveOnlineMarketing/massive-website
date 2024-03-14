@@ -74,7 +74,7 @@ const VerticalLines = () => {
   return (
     <div className="absolute -z-10 w-full h-full top-0 left-0">
       <div className="relative h-full w-full flex items-center justify-center">
-        <div className={`absolute h-full w-full border-l-[1px] border-r-[1px] border-gray-200  -z-10 max-w-[1300px]`}></div>
+        <div className={`absolute h-full w-full border-l-[1px] border-r-[1px] border-gray-200  -z-10 max-w-[1324px]`}></div>
         <div className="md:block absolute h-full w-[1px] bg-gray-200 left-1/2 top-0 -z-10 hidden"></div>
       </div>
     </div>

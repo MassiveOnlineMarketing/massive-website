@@ -110,7 +110,7 @@ export default async function page({ params, searchParams }: pageProps) {
             <div className='bg-primary-50'>
                 <main className='pb-[100px]'>
                     <div className={`${container.maxWidthGutter} pt-[60px] md:pt-[140px]`}>
-                        <div className='py-12 max-w-[750px]'>
+                        <div className='pt-12 md:pt-0 pb-5 max-w-[750px]'>
                             <Heading level='h1' size='5xl' >{category.contentTitle}</Heading>
                             <Paragraph size='lg' className='mt-6'>{category.contentDescription}</Paragraph>
                         </div>

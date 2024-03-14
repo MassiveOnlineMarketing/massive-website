@@ -59,6 +59,7 @@ interface CardProps {
     heading: string
     paragraph: string
     buttonLabel: string
+    buttonLink: string
   }
 }
 
@@ -105,7 +106,7 @@ const DesktopCard = ({ card }: CardProps) => {
           <Paragraph>{card.paragraph}</Paragraph>
         </Title>
 
-        <InternalAnchor href={DEFAULT_MULTISTEP_FORM_ROUTE} variant='glass' size='sm' className='mt-3 mx-3 pr-[10px] '> {card.buttonLabel} <ChevronRightIcon className='w-4 h-4' /></InternalAnchor>
+        <InternalAnchor href={card.buttonLink} variant='glass' size='sm' className='mt-3 mx-3 pr-[10px] '> {card.buttonLabel} <ChevronRightIcon className='w-4 h-4' /></InternalAnchor>
       </div>
     </div>
   )
@@ -125,7 +126,8 @@ const DIENSTEN = {
       subHeading: 'Zakelijke Website',
       heading: 'Website Ontwikkeling',
       paragraph: 'Converteren uw bezoekers niet? Wij creëren gebruikersvriendelijke webshops geoptimaliseerd voor conversie, die de verkoop stimuleren en klantloyaliteit opbouwen.',
-      buttonLabel: 'Neem Contact op',
+      buttonLabel: 'Ontdek meer',
+      buttonLink: '/zakelijke-website-laten-maken'
     },
     {
       image: '/home/diensten-card-image-background.png',
@@ -134,7 +136,8 @@ const DIENSTEN = {
       subHeading: 'Webshop',
       heading: 'eCommerce-oplossingen',
       paragraph: 'Verander bezoekers in kopers met onze geoptimaliseerde eCommerce-platforms. Wij creëren gebruikersvriendelijke webshops die de verkoop stimuleren en klantloyaliteit opbouwen.',
-      buttonLabel: 'Neem Contact op',
+      buttonLabel: 'Ontdek meer',
+      buttonLink: '/professionele-webshop-laten-maken'
     },
     {
       image: '/home/diensten-card-image-background.png',
@@ -143,7 +146,8 @@ const DIENSTEN = {
       subHeading: 'SEO',
       heading: 'Zoekmachineoptimalisatie',
       paragraph: 'Behaalt u elke keer maar niet de positie in google die u wilt? Verhoog uw online zichtbaarheid met onze strategische SEO-diensten. Waar wij uw website optimaliseren en u van een hogere positie geniet.',
-      buttonLabel: 'Neem Contact op',
+      buttonLabel: 'Ontdek meer',
+      buttonLink: '/search-engine-optimization'
     },
     {
       image: '/home/diensten-card-image-background.png',
@@ -153,6 +157,7 @@ const DIENSTEN = {
       heading: 'Zoekmachineadverteren (SEA)',
       paragraph: 'Bereik uw doelgroep effectief met onze gerichte advertentiestrategieën. Van Google Ads tot sociale media campagnes, wij helpen u om zichtbaar te zijn waar uw klanten zijn.',
       buttonLabel: 'Neem Contact op',
+      buttonLink: DEFAULT_MULTISTEP_FORM_ROUTE
     },
     {
       image: '/home/diensten-card-image-background.png',
@@ -162,6 +167,7 @@ const DIENSTEN = {
       heading: 'Content Management Systemen',
       paragraph: 'Het overzicht kwijt door alle verschillende systemen die uw website draaiende houden?  Neem de controle over uw website weer terug door onze opmaat gemaakte CMS-oplossingen. ',
       buttonLabel: 'Neem Contact op',
+      buttonLink: DEFAULT_MULTISTEP_FORM_ROUTE
     },
     {
       image: '/home/diensten-card-image-background.png',
@@ -171,6 +177,7 @@ const DIENSTEN = {
       heading: 'Digitale Strategieontwikkeling',
       paragraph: 'Geen idee hoe je uw online strategie moet aanpakken? Wij helpen u bij het bepalen van doelen, het identificeren van kansen en het implementeren van effectieve digitale plannen.',
       buttonLabel: 'Neem Contact op',
+      buttonLink: DEFAULT_MULTISTEP_FORM_ROUTE
     }
 
   ]
