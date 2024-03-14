@@ -3,6 +3,7 @@ import '@/styles/globals.css'
 import '@/styles/animations.css'
 import '@/styles/gradients.css'
 import Script from 'next/script'
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 
 import { Providers } from './providers'
@@ -102,6 +103,7 @@ export default async function RootLayout({
 
         <LoadCookies />
         <CookieConsentBanner />
+        <SpeedInsights />
 
         <Script type="application/ld+json" id='default-schema'>
           {JSON.stringify(schema)}

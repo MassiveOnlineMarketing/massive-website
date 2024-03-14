@@ -30,6 +30,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@svgr/webpack": "^8.1.0",
     "@tanstack/react-table": "^8.11.8",
+    "@vercel/speed-insights": "^1.0.10",
     "argon2": "^0.31.2",
     "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",
