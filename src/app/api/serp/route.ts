@@ -6,7 +6,7 @@ import { insertSERPResults } from "@/serp/data/serp-result";
 import axios from "axios";
 
 const BATCH_SIZE = 100;
-export const maxDuration = 300;
+export const maxDuration = 9;
 
 interface Data {
   projectId: string;
