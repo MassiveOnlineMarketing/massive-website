@@ -61,7 +61,7 @@ export default async function page({ searchParams }: pageProps) {
                 <main className='pb-[100px]'>
                     <div className={`${container.maxWidthGutter} pt-[60px] md:pt-[140px]`}>
                         <div className='pt-12 md:pt-0 pb-5 max-w-[750px]'>
-                            <Heading level='h1' size='5xl' >Blog</Heading>
+                            <Heading level='h1' size='5xl'>Blog</Heading>
 
                             <Paragraph size='lg' className='mt-6'>Welkom bij Massive Online Marketing, dé plek waar de grenzen van digitaal zakendoen voortdurend worden verlegd. Onze nieuwste blogcollectie duikt diep in de essentiële facetten van online marketing die elke ondernemer en marketeer moet kennen. Of je nu een doorgewinterde professional bent of net begint, onze inzichten in Design, Social Media, Webshops, Websites, SEO en Marketing strategieën zullen je gereedschapskist voor online succes aanzienlijk verrijken.</Paragraph>
 
