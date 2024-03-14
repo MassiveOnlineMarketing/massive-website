@@ -13,7 +13,7 @@ import StrategischAdvies from "../website/sections/section-gesprek";
 import ToekomstVisie from "./_components/toekomst-visie";
 import WaarWijVoorStaan from "./_components/waar-wij-voor-staan";
 import Faq from "./_components/faq";
-import OnsProces from "./_components/ons-proces";
+// import OnsProces from "./_components/ons-proces";
 import { NavbarWithTopbar } from "@/website/partials/navbar-with-topbar";
 
 
