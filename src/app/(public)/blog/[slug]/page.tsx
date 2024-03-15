@@ -98,7 +98,7 @@ export default async function BlogPage({ params }: pageProps) {
                         </div>
                     </section>
 
-                    <Image className="mx-auto" src={`${PAYLOAD_BACKEND_URL}${blogData.heroImage.url}`} alt={blogData.heroImage.alt} width={blogData.heroImage.width} height={blogData.heroImage.height} />
+                    <Image className="mx-auto" priority={true}  src={`${PAYLOAD_BACKEND_URL}${blogData.heroImage.url}`} alt={blogData.heroImage.alt} width={blogData.heroImage.width} height={blogData.heroImage.height} />
 
                     <article className={`mt-[44px] max-w-[800px] mx-auto`}>
                         <RenderBlocks layout={blogData.layout} />

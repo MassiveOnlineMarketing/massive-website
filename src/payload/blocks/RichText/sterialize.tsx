@@ -79,9 +79,9 @@ const serialize = (children?: Children): React.ReactNode[] =>
       case 'quote':
         return <blockquote key={i}>{serialize(node?.children)}</blockquote>
       case 'ul':
-        return <ul className='mt-6 list-disc ml-6' key={i}>{serialize(node?.children)}</ul>
+        return <ul className='mt-6 text-lg list-disc ml-6' key={i}>{serialize(node?.children)}</ul>
       case 'ol':
-        return <ol className='mt-6 list-decimal ml-6' key={i}>{serialize(node.children)}</ol>
+        return <ol className='mt-6 text-lg list-decimal ml-6' key={i}>{serialize(node.children)}</ol>
       case 'li':
         return <li key={i}>{serialize(node.children)}</li>
       case 'upload':
@@ -91,13 +91,13 @@ const serialize = (children?: Children): React.ReactNode[] =>
         if (node.fields?.linkType === 'Intern') {
           console.log('node', node)
           return (
-            <InternalAnchor key={i} variant='text' href={node.url || ''} className=' underline'>
+            <InternalAnchor key={i} variant='text' href={`${node.url}/blog` || ''} className=' underline'>
               {serialize(node?.children)}
             </InternalAnchor>
           )
         } else {
           return (
-            <ExternalAnchor key={i} variant='text' href={node.url || ''} className=' underline'>
+            <ExternalAnchor key={i} variant='text' href={`${node.url}/blog` || ''} className=' underline'>
               {serialize(node?.children)}
             </ExternalAnchor>
           )}
