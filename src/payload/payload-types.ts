@@ -83,6 +83,13 @@ export interface BlogPost {
             blockName?: string | null;
             blockType: 'RichText';
           }
+        | {
+            image: string | Media;
+            className?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'Image';
+          }
       )[]
     | null;
   relatedPosts?: (string | BlogPost)[] | null;
@@ -92,6 +99,7 @@ export interface BlogPost {
   publishedAt: string;
   slug?: string | null;
   keywords: string;
+  visable: boolean;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -185,3 +193,4 @@ export interface PayloadMigration {
   updatedAt: string;
   createdAt: string;
 }
+

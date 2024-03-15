@@ -4,6 +4,7 @@ import { Text } from 'slate'
 import Image from 'next/image'
 import { Heading, Paragraph } from '@/components/ui/typography/typography'
 import { PAYLOAD_BACKEND_URL } from '../../../../routes'
+import { ExternalAnchor, InternalAnchor } from '@/components/ui/link'
 
 // eslint-disable-next-line no-use-before-define
 type Children = Leaf[]
@@ -17,6 +18,9 @@ type Leaf = {
   children?: Children
   url?: string
   [key: string]: unknown
+  fields?: {
+    linkType: string
+  }
 }
 
 const serialize = (children?: Children): React.ReactNode[] =>
@@ -83,7 +87,21 @@ const serialize = (children?: Children): React.ReactNode[] =>
       case 'upload':
         // @ts-ignore
         return <Image key={i} src={`${PAYLOAD_BACKEND_URL}${node.value?.url}`} alt={node.value?.alt} width={node.value?.width} height={node.value?.height} />
-        
+      case 'link':
+        if (node.fields?.linkType === 'Intern') {
+          console.log('node', node)
+          return (
+            <InternalAnchor key={i} variant='text' href={node.url || ''} className=' underline'>
+              {serialize(node?.children)}
+            </InternalAnchor>
+          )
+        } else {
+          return (
+            <ExternalAnchor key={i} variant='text' href={node.url || ''} className=' underline'>
+              {serialize(node?.children)}
+            </ExternalAnchor>
+          )}
+
       // case 'link':
       //   return (
       //     <CMSLink
