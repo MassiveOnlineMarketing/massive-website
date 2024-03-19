@@ -27,7 +27,7 @@ const BlogCard = ( ...props: any ) => {
             <div className='flex flex-col gap-4'>
 
                 <div className='relative text-xs text-gray-800'>
-                    <Image src={`${PAYLOAD_BACKEND_URL}${post.heroImage.url}`} alt={post.heroImage.alt} width={post.heroImage.width} height={post.heroImage.height} />
+                    <Image src={`${PAYLOAD_BACKEND_URL}${post.heroImage.url}`} alt={post.heroImage.alt} width={post.heroImage.width} height={post.heroImage.height} className='rounded-lg ' />
 
                     <div className={`absolute left-3 bottom-3 px-3 py-[6px] w-fit h-fit rounded-4xl ${constants.glassFill} border-t-[1.5px] border-[#fff]/50 flex items-center gap-2`}>
                         <BookOpenIcon className='w-5 h-5' />

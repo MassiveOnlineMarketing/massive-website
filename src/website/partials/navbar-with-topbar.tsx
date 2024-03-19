@@ -86,7 +86,7 @@ export const NavbarWithTopbar = () => {
                     <div className={`hidden md:block fixed top-0 w-full z-30 transition-transform duration-500 ease-in-out ${navbarStyle}`}>
                         <div className={`px-6 py-6 mt-4 rounded-2xl  max-w-[1324px] mx-auto ${styles.glass}`}>
                             <div className='flex flex-row '>
-                                <InternalAnchor href='/'>
+                                <InternalAnchor aria-label='home' href='/'>
                                     <MassiveLogoColor className="w-14" />
                                 </InternalAnchor>
 
@@ -129,7 +129,7 @@ const Drawer = ({ isOpen, setIsOpen }: DrawerProps) => {
             </button>
             <ul className="p-4 mt-6  flex flex-col h-full gap-6   text-base leading-6 font-medium text-gray-600">
                 <li>
-                    <InternalAnchor href='/'><MassiveLogoColor className="w-14" /></InternalAnchor>
+                    <InternalAnchor aria-label='home' href='/'><MassiveLogoColor className="w-14" /></InternalAnchor>
                 </li>
                 {MAIN_NAVIGATION.map((item) => (
                     <li key={item.label}>
