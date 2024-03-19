@@ -272,7 +272,7 @@ const SECTION33 = {
             "Het niet effectief overbrengen van uw merkidentiteit en boodschap op uw website kan leiden tot een aanzienlijk verlies van klantvertrouwen. Dit is niet alleen een gemiste kans, maar kan ook resulteren in meetbare kosten voor uw bedrijf, zoals een verminderde gemiddelde orderwaarde en klantloyaliteit.",
     },
     image: {
-        src: "/zakelijke-website-laten-maken/zakelijke-website-laten-maken-meeting-klant.jpg",
+        src: "/zakelijke-website-laten-maken/zakelijke-website-laten-maken-meeting-klant-Copy.jpg",
         alt: "Meeting Zakelijke Website Laten Maken",
         width: 1229,
         height: 861,
