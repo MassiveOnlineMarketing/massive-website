@@ -15,14 +15,14 @@ function LoadCookies() {
             <Script src={`/scroll.js`} strategy="afterInteractive" />
 
             {/* Google tag analytics script */}
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.G_TAG}`} strategy="afterInteractive" />
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=G-BQ9FGY7RYN`} strategy="afterInteractive" />
             <Script id="gtag" strategy="afterInteractive">
                 {`
                     window.dataLayer = window.dataLayer || [];
                     function gtag(){dataLayer.push(arguments);}
                     gtag('js', new Date());
                     
-                    gtag('config', '${process.env.G_TAG}', {
+                    gtag('config', 'G-BQ9FGY7RYN', {
                         page_path: window.location.pathname,
                     });
                 `}
