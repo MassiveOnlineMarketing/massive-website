@@ -45,22 +45,24 @@ function CookieConsentBanner() {
 
   // acceptAllCookies is called when the user clicks the accept all button
   const acceptAllCookies = () => {
+    const expires = new Date();
+    expires.setFullYear(expires.getFullYear() + 1); // set the date to a year from now
+
     for (const segment in consent) {
-      setCookie(segment as CookieKeys, true, { path: '/' });
+      setCookie(segment as CookieKeys, true, { path: '/', expires }); // use the Date object
     }
-    setCookie('consentGiven', true, { path: '/' });
+    setCookie('consentGiven', true, { path: '/', expires }); // use the Date object
     setShowConsent(false);
   };
 
-
-
-
-
   const savePreferences = () => {
+    const expires = new Date();
+    expires.setFullYear(expires.getFullYear() + 1); // set the date to a year from now
+
     for (const segment in consent) {
-      setCookie(segment as CookieKeys, consent[segment as ConsentKeys], { path: '/' });
+      setCookie(segment as CookieKeys, consent[segment as ConsentKeys], { path: '/', expires }); // use the Date object
     }
-    setCookie('consentGiven', true, { path: '/' });
+    setCookie('consentGiven', true, { path: '/', expires }); // use the Date object
     setShowConsent(false);
   };
 

@@ -18,11 +18,15 @@ async function generateSitemap() {
     const page = 1 
     const getPosts = async function (page) {
 
-        const posts = await axios(`${process.env.PAYLOAD_BACKEND_URL}/api/blog-posts?limit=2&page=${page}`)
+        const posts = await axios(`${process.env.PAYLOAD_BACKEND_URL}/api/blog-posts?limit=10&page=${page}`)
 
         if (posts.data.docs.length > 0) {
             posts.data.docs.map((post) => {
-                postPaths.push(`/blog/${post.slug}`)
+                if (post.visable === true){
+                    return postPaths.push(`/blog/${post.slug}`)
+                } else {
+                    return null
+                }
             })
         }
 
