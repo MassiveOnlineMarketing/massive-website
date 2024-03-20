@@ -91,7 +91,7 @@ const serialize = (children?: Children): React.ReactNode[] =>
         if (node.fields?.linkType === 'Intern') {
           console.log('node', node)
           return (
-            <InternalAnchor key={i} variant='text' href={`/blog${node.url}` || ''} className=' underline'>
+            <InternalAnchor key={i} variant='text' href={`${node.url}` || ''} className=' underline'>
               {serialize(node?.children)}
             </InternalAnchor>
           )
