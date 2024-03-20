@@ -37,7 +37,6 @@ function CookieConsentBanner() {
   }, [cookies]);
 
 
-
   // handleConsentChange is called when the user changes the consent
   const handleConsentChange = (segment: CookieKeys, newValue: boolean) => {
     setConsent(prevState => ({ ...prevState, [segment]: newValue }));

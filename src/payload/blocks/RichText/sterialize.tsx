@@ -73,9 +73,9 @@ const serialize = (children?: Children): React.ReactNode[] =>
       case 'h4':
         return <Heading level='h4' size='2xl' className='mt-12' key={i}>{serialize(node?.children)}</Heading>
       case 'h5':
-        return <h5 key={i}>{serialize(node?.children)}</h5>
+        return <Heading level='h5' size='xl' className='mt-12' key={i}>{serialize(node?.children)}</Heading>
       case 'h6':
-        return <h6 key={i}>{serialize(node?.children)}</h6>
+        return <Heading level='h6' size='lg' className='mt-12' key={i}>{serialize(node?.children)}</Heading>
       case 'quote':
         return <blockquote key={i}>{serialize(node?.children)}</blockquote>
       case 'ul':
