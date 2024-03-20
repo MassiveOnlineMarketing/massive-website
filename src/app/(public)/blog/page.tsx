@@ -40,7 +40,7 @@ export default async function page({ searchParams }: pageProps) {
     try {
         const response = await fetchBlogPosts({ limit: 27, page: pageNumber })
         // console.log('response', response.props);
-        blogPosts = response.props.page.docs
+        blogPosts = response.props.page.docs.filter((post: BlogPost) => post.visable === true);
         pagination = {
             numberOfPages: response.props.page.totalPages,
             hasPrevPage: response.props.page.hasPrevPage,

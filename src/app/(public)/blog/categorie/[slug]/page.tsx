@@ -54,7 +54,7 @@ export default async function page({ params, searchParams }: pageProps) {
     try {
         // @ts-ignore
         const response = await fetchBlogPostByCatagories(category.id, { limit: 27, page: pageNumber })
-        blogPosts = response.props.page.data.docs
+        blogPosts = response.props.page.data.docs.filter((post: BlogPost) => post.visable === true)
         pagination = {
             numberOfPages: response.props.page.data.totalPages,
             hasPrevPage: response.props.page.data.hasPrevPage,

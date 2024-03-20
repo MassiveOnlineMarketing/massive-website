@@ -15,8 +15,8 @@ function LoadCookies() {
             <Script src={`/scroll.js`} strategy="afterInteractive" />
 
             {/* Google tag analytics script */}
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=G-BQ9FGY7RYN`} strategy="afterInteractive" />
-            <Script id="gtag" strategy="afterInteractive">
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=G-BQ9FGY7RYN`} strategy="lazyOnload" />
+            <Script id="gtag" strategy="lazyOnload">
                 {`
                     window.dataLayer = window.dataLayer || [];
                     function gtag(){dataLayer.push(arguments);}

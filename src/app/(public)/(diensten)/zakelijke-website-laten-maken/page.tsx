@@ -119,7 +119,7 @@ const page = () => {
                                 <Heading level='h3' size="5xl">{SECTION33.content.heading}</Heading>
                                 <Paragraph>{SECTION33.content.paragraph}</Paragraph>
                             </Title>
-                            <InternalAnchor variant='text' size='sm' href="/#" className="text-primary-500 mt-6">
+                            <InternalAnchor variant='text' size='sm' href="/blog/wordpress-vs-maatwerk-cms-keuze" className="text-primary-500 mt-6">
                                 Lees Meer <ArrowRightIcon className="w-5 h-5" />
                             </InternalAnchor>
                         </div>

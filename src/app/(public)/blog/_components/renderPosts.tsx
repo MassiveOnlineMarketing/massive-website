@@ -9,11 +9,7 @@ const RenderPosts = (posts: any) => {
     return (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
             {posts.posts.map((post: BlogPost) => {
-                if (post.visable){
-                    return <BlogCard key={post.id} {...post} />;
-                } else {
-                    return null
-                }
+                return <BlogCard key={post.id} {...post} />;
             })}
         </div>
     )
