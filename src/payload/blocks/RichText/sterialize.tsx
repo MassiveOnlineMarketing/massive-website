@@ -67,26 +67,26 @@ const serialize = (children?: Children): React.ReactNode[] =>
       case 'h1':
         return <h1 key={i}>{serialize(node?.children)}</h1>
       case 'h2':
-        return <Heading level='h2' size='4xl' className='mt-12' key={i}>{serialize(node?.children)}</Heading>
+        return <Heading level='h2' size='4xl' className='mt-[72px]' key={i}>{serialize(node?.children)}</Heading>
       case 'h3':
-        return <Heading level='h3' size='3xl' className='mt-12' key={i}>{serialize(node?.children)}</Heading>
+        return <Heading level='h3' size='3xl' className='mt-[72px]' key={i}>{serialize(node?.children)}</Heading>
       case 'h4':
-        return <Heading level='h4' size='2xl' className='mt-12' key={i}>{serialize(node?.children)}</Heading>
+        return <Heading level='h4' size='2xl' className='mt-[72px] -mb-3' key={i}>{serialize(node?.children)}</Heading>
       case 'h5':
-        return <Heading level='h5' size='xl' className='mt-12' key={i}>{serialize(node?.children)}</Heading>
+        return <Heading level='h5' size='xl' className='mt-[72px]' key={i}>{serialize(node?.children)}</Heading>
       case 'h6':
-        return <Heading level='h6' size='lg' className='mt-12' key={i}>{serialize(node?.children)}</Heading>
+        return <Heading level='h6' size='lg' className='mt-[72px]' key={i}>{serialize(node?.children)}</Heading>
       case 'quote':
         return <blockquote key={i}>{serialize(node?.children)}</blockquote>
       case 'ul':
-        return <ul className='mt-6 text-lg list-disc ml-6' key={i}>{serialize(node?.children)}</ul>
+        return <ul className='mt-6 list-disc ml-6 text-gray-600 leading-7 text-lg' key={i}>{serialize(node?.children)}</ul>
       case 'ol':
-        return <ol className='mt-6 text-lg list-decimal ml-6' key={i}>{serialize(node.children)}</ol>
+        return <ol className='mt-6 list-decimal ml-6 text-gray-600 leading-7 text-lg' key={i}>{serialize(node.children)}</ol>
       case 'li':
         return <li key={i}>{serialize(node.children)}</li>
       case 'upload':
         // @ts-ignore
-        return <Image key={i} src={`${PAYLOAD_BACKEND_URL}${node.value?.url}`} alt={node.value?.alt} width={node.value?.width} height={node.value?.height} />
+        return <Image className='mt-[72px]' key={i} src={`${PAYLOAD_BACKEND_URL}${node.value?.url}`} alt={node.value?.alt} width={node.value?.width} height={node.value?.height} />
       case 'link':
         if (node.fields?.linkType === 'Intern') {
           console.log('node', node)
@@ -97,7 +97,7 @@ const serialize = (children?: Children): React.ReactNode[] =>
           )
         } else {
           return (
-            <ExternalAnchor key={i} variant='text' href={`${node.url}` || ''} className=' underline text-wrap'>
+            <ExternalAnchor key={i} variant='text' href={`${node.url}` || ''} className='underline text-wrap'>
               {serialize(node?.children)}
             </ExternalAnchor>
           )}
@@ -123,7 +123,7 @@ const serialize = (children?: Children): React.ReactNode[] =>
       // }
 
       default:
-        return <Paragraph size='lg' className='mt-6 ' key={i}>{serialize(node?.children)}</Paragraph>
+        return <Paragraph size='lg' className='mt-6 leading-7 text-gray-600 ' key={i}>{serialize(node?.children)}</Paragraph>
     }
   }) || []
 

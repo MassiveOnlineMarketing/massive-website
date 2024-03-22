@@ -12,7 +12,7 @@ const PayloadImage: React.FC<{ image: Media, className: string }> = ({ image, cl
             width={image.width || 0}
             height={image.height || 0}
             className={cn(
-                "mt-6",
+                "mt-20",
                 className
             )}
         />
