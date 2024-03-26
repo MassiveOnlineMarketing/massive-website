@@ -9,9 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
+import { Button, OutlinedButton } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowsUpDownIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
+import { ArrowsUpDownIcon, EllipsisHorizontalIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { Result } from "@prisma/client"
 
 // This type is used to define the shape of our data.
@@ -55,7 +55,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500 mx-auto"
+          className="flex font-medium text-gray-500 mx-auto bg-green-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Position
@@ -65,7 +65,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     },
     cell: ({ row }) => {
       return (
-        <div className="flex mx-auto">
+        <div className="flex mx-auto bg-blue-500 h-full">
           <p className=" mx-auto">{row.getValue('position')}</p>
         </div>
       )
@@ -77,7 +77,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Keyword
@@ -113,7 +113,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500 mx-auto"
+          className="flex font-medium text-gray-500 mx-auto"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           First Position
@@ -135,7 +135,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500 mx-auto"
+          className="flex font-medium text-gray-500 mx-auto"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Best Position
@@ -157,7 +157,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500 mx-auto"
+          className="flex font-medium text-gray-500 mx-auto"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Latest Change
@@ -208,9 +208,9 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='outline' className="h-8 w-8 p-0">
+            <Button variant='dashboard' >
               <span className="sr-only">Open menu</span>
-              <EllipsisHorizontalIcon className="w-4 h-4" />
+              <EllipsisVerticalIcon className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

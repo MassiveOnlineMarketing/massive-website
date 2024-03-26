@@ -9,9 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
+import { Button, OutlinedButton } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowsUpDownIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
+import { ArrowsUpDownIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { deleteKeywordsById } from "@/serp/data/keyword"
 import { Project } from "@prisma/client"
 
@@ -56,7 +56,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Project Name
@@ -71,7 +71,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Domain
@@ -86,7 +86,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Language
@@ -101,7 +101,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Country
@@ -116,7 +116,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Improved
@@ -131,7 +131,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Worsened
@@ -146,7 +146,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Total
@@ -161,7 +161,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Top 10
@@ -176,7 +176,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           No Change
@@ -194,7 +194,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
     header: ({ column }) => {
       return (
         <button
-          className="flex font-medium text-neutral-500"
+          className="flex font-medium text-gray-500"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Not Found
@@ -212,10 +212,12 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
       return (
         <DropdownMenu >
           <DropdownMenuTrigger asChild>
-            <Button variant='outline' className="h-8 w-8 p-0 float-right z-10">
+            <OutlinedButton buttonClassName="p-2" >
               <span className="sr-only">Open menu</span>
-              <EllipsisHorizontalIcon className="w-4 h-4" />
-            </Button>
+              <EllipsisVerticalIcon className="w-4 h-4 " />
+            </OutlinedButton>
+            {/* <Button variant='outline' className="h-8 w-8 p-0 float-right z-10">
+            </Button> */}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className='z-10'>
             <DropdownMenuItem

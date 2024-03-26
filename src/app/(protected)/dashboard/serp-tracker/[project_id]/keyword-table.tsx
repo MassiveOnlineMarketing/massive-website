@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useState} from "react";
 import AddKeywordsFrom from "@/serp/components/add-keywords-form";
 
 import {
@@ -25,7 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Button } from "@/components/ui/button";
+import { Button, OutlinedButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -40,6 +40,7 @@ import { AddNewTagInput } from "@/serp/components/add-new-tag-input";
 import { DeleteKeywords } from "@/serp/components/delete-keywords";
 import { DataTablePagination } from "./pagination-table";
 import { downloadToExcel } from "@/serp/lib/xlsx";
+import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -112,11 +113,12 @@ export function DataTable<TData, TValue>({
     setRowSelection({});
   }
 
+  const numberOfVisibleColumns = table.getVisibleFlatColumns().length;
 
   return (
-    <>
+    <div className="bg-white rounded-2xl shadow-sm p-8 mt-8">
       {/* Top bar */}
-      <div className="flex items-center py-4">
+      <div className="flex items-center">
         {/* Searchbar */}
         <Input
           placeholder="Filter by keword name..."
@@ -127,9 +129,9 @@ export function DataTable<TData, TValue>({
           className="max-w-sm "
         />
 
-        <Button variant="outline" size="sm" className="ml-2" onClick={() => downloadToExcel(data)} >
-          Download to excell
-        </Button>
+        <OutlinedButton className="ml-2" buttonClassName="p-2" onClick={() => downloadToExcel(data)} >
+          <ArrowDownTrayIcon className="w-5 h-5" />
+        </OutlinedButton>
 
         {/* Selected rows */}
         <div className="mr-auto">
@@ -157,9 +159,7 @@ export function DataTable<TData, TValue>({
         {/* Toggle visable colums */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="lg" className="ml-2">
-              Columns
-            </Button>
+            <OutlinedButton size='sm' className="ml-2">Columns</OutlinedButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {table
@@ -188,14 +188,22 @@ export function DataTable<TData, TValue>({
 
 
       {/* Keywords Table */}
-      <div className="rounded-md border">
+      <div className="rounded-md ">
         <Table>
-          <TableHeader>
+          <TableHeader className="rouded-lg overflow-hidden bg-primary-50">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className=" rounded-lg">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      className={
+                        header.column.getIndex() === 0
+                          ? "rounded-l-2xl overflow-hidden "
+                          : header.column.getIndex() === numberOfVisibleColumns - 1
+                            ? "rounded-r-2xl "
+                            : ""
+                      }
+                      key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -215,11 +223,20 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="border-b"
                 // handle click row, open keyword detail
                 // onClick={handleClickRow(row.id)}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      className={
+                        cell.column.getIndex() === 0
+                          ? "rounded-l-2xl overflow-hidden "
+                          : cell.column.getIndex() === numberOfVisibleColumns - 1
+                            ? "rounded-r-2xl "
+                            : ""
+                      }
+                      key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -252,10 +269,10 @@ export function DataTable<TData, TValue>({
         {/* <DataTablePagination table={data} /> */}
 
       </div>
-      <DataTablePagination table={table} /> 
+      <DataTablePagination table={table} />
       {/* Keyword Detail */}
       {/* <KeywordDetail data={data} /> */}
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-    </>
+    </div>
   );
 }

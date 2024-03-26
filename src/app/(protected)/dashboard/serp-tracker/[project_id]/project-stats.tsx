@@ -2,7 +2,7 @@ import { KeywordResultWithTagProp } from "@/serp/keywords-context";
 import { UpdateProjectInfoForm } from "@/serp/components/update-project-info-form";
 import { useProjectDetails } from "@/serp/project-details-context";
 
-export const ProjectStats = ({data}: {data: KeywordResultWithTagProp[]}) => { 
+export const ProjectStats = ({ data }: { data: KeywordResultWithTagProp[] }) => {
   const { projectDetails } = useProjectDetails()
 
   const keywords = data
@@ -32,11 +32,9 @@ export const ProjectStats = ({data}: {data: KeywordResultWithTagProp[]}) => {
     }
   })
 
-
-
   return (
     <>
-      <div className="rounded-md border p-4">
+      <div className="rounded-2xl shadow-sm bg-white p-4">
         <div className="flex justify-between">
           <h2 className="text-xl font-bold">Project Stats</h2>
           <UpdateProjectInfoForm />
@@ -47,32 +45,33 @@ export const ProjectStats = ({data}: {data: KeywordResultWithTagProp[]}) => {
       </div>
       <div>
         <div className="flex items-center justify-between mt-4 gap-4">
-          <div className="text-sm w-full text-center py-6 rounded-md border">
-            <p className="text-neutral-500 dark:text-neutral-400">Keywords</p>
-            <p className="text-lg font-semibold">{numberOfKeywords}</p>
-          </div>
-          <div className="text-sm w-full text-center py-6 rounded-md border">
-            <p className="text-neutral-500 dark:text-neutral-400">Top 3</p>
-            <p className="text-lg font-semibold">{numberOfKeywordsInTop3}/{numberOfKeywords}</p>
-          </div>
-          <div className="text-sm w-full text-center py-6 rounded-md border">
-            <p className="text-neutral-500 dark:text-neutral-400">Top 10</p>
-            <p className="text-lg font-semibold">{numberOfKeywordsInTop10}/{numberOfKeywords}</p>
-          </div>
-          <div className="text-sm w-full text-center py-6 rounded-md border">
-            <p className="text-neutral-500 dark:text-neutral-400">Top 100</p>
-            <p className="text-lg font-semibold">{numberOfKeywordsInTop100}/{numberOfKeywords}</p>
-          </div>
-          <div className="text-sm w-full text-center py-6 rounded-md border">
-            <p className="text-neutral-500 dark:text-neutral-400">Bettered</p>
-            <p className="text-lg font-semibold text-green-500">{numberOfKeyowrdsBettered}/{numberOfKeywords}</p>
-          </div>
-          <div className="text-sm w-full text-center py-6 rounded-md border">
-            <p className="text-neutral-500 dark:text-neutral-400">Worsened</p>
-            <p className="text-lg font-semibold text-red-500">{numberOfKeyowrdsWorsened}/{numberOfKeywords}</p>
-          </div>
+          <Card title="Keywords" number={numberOfKeywords} />
+          <Card title="Top 3" number={numberOfKeywordsInTop3} numberOfKeywords={numberOfKeywords} />
+          <Card title="Top 10" number={numberOfKeywordsInTop10} numberOfKeywords={numberOfKeywords} />
+          <Card title="Top 100" number={numberOfKeywordsInTop100} numberOfKeywords={numberOfKeywords} />
+          <Card title="Bettered" number={numberOfKeyowrdsBettered} numberOfKeywords={numberOfKeywords} />
+          <Card title="Worsend" number={numberOfKeyowrdsWorsened} numberOfKeywords={numberOfKeywords} />
         </div>
       </div>
     </>
+  )
+}
+
+type CardProps = {
+  title: string
+  number: number
+  numberOfKeywords?: number
+}
+
+
+const Card = ({ title, number, numberOfKeywords }: CardProps) => {
+  console.log(number)
+  console.log(title)
+  return (
+    <div className="w-full rounded-2xl shadow-sm p-6 bg-white">
+      <p className="text-sm text-neutral-500 dark:text-neutral-400">{title}</p>
+      <p className="mt-2 text-4xl font-semibold text-gray-700">{number}</p> 
+      <div className="mt-4 px-2 py-1 bg-red-50 text-red-600 w-fit rounded-[4px]">13%</div>
+    </div>
   )
 }
