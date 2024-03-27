@@ -28,7 +28,7 @@ const buttonVariants = cva(
         light: 'border border-gray-200 text-gray-600 hover:shadow-base hover:border-none hover:-translate-y-[1px] hover:mb-[1px] transition-transform duration-100',
         dark: `text-gray-300 ${styles.darkGlass} hover:text-white hover:bg-gray-800`,
         flat: 'text-gray-50 bg-gray-800 hover:bg-gray-700',
-        text: 'text-gray-800 hover:text-primary-500',
+        text: 'text-gray-800 hover:text-primary-500 dark:text-primary-500 dark:hover:text-gray-50',
         disabled: 'text-gray-400 bg-gray-200 cursor-not-allowed',
         glass: `text-gray-800 ${styles.glass} hover:bg-gray-50 hover:text-primary-500 fill-primary-500`  ,
         

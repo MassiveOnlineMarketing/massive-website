@@ -25,7 +25,7 @@ export const GridHalvePageContainer = ({
         <ul className={cn(
             'grid',
             (!columns && numberOfChildren === 2) && 'md:grid-cols-2',
-            (!columns && numberOfChildren === 3) && 'md:grid-cols-3 px-4 md:px-8 lg:px-16',
+            (!columns && numberOfChildren === 3) && 'lg:grid-cols-3 gap-6 lg:gap-3',
             (!columns && numberOfChildren === 4) && 'grid-cols-4',
             (!columns && numberOfChildren === 5) && 'grid-cols-5',
             (!columns && numberOfChildren === 6) && 'grid-cols-6',

@@ -102,7 +102,7 @@ export const subHeadingVariants = cva(
                 // accent: "text-indigo-600 dark:text-indigo-400",
                 purple: "text-purple-600 bg-purple-100 dark:text-purple-400",
                 gray: "text-gray-500 bg-gray-50",
-                'text-primary-500': "text-primary-500" ,
+                'text-primary-500': "text-primary-500 dark:text-primary-300" ,
                 'gradient-primary': 'text-gradient-primary',
                 
                 // Pill variant
@@ -161,7 +161,7 @@ export const paragraphVariants = cva(
                 xs: "text-xs leading-4",
             },
             colorScheme: {
-                default: "text-gray-900 dark:text-gray-100",
+                default: "text-gray-900 dark:text-gray-50",
                 muted: "text-gray-600 dark:text-gray-400",
                 accent: "text-indigo-600 dark:text-indigo-400",
                 white: "text-white",    

@@ -9,7 +9,7 @@ import GebruikersCardSvg from '../_assets/gebruikers-card-svg'
 import BestellingenCardSvg from '../_assets/bestellingen-card-svg'
 
 // styles
-import container from '@/styles/styles'
+import container, { styles } from '@/styles/styles'
 
 // sections
 import { VerticalLines } from '@/website/partials/vertical-lines'
@@ -25,6 +25,11 @@ import { GridFullPageContainer } from '@/website/layouts/grid-full-page'
 import { LinksRechtsImageContainer } from '@/website/layouts/links-rechts-image'
 import { InternalAnchor } from '@/components/ui/link'
 import { PaarseGolf } from '../_assets'
+import { cn } from '@/lib/utils'
+import { HogerInGoogleSvg } from './_assets/HogerInGoogleSvg'
+import { VerhoogdeCROSvg } from './_assets/VerhoogdeCROSvg'
+import { LinksRechtsContainer } from '@/website/layouts/links-rechts'
+import { GridHalvePageContainer } from '@/website/layouts/grid-halve-page'
 
 
 export const metadata: Metadata = {
@@ -40,76 +45,94 @@ const page = () => {
 
             <Hero DATA={HERO} />
 
-            <section>
-                {/* Container for svg  background*/}
-                <div className='relative'>
-                    <PaarseGolf className="xl:absolute hidden xl:block top-1/2 -translate-y-[63%] -z-10 " />
-
-                    {/* Section 3.1 */}
-                    <div className={` ${container.sectionPadding}  ${container.maxWidthGutter}`}>
-                        {/* Content */}
-                        <LinksRechtsImageContainer image={SECTION31.image} imageSide="left" containerStyles="gap-20 lg:gap-5 ">
-                            <div className={`${container.extraPaddingMd}`}>
-                                <Title>
-                                    <SubHeading level='p' size="lg" colorScheme="text-primary-500">{SECTION31.content.subHeading}</SubHeading>
-                                    <Heading level='h3' size="5xl">{SECTION31.content.heading}</Heading>
-                                    <Paragraph>{SECTION31.content.paragraph}</Paragraph>
-                                </Title>
-
-                                {/* Cards */}
-                                <ul className='mt-5 grid lg:grid-cols-3 gap-6 lg:gap-3 mb-auto'>
-                                    {SECTION31.content.list.map((item) => (
-                                        <li key={item.heading}>
-                                            <div className='flex gap-[10px] items-center'>
-                                                {item.icon}
-                                                <Heading level='h4' size='base'>{item.heading}</Heading>
-                                            </div>
-                                            <Paragraph size="sm" className='mt-2'>{item.paragraph}</Paragraph>
-                                        </li>
-                                    ))}
-                                </ul>
+            <section className={`${container.sectionPadding}`}>
+                <div className={`${container.maxWidthGutter}`}>
+                    <LinksRechtsImageContainer image={SECTION4.image} imageSide='right'>
+                        <div>
+                            <Title>
+                                <SubHeading level='p' size='lg' colorScheme='text-primary-500'>{SECTION4.content.subHeading}</SubHeading>
+                                <Heading level='h3' size='5xl'>{SECTION4.content.heading}</Heading>
+                                <Paragraph>{SECTION4.content.paragraph}</Paragraph>
+                            </Title>
+                        </div>
+                    </LinksRechtsImageContainer>
+                </div>
+                <GridFullPageContainer containerStyles={`${container.maxWidthGutter} mt-10 gap-2`}>
+                    {SECTION4.cards.map((item, i) => (
+                        <li key={i}>
+                            <div className="text-primary-500 w-12 h-12 p-3 rounded shadow-base bg-white ">
+                                {item.icon}
                             </div>
+                            <Heading level='h3' size='xl' className="mt-2">{item.heading}</Heading>
+                            <Paragraph size="base" colorScheme='gray-500' className="mt-2">{item.paragraph}</Paragraph>
+                        </li>
+                    ))}
+                </GridFullPageContainer>
 
-                            {/* Cards in image */}
-                            <div className='inline-flex gap-12 -mt-[10%] justify-center'>
-                                <div className='max-w-[270px] w-full ml-6'>
-                                    <GebruikersCardSvg />
-                                </div>
-                                <div className='max-w-[270px] w-full mr-6'>
-                                    <BestellingenCardSvg />
-                                </div>
-                            </div>
-                        </LinksRechtsImageContainer>
-                    </div>
+            </section>
 
-                    {/* Section 3.2 */}
-                    <div className={` ${container.sectionPadding}  ${container.maxWidth}`}>
-                        <LinksRechtsImageContainer image={SECTION32.image} imageSide="right" containerStyles={container.sectionGutter} >
-                            <div className={`${container.extraPaddingMd}`}>
-                                <Title>
-                                    <SubHeading level='h2' size="lg" colorScheme="text-primary-500">{SECTION32.content.subHeading}</SubHeading>
-                                    <Heading level='h3' size="5xl">{SECTION32.content.heading}</Heading>
-                                    <Paragraph>{SECTION32.content.paragraph}</Paragraph>
-                                </Title>
-                                <InternalAnchor variant='text' size='sm' href="/#" className="text-primary-500 mt-6">
-                                    Lees Meer <ArrowRightIcon className="w-5 h-5" />
-                                </InternalAnchor>
-                            </div>
-                        </LinksRechtsImageContainer>
-
-                        {/* Cards */}
-                        <GridFullPageContainer containerStyles="mt-8 md:px-8 lg:px-16">
-                            {SECTION32.cards.map((card, i) => (
-                                <li key={i} className={`py-3 px-6 md:px-5 flex flex-col gap-2 ${i === 0 && ' border-l-2 border-primary-500'}`}>
-                                    {card.icon}
-                                    <Heading level='h4' size='base'>{card.heading}</Heading>
-                                    <Paragraph size="sm" className=''>{card.paragraph}</Paragraph>
-                                </li>
-                            ))}
-                        </GridFullPageContainer>
+            <section className={`dark:bg-gray-1100 ${container.sectionPaddingBottom}`}>
+                {/*  Container */}
+                <div className={`${container.maxWidthGutter} ${container.sectionPaddingTop} dark:border-y border-[#320E79] relative z-20 dark:bg-gray-1100`}>
+                    <Title className='max-w-[1000px] mx-auto text-center items-center'>
+                        <SubHeading level='p' size='lg' colorScheme='text-primary-500'>{layout2.title.subHeading}</SubHeading>
+                        <Heading level='h3' size='4xl'>{layout2.title.heading}</Heading>
+                        <Paragraph size='base'>{layout2.title.paragraph}</Paragraph>
+                    </Title>
+                    <div className='mx-auto max-w-[576px] mt-10'>
+                        <HogerInGoogleSvg />
                     </div>
                 </div>
 
+                {/* Cards */}
+                <GridFullPageContainer
+                    containerStyles={`mt-12 ${container.maxWidthGutter}`}
+                >
+                    {layout2.cards.map((card, index) => (
+                        <div key={index} className={cn(
+                            'p-6 flex flex-col gap-2',
+                            index === 0 && 'border-t-2 border-primary-500'
+                        )
+                        }>
+                            {card.icon}
+                            <Heading level='h3' size='base'>{card.title}</Heading>
+                            <Paragraph size='base'>{card.description}</Paragraph>
+                            {/* <InternalAnchor variant='text' href={card.readMoreLink}>Lees meer <ArrowRightIcon className='w-5 h-5' /></InternalAnchor> */}
+                        </div>
+                    ))}
+                </GridFullPageContainer>
+            </section>
+
+            <section>
+                {/* Section 3.2 */}
+                <div className={` ${container.sectionPadding}  ${container.maxWidth}`}>
+                    <LinksRechtsImageContainer image={SECTION32.image} imageSide="left" containerStyles={container.sectionGutter} >
+                        <div className={`${container.extraPaddingMd}`}>
+                            <Title>
+                                <SubHeading level='h2' size="lg" colorScheme="text-primary-500">{SECTION32.content.subHeading}</SubHeading>
+                                <Heading level='h3' size="5xl">{SECTION32.content.heading}</Heading>
+                                <Paragraph>{SECTION32.content.paragraph}</Paragraph>
+                            </Title>
+                            <InternalAnchor variant='text' size='sm' href="/#" className="text-primary-500 mt-6">
+                                Lees Meer <ArrowRightIcon className="w-5 h-5" />
+                            </InternalAnchor>
+                        </div>
+                    </LinksRechtsImageContainer>
+
+                    {/* Cards */}
+                    <GridFullPageContainer containerStyles="mt-8 md:px-8 lg:px-16">
+                        {SECTION32.cards.map((card, i) => (
+                            <li key={i} className={`py-3 px-6 md:px-5 flex flex-col gap-2 ${i === 0 && ' border-l-2 border-primary-500'}`}>
+                                {card.icon}
+                                <Heading level='h4' size='base'>{card.heading}</Heading>
+                                <Paragraph size="sm" className=''>{card.paragraph}</Paragraph>
+                            </li>
+                        ))}
+                    </GridFullPageContainer>
+                </div>
+            </section>
+
+            <section>
                 {/* Section 3.3 */}
                 <div className={` ${container.sectionPadding}  ${container.maxWidth}`}>
                     <LinksRechtsImageContainer image={SECTION33.image} imageSide="right" containerStyles={container.sectionGutter} >
@@ -138,6 +161,97 @@ const page = () => {
                                 {card.icon}
                                 <Heading level='h4' size='base'>{card.heading}</Heading>
                                 <Paragraph size="sm" className=''>{card.paragraph}</Paragraph>
+                            </li>
+                        ))}
+                    </GridFullPageContainer>
+                </div>
+            </section>
+
+            <section className={`${container.sectionPadding}`}>
+                <div className={`${container.maxWidthGutter}`}>
+                    <Title className='max-w-[1000px]'>
+                        <SubHeading level='p' size='lg' colorScheme='text-primary-500'>{SECTION5.content.subHeading}</SubHeading>
+                        <Heading level='h3' size='5xl'>{SECTION5.content.heading}</Heading>
+                        <Paragraph>{SECTION5.content.paragraph}</Paragraph>
+                    </Title>
+                    <LinksRechtsImageContainer image={SECTION5.image} imageSide='left'>
+                        <div>
+                            <ul>
+                                {SECTION5.cards.map((card, i) => (
+                                    <li key={i} className='flex gap-4 items-center mt-6'>
+                                        <div>
+                                            <Heading level='h4' size='base'>{card.heading}</Heading>
+                                            <Paragraph size='base'>{card.paragraph}</Paragraph>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </LinksRechtsImageContainer>
+                </div>
+            </section>
+
+            <section className={`${container.sectionPadding}`}>
+                <div className={`${container.maxWidthGutter}`}>
+                    <LinksRechtsContainer secondContainerSide='left' firstContainerStyles=' my-auto' >
+                        <VerhoogdeCROSvg />
+                        <div>
+                            <Title>
+                                <SubHeading level='p' size='lg' colorScheme='text-primary-500'>{SECTION6.content.subHeading}</SubHeading>
+                                <Heading level='h3' size='5xl'>{SECTION6.content.heading}</Heading>
+                                <Paragraph>{SECTION6.content.paragraph}</Paragraph>
+                            </Title>
+                            <GridHalvePageContainer containerStyles='mt-5'>
+                                {SECTION6.cards.map((card, i) => (
+                                    <li key={card.heading}>
+                                        <div className='flex gap-[10px] items-center'>
+                                            {card.icon}
+                                            <Heading level='h4' size='base'>{card.heading}</Heading>
+                                        </div>
+                                        <Paragraph size="sm" className='mt-2'>{card.paragraph}</Paragraph>
+                                    </li>
+                                ))}
+                            </GridHalvePageContainer>
+                        </div>
+                    </LinksRechtsContainer>
+                </div>
+            </section>
+
+            <section className={`${container.sectionPadding}`}>
+                <div className={`${container.maxWidthGutter}`}>
+                    <Title className='max-w-[900px] mx-auto items-center text-center'>
+                        <SubHeading level='p' size='lg' colorScheme='text-primary-500'>{TESTEMONIALS.title.subHeading}</SubHeading>
+                        <Heading level='h3' size='5xl'>{TESTEMONIALS.title.heading}</Heading>
+                        <Paragraph>{TESTEMONIALS.title.paragraph}</Paragraph>
+                    </Title>
+                </div>
+                <GridFullPageContainer containerStyles='mt-10 gap-6'>
+                    {TESTEMONIALS.cards.map((card, i) => (
+                        <li key={i} className='p-8 bg-white shadow-base rounded-lg'>
+                            <Paragraph size='base' colorScheme='gray-800'>{card.paragraph}</Paragraph>
+                            <div className='mt-6 flex flex-row gap-3 items-center'>
+                                <div className='w-16 h-16 bg-gray-500 rounded-full'></div>
+                                <div>
+                                    <Paragraph size='base' colorScheme='gray-800' className='font-semibold'>{card.name}</Paragraph>
+                                    <Paragraph size='base' colorScheme='gray-600'>{card.position}</Paragraph>
+                                </div>
+                            </div>
+                        </li>
+                    ))}
+                </GridFullPageContainer>
+            </section>
+
+            <section className={`${container.sectionPadding}`}>
+                <div className={`${container.maxWidthGutter}`}>
+                    <Title>
+                        <Heading level='h3' size='5xl'>{PROCESS.title.heading}</Heading>
+                    </Title>
+                    <GridFullPageContainer containerStyles='gap-6' columns={2}>
+                        {PROCESS.stappen.map((card, i) => (
+                            <li key={i} className='p-8 bg-white shadow-base rounded-lg'>
+                                <SubHeading level='h4' size='base'>{card.subHeading}</SubHeading>
+                                <Heading level='h4' size='base'>{card.heading}</Heading>
+                                <Paragraph size='base'>{card.paragraph}</Paragraph>
                             </li>
                         ))}
                     </GridFullPageContainer>
@@ -430,5 +544,179 @@ const FEATURES = {
             heading: "Bewerking en postproductie",
             paragraph: "In een wereld waar visuele content regeert, bieden wij professionele fotografie- en videodiensten aan om jouw merkverhaal op je nieuwe website te versterken"
         },
+    ]
+}
+
+
+const layout2 = {
+    title: {
+        subHeading: "Slecht vindbaar online?",
+        heading: "Word zichtbaar in zoekmachines en trek nieuwe klanten aan met een nieuwe website",
+        paragraph: "Een slechte vindbaarheid in zoekmachines is alsof u een winkel heeft in een verlaten steegje; potentiële klanten weten niet dat u er bent. Dit beperkt uw groeikansen en resulteert in gemiste verkoop. Door gericht SEO toe te passen tijdens het ontwikkelen van je nieuwe website, maken we jouw website zichtbaar. Dit vergroot uw bereik en biedt nieuwe groeimogelijkheden in een competitieve markt"
+    },
+    cards: [
+        {
+            icon: <ComputerDesktopIcon className='w-5 h-5 text-primary-500' />,
+            title: "SEO Implementatie",
+            description: "Door SEO-best practices te integreren tijdens het ontwikkelen van de nieuwe website, kunnen we ervoor zorgen dat deze optimaal geoptimaliseerd is voor zoekmachines. Dit omvat het gebruik van relevante zoekwoorden, het optimaliseren van metadata, het verbeteren van de laadsnelheid, het creëren van kwalitatieve inhoud",
+            readMoreLink: "#"
+        },
+        {
+            icon: <ComputerDesktopIcon className='w-5 h-5 text-primary-500' />,
+            title: "Lokaal vindbaar",
+            description: "Voor lokale bedrijven is lokale vindbaarheid essentieel. Met een nieuwe website geoptimaliseerd voor lokale zoekresultaten, zorgen we ervoor dat uw bedrijf gemakkelijk gevonden wordt. We gebruiken lokale zoekwoorden, optimaliseren Google Mijn Bedrijf-vermeldingen, verkrijgen positieve recensies en integreren geografische informatie op uw site.",
+            readMoreLink: "#"
+        }
+    ]
+}
+
+const SECTION4 = {
+
+    image: {
+        src: "/test/modern-website-1.jpg",
+        alt: "omzet deze maand",
+        width: 1000,
+        height: 600
+    },
+    content: {
+        subHeading: "Vernieuwen van Website Design",
+        heading: "Maak een sterke eerste indruk met een modern websiteontwerp",
+        paragraph: "Een verouderd of onprofessioneel websiteontwerp kan potentiële klanten afschrikken en schaden aan uw merkimago. Een fris en modern ontwerp kan daarentegen een positieve eerste indruk creëren en bezoekers langer op uw site houden. Wij kunnen uw website een complete make-over geven met een responsive, gebruiksvriendelijk en visueel aantrekkelijk ontwerp dat uw merkwaarden uitstraalt."
+    },
+    cards: [
+        {
+            icon: <ComputerDesktopIcon />,
+            heading: "Professioneel Webdesign",
+            paragraph: "Een uniek ontwerp dat uw merk perfect weerspiegelt en uw bedrijf onderscheidt van de concurrentie.",
+        },
+        {
+            icon: <FingerPrintIcon />,
+            heading: "Gebruikerservaring",
+            paragraph: "Een geoptimaliseerde gebruikerservaring die de conversie verhoogt en bezoekers aanzet tot actie.",
+        },
+        {
+            icon: <DevicePhoneMobileIcon />,
+            heading: "Responsive Design",
+            paragraph: "Een professioneel ontwerp dat er geweldig uitziet op elk apparaat en schermformaat.",
+        }
+    ]
+}
+
+const SECTION5 = {
+    image: {
+        src: "/test/Untitled.png",
+        alt: "omzet deze maand",
+        width: 600,
+        height: 650
+    },
+    content: {
+        subHeading: 'Gebruiksvriendelijkheid',
+        heading: 'Zorg voor een soepele gebruikerservaring en houd bezoekers betrokken',
+        paragraph: 'Een slechte gebruikerservaring kan bezoekers frustreren en ervoor zorgen dat ze uw site verlaten zonder actie te ondernemen. Een goed ontworpen en gebruiksvriendelijke website zorgt ervoor dat bezoekers gemakkelijk kunnen navigeren, informatie kunnen vinden en actie kunnen ondernemen. Wij kunnen uw website optimaliseren voor een soepele gebruikerservaring en hogere conversiepercentages.'
+    },
+    cards: [
+        {
+            icon: <ComputerDesktopIcon />,
+            heading: "Intuïtieve Navigatie",
+            paragraph: "Een duidelijke en intuïtieve navigatiestructuur die bezoekers helpt snel en gemakkelijk te vinden wat ze zoeken.",
+        },
+        {
+            icon: <FingerPrintIcon />,
+            heading: "Gebruiksvriendelijk Ontwerp",
+            paragraph: "Een gebruiksvriendelijk ontwerp dat de interactie met uw website vereenvoudigt en de betrokkenheid van bezoekers vergroot.",
+        },
+        {
+            icon: <DevicePhoneMobileIcon />,
+            heading: "Toegankelijkheid",
+            paragraph: "Een toegankelijk ontwerp dat voldoet aan de WCAG-richtlijnen en ervoor zorgt dat uw website voor iedereen bruikbaar is.",
+        }
+    ]
+}
+
+const SECTION6 = {
+    content: {
+        subHeading: "Verhoogde Conversie",
+        heading: "Verhoog de conversie en genereer meer leads en verkopen",
+        paragraph: "Een hoge conversieratio is essentieel voor het succes van uw website. Of het nu gaat om het genereren van leads, het stimuleren van verkopen of het vergroten van de betrokkenheid, een effectieve conversiestrategie kan uw bedrijf naar nieuwe hoogten brengen. Wij kunnen uw website optimaliseren voor maximale conversie en resultaten."
+    },
+    cards: [
+        {
+            icon: <CursorArrowRaysIcon className='w-5 h-5 text-primary-500' />,
+            heading: "Landingspagina's",
+            paragraph: "Geoptimaliseerde landingspagina's die bezoekers aantrekken en aanzetten tot actie.",
+        },
+        {
+            icon: <CursorArrowRaysIcon className='w-5 h-5 text-primary-500' />,
+            heading: "A/B-Testen",
+            paragraph: "A/B-testen om de effectiviteit van uw website te meten en te optimaliseren voor maximale conversie.",
+        },
+        {
+            icon: <CursorArrowRaysIcon className='w-5 h-5 text-primary-500' />,
+            heading: "Conversie Tracking",
+            paragraph: "Geavanceerde conversietracking om de prestaties van uw website te meten en te verbeteren.",
+        }
+    ]
+}
+
+const TESTEMONIALS = {
+    title: {
+        subHeading: "Wat Onze Klanten Zeggen",
+        heading: "Nog niet overtuigd? Lees wat onze klanten te zeggen hebben.",
+        paragraph: "Onze klanten zijn onze grootste supporters. Ontdek wat ze te zeggen hebben over hun ervaring met ons bedrijf en hoe onze producten en diensten hun bedrijf hebben geholpen groeien en gedijen."
+    },
+    cards: [
+        {
+            paragraph: 'Ze ontwikkelden op maat gemaakte producten die perfect aansluiten bij mijn merk en doelgroep. De resultaten spreken voor zich - meer verkeer, meer leads en uiteindelijk meer omzet. Een echte gamechanger!',
+            name: 'Tom Jones',
+            position: 'E-Commerce Strijder',
+            image: {
+                src: '',
+                alt: '',
+            }
+        }, {
+            paragraph: 'Ze ontwikkelden op maat gemaakte producten die perfect aansluiten bij mijn merk en doelgroep. De resultaten spreken voor zich - meer verkeer, meer leads en uiteindelijk meer omzet. Een echte gamechanger!',
+            name: 'Tom Jones',
+            position: 'E-Commerce Strijder',
+            image: {
+                src: '',
+                alt: '',
+            }
+        }, {
+            paragraph: 'Ze ontwikkelden op maat gemaakte producten die perfect aansluiten bij mijn merk en doelgroep. De resultaten spreken voor zich - meer verkeer, meer leads en uiteindelijk meer omzet. Een echte gamechanger!',
+            name: 'Tom Jones',
+            position: 'E-Commerce Strijder',
+            image: {
+                src: '',
+                alt: '',
+            }
+        }
+    ]
+}
+
+const PROCESS = {
+    title: {
+        heading: "Onze eenvoudige workflow om jouw website droom waar te maken",
+    },
+    stappen: [
+        {
+            subHeading: "Stap 1",
+            heading: "Overleg met de klant",
+            paragraph: "We beginnen met een grondige analyse van jouw bedrijf, doelstellingen en doelgroep om een duidelijk beeld te krijgen van wat je wilt bereiken met jouw nieuwe website.",
+        },
+        {
+            subHeading: "Stap 2",
+            heading: "Strategie Ontwikkeling",
+            paragraph: "Op basis van de informatie die we hebben verzameld, ontwikkelen we een strategie die aansluit bij jouw bedrijfsdoelstellingen en de behoeften van jouw doelgroep. We werken nauw samen met jou om ervoor te zorgen dat de website voldoet aan jouw verwachtingen en doelstellingen.",
+        },
+        {
+            subHeading: "Stap 3",
+            heading: "Uitvoering en optimalisatie",
+            paragraph: "Na goedkeuring van het ontwerp en de strategie, gaan we aan de slag met de ontwikkeling van de website. We zorgen ervoor dat de website voldoet aan de hoogste normen op het gebied van design, functionaliteit en gebruiksvriendelijkheid. We voeren uitgebreide tests uit om ervoor te zorgen dat de website goed werkt op alle apparaten en browsers.",
+        },
+        {
+            subHeading: "Stap 4",
+            heading: "Meten en evaluatie",
+            paragraph: "Na de lancering van jouw nieuwe website blijven we werken aan het optimaliseren van de prestaties en het verbeteren van de gebruikerservaring om ervoor te zorgen dat jouw website blijft groeien en bloeien.",
+        }
     ]
 }

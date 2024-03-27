@@ -9,22 +9,28 @@ export const constants = {
 }
 
 const container = {
+  // standard section gutter
+  sectionGutter: 'px-[12px] md:px-[60px] lg:px-16',
+  // standard section gutter with max width
   maxWidthGutter: 'max-w-[1428px] mx-auto px-[12px] md:px-[60px] lg:px-16',
+  // extra padding on md, used on content inside a container
   maxWidthGutterExtraPaddingMd: 'max-w-[1428px] mx-auto px-[24px] md:px-[60px] lg:px-16',
+  // only the extra padding on md
+  extraPaddingMd: 'px-[12px] md:px-0',
   maxWidth: 'max-w-[1428px] mx-auto  ',
+
+  // standard section padding
   sectionPadding: 'py-[100px]',
   sectionPaddingTop: 'pt-[100px]',
   sectionPaddingBottom: 'pb-[100px]',
-  sectionGutter: 'px-[12px] md:px-[60px] lg:px-16',
-  gutter: 'px-4',
-  extraPaddingMd: 'px-[12px] md:px-0',
+  
+ 
+  gutter: 'px-4', 
 }
 
 export const styles = {
   glass: `${constants.glassStroke} ${constants.glassFill} shadow-md`,
   darkGlass: `${constants.darkStroke} ${constants.darkFill} shadow-md`,
-
-
 }
 
 
