@@ -85,7 +85,7 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
                 {table.getSelectedRowModel().rows.length > 0 && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <OutlinedButton size='sm'>Row actions</OutlinedButton>
+                            <OutlinedButton size='smD'>Row actions</OutlinedButton>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -188,7 +188,7 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
                 {/* Download to Excell */}
                 <Tooltip>
                     <TooltipTrigger>
-                        <OutlinedButton className="ml-2" size='sm' buttonClassName="px-2" onClick={() => downloadToExcel(data)} >
+                        <OutlinedButton className="ml-2" size='smD' buttonClassName="px-2" onClick={() => downloadToExcel(data)} >
                             <ArrowDownTrayIcon className="w-5 h-5" />
                         </OutlinedButton>
                     </TooltipTrigger>
@@ -202,7 +202,7 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
                     <TooltipTrigger>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <OutlinedButton size='sm' className="ml-2" buttonClassName="px-2"><ViewColumnsIcon className="w-5 h-5" /></OutlinedButton>
+                                <OutlinedButton size='smD' className="ml-2" buttonClassName="px-2"><ViewColumnsIcon className="w-5 h-5" /></OutlinedButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 {table

@@ -63,7 +63,8 @@ const InternalAnchor = React.forwardRef<HTMLAnchorElement, InternalAnchorProps>(
                 href={`${BASE_URL}${href}` }
                 {...props}
                 className={cn(
-                    buttonVariants({ option, size, variant, className })
+                    buttonVariants({ option, size, variant, className }),
+                    'flex items-center', 
                 )}
                 ref={ref}
             ></Link>

@@ -71,7 +71,7 @@ export function SortingRows({ sorting, setSorting }: SortingRowsProps) {
                 <OutlinedButton
                     role="combobox"
                     aria-expanded={tagPopoverOpen}
-                    size='sm'
+                    size='smD'
                     buttonClassName="w-[220px] font-medium text-sm text-left justify-start"
                 >
                     <span className='text-gray-800 '>Sort by:</span>

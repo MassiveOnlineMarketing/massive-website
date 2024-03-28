@@ -46,7 +46,7 @@ const TagSelection = () => {
         <OutlinedButton
           role="combobox"
           aria-expanded={tagPopoverOpen}
-          size='sm'
+          size='smD'
           buttonClassName="w-[250px]  text-sm text-left"
         >
           <span className='text-gray-800 '>Tags:</span>
