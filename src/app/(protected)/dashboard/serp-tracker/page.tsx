@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 
 import { CreateProjectForm } from '@/serp/components/create-project-form'
 import { deleteProjectById, getProjectByUserId } from '@/serp/data/project'
-import { ProjectTable } from './project-table'
-import { columns } from './columns'
+import { ProjectTable } from './_components/table/project-table'
+import { columns } from './_components/table/columns'
 import { useCurrentUser } from '@/auth/hooks/use-current-user';
 import { useToast } from '@/website/features/toast/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from '@/components/ui/alert-dialog'

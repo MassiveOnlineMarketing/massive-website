@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useKeywords } from "..//hooks/useKeywords";
 
-export const DeleteKeywords = ({ selectedRows, onActionFinished }: { selectedRows: any, onActionFinished: () => void }) => {
+export const DeleteKeywords = ({ selectedRows, onActionFinished, children }: { selectedRows: any, onActionFinished: () => void, children: React.ReactNode }) => {
   const keywordIds = selectedRows.rows.map((row: any) => row.original.keywordId);
   // convert keywordIds to string
 
@@ -16,6 +16,8 @@ export const DeleteKeywords = ({ selectedRows, onActionFinished }: { selectedRow
   }
 
   return (
-    <Button variant='outline' size='sm' onClick={handleDeleteClick}>Delete</Button>
+    <p onClick={handleDeleteClick}>
+      {children}
+    </p>
   )
 }

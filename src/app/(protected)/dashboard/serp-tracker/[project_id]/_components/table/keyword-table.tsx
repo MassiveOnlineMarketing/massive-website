@@ -1,7 +1,6 @@
 "use client";
 
-import React, {useState} from "react";
-import AddKeywordsFrom from "@/serp/components/add-keywords-form";
+import React from "react";
 
 import {
   ColumnDef,
@@ -25,22 +24,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Button, OutlinedButton } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { PlusIcon } from "@heroicons/react/20/solid";
-import { AddTagToKeywords } from "@/serp/components/add-tag-to-keyword";
-import { DeleteTagFromKeyword } from "@/serp/components/delete-tag-from-keyword";
-import { AddNewTagInput } from "@/serp/components/add-new-tag-input";
-import { DeleteKeywords } from "@/serp/components/delete-keywords";
+import { cn } from "@/lib/utils";
+
 import { DataTablePagination } from "./pagination-table";
-import { downloadToExcel } from "@/serp/lib/xlsx";
-import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
+import { DataTableTopBar } from "./top-bar";
+
+
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -118,77 +108,17 @@ export function DataTable<TData, TValue>({
   return (
     <div className="bg-white rounded-2xl shadow-sm p-8 mt-8">
       {/* Top bar */}
-      <div className="flex items-center">
-        {/* Searchbar */}
-        <Input
-          placeholder="Filter by keword name..."
-          value={(table.getColumn("keywordName")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("keywordName")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm "
-        />
-
-        <OutlinedButton className="ml-2" buttonClassName="p-2" onClick={() => downloadToExcel(data)} >
-          <ArrowDownTrayIcon className="w-5 h-5" />
-        </OutlinedButton>
-
-        {/* Selected rows */}
-        <div className="mr-auto">
-          {table.getSelectedRowModel().rows.length > 0 && (
-            <div className="flex gap-2 ml-2">
-              <DeleteKeywords selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} />
-              <AddTagToKeywords selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} />
-              <DeleteTagFromKeyword selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} />
-              <AddNewTagInput selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} />
-            </div>
-          )}
-        </div>
-        {/* <div>
-          {table.getSelectedRowModel().rows.map((row) => (
-            <div key={row.id}>{JSON.stringify(row)}</div>
-          ))}
-        </div> */}
-
-        <AddKeywordsFrom>
-          <p className="flex items-center justify-center w-[54px] h-[54px] rounded-full p-0 border border-neutral-200">
-            <PlusIcon className="w-6 h-6" />
-          </p>
-        </AddKeywordsFrom>
-
-        {/* Toggle visable colums */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <OutlinedButton size='sm' className="ml-2">Columns</OutlinedButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter(
-                (column) => column.getCanHide()
-              )
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
+      <DataTableTopBar
+        table={table}
+        data={data}
+        deselectAllRows={deselectAllRows}
+        sorting={sorting}
+        setSorting={setSorting}
+      />
 
 
       {/* Keywords Table */}
-      <div className="rounded-md ">
+      <div className="rounded-md mt-6">
         <Table>
           <TableHeader className="rouded-lg overflow-hidden bg-primary-50">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -197,6 +127,7 @@ export function DataTable<TData, TValue>({
                   return (
                     <TableHead
                       className={
+                        // add rounded corners to first and last cell
                         header.column.getIndex() === 0
                           ? "rounded-l-2xl overflow-hidden "
                           : header.column.getIndex() === numberOfVisibleColumns - 1
@@ -218,18 +149,22 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
 
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="border-b"
+                  className={cn(
+                    "border-",
+                    index % 2 !== 0 ? 'bg-gray-50' : ''
+                  )}
                 // handle click row, open keyword detail
                 // onClick={handleClickRow(row.id)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       className={
+                        // add rounded corners to first and last cell
                         cell.column.getIndex() === 0
                           ? "rounded-l-2xl overflow-hidden "
                           : cell.column.getIndex() === numberOfVisibleColumns - 1
@@ -276,3 +211,7 @@ export function DataTable<TData, TValue>({
     </div>
   );
 }
+
+
+
+

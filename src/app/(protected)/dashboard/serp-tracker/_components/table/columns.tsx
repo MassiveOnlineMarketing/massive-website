@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button, OutlinedButton } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowsUpDownIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
+import { ArrowsUpDownIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
 import { deleteKeywordsById } from "@/serp/data/keyword"
 import { Project } from "@prisma/client"
 
@@ -214,7 +214,7 @@ export const columns = (handleProjectDelete: (projectId: string) => void): Colum
           <DropdownMenuTrigger asChild>
             <OutlinedButton buttonClassName="p-2" >
               <span className="sr-only">Open menu</span>
-              <EllipsisVerticalIcon className="w-4 h-4 " />
+              <EllipsisHorizontalIcon className="w-4 h-4 " />
             </OutlinedButton>
             {/* <Button variant='outline' className="h-8 w-8 p-0 float-right z-10">
             </Button> */}

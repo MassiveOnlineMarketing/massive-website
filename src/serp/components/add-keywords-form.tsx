@@ -24,7 +24,7 @@ type ResultResponse = {
   bestPosition: number;
 }
 
-const AddKeywordsFrom = ({ children }: { children: React.ReactNode }) => {
+const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactNode , buttonClassName?: string}) => {
   const [open, setOpen] = React.useState(false)
   const { projectDetails } = useProjectDetails()
   const { processNewKeywords, isLoading } = useProcessNewKeywords()
@@ -57,7 +57,7 @@ const AddKeywordsFrom = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen} >
-        <DialogTrigger>
+        <DialogTrigger className={buttonClassName}>
           {children}
         </DialogTrigger>
         <DialogContent>

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button, OutlinedButton } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowsUpDownIcon, EllipsisHorizontalIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid"
+import { ArrowsUpDownIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
 import { Result } from "@prisma/client"
 
 // This type is used to define the shape of our data.
@@ -37,6 +37,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
+        className="rounded-[4px] border-gray-300 border-[1.5px]"
       />
     ),
     cell: ({ row }) => (
@@ -44,6 +45,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
+        className="rounded-[4px] border-gray-300 border-[1.5px]"
       />
     ),
     enableSorting: false,
@@ -54,18 +56,14 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "position",
     header: ({ column }) => {
       return (
-        <button
-          className="flex font-medium text-gray-500 mx-auto bg-green-500"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <p className="flex font-medium text-gray-500 mx-auto" >
           Position
-          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </button>
+        </p>
       )
     },
     cell: ({ row }) => {
       return (
-        <div className="flex mx-auto bg-blue-500 h-full">
+        <div className="flex mx-auto h-full">
           <p className=" mx-auto">{row.getValue('position')}</p>
         </div>
       )
@@ -76,13 +74,9 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "keywordName",
     header: ({ column }) => {
       return (
-        <button
-          className="flex font-medium text-gray-500"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <p className="flex font-medium text-gray-500" >
           Keyword
-          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </button>
+        </p>
       )
     },
   },
@@ -112,13 +106,9 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "firstPosition",
     header: ({ column }) => {
       return (
-        <button
-          className="flex font-medium text-gray-500 mx-auto"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <p className="flex font-medium text-gray-500 mx-auto">
           First Position
-          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </button>
+        </p>
       )
     },
     cell: ({ row }) => {
@@ -134,13 +124,9 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "bestPosition",
     header: ({ column }) => {
       return (
-        <button
-          className="flex font-medium text-gray-500 mx-auto"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <p className="flex font-medium text-gray-500 mx-auto" >
           Best Position
-          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </button>
+        </p>
       )
     },
     cell: ({ row }) => {
@@ -156,13 +142,9 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "latestChange",
     header: ({ column }) => {
       return (
-        <button
-          className="flex font-medium text-gray-500 mx-auto"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <p className="flex font-medium text-gray-500 mx-auto" >
           Latest Change
-          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </button>
+        </p>
       )
     },
     cell: ({ row }) => {
@@ -210,7 +192,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
           <DropdownMenuTrigger asChild>
             <Button variant='dashboard' >
               <span className="sr-only">Open menu</span>
-              <EllipsisVerticalIcon className="w-4 h-4" />
+              <EllipsisHorizontalIcon className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

@@ -65,8 +65,6 @@ type CardProps = {
 
 
 const Card = ({ title, number, numberOfKeywords }: CardProps) => {
-  console.log(number)
-  console.log(title)
   return (
     <div className="w-full rounded-2xl shadow-sm p-6 bg-white">
       <p className="text-sm text-neutral-500 dark:text-neutral-400">{title}</p>

@@ -5,12 +5,12 @@ import { useKeywordResults } from '@/serp/keywords-context'
 import { useProjectDetails } from '@/serp/project-details-context'
 
 // Table
-import { DataTable } from './keyword-table'
-import { columns } from './columns'
+import { DataTable } from './_components/table/keyword-table'
+import { columns } from './_components/table/columns'
 
-import { ProjectStats } from './project-stats'
+import { ProjectStats } from './_components/project-stats'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from '@/components/ui/alert-dialog'
-import TagSelection from './tag-selection'
+import TagSelection from './_components/table/tag-selection'
 import { useFetchKeywordResults } from '@/serp/hooks/useFetchKeywordResults'
 import { useKeywords } from '@/serp/hooks/useKeywords'
 
@@ -59,11 +59,7 @@ const Page = ({ params }: pageProps) => {
   // console.log('filteredResults', filteredResults)
 
   return (
-    <div className='px-4'>
-      <div>
-        Filters
-        <TagSelection />
-      </div>
+    <div className='p-6 mb-16'>
 
       {projectDetails &&
         <>

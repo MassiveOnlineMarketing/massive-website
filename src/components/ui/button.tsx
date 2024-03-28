@@ -44,7 +44,7 @@ const buttonVariants = cva(
       },
       size: {
         xs: "px-[12px] py-[6px] text-xs font-medium leading-4 gap-[4px]",
-        sm: "px-[16px] py-[8px] text-sm font-medium leading-5 gap-[6px]",
+        sm: "px-[16px] h-[32px] text-sm font-medium leading-5 gap-[6px]",
         md: "px-[24px] py-[12px] text-base font-semibold leading-6 gap-[8px]",
         lg: "px-[32px] py-[14px] text-base font-semibold leading-6 gap-[12px]",
 
@@ -97,11 +97,11 @@ interface OutlinedButtonProps
 const OutlinedButton = React.forwardRef<HTMLButtonElement, OutlinedButtonProps>(
   ({ children, className, buttonClassName, variant, size, option, ...props }, ref) => {
     return (
-      <div className={cn("relative w-fit h-fit", className)}>
+      <div className={cn("relative w-fit h-fit m-1", className)}>
         <Button
           ref={ref}
           className={cn(
-            "shadow-base bg-white z-40 rounded-lg relative",
+            "shadow-base bg-white z-40 rounded-lg relative cursor-pointer",
             buttonVariants({ variant, size, option }),
             buttonClassName
           )}
