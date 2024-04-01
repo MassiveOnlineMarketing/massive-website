@@ -62,7 +62,7 @@ export const CreateProjectForm = () => {
 
 
     reset()
-    router.push(`/dashboard/serp-tracker/${projectResponse.project.id}`)
+    router.push(`/app/search/tracker/${projectResponse.project.id}`)
     setOpen(false)
 
     if (!data.keywords) {

@@ -6,29 +6,49 @@ import { cn } from "@/lib/utils";
 interface props
     extends React.AnchorHTMLAttributes<HTMLParagraphElement>,
     VariantProps<typeof buttonVariants> {
-      children: React.ReactNode;
-      mbFull?: boolean;
+    children: React.ReactNode;
+    mbFull?: boolean;
+    buttonClassName?: string;
 }
 
-const TextButton = React.forwardRef<HTMLParagraphElement, props>(
-  (
-      { className, option, size, variant, mbFull, ...props },
-      ref 
-  ) => {
-      return (
-          <p
-              {...props}
-              ref={ref} 
-              className={cn(
-                  buttonVariants({ option, size, variant, className }),
-                  mbFull ? 'w-full md:w-fit' : ''
-              )}
-          >
-            {props.children} 
-          </p>
-      );
-  }
-);
+const TextButton = React.forwardRef<HTMLParagraphElement, props>(({ className, option, size, variant, mbFull, ...props }, ref) => {
+    return (
+        <p
+            ref={ref}
+            {...props}
+            className={cn(
+                buttonVariants({ option, size, variant, className }),
+                mbFull ? 'w-full md:w-fit' : ''
+            )}
+        >
+            {props.children}
+        </p>
+    );
+});
+
 TextButton.displayName = "TextButton";
 
-export { TextButton };
+const OutlinedTextButton = React.forwardRef<HTMLParagraphElement, props>(({ className, buttonClassName, option, size, variant, mbFull, ...props }, ref) => {
+    return (
+        <div className={cn("relative w-fit h-fit m-1", className)}>
+            <p
+                ref={ref}
+                {...props}
+                className={cn(
+                    "shadow-base bg-white z-40 rounded-lg relative cursor-pointer",
+                    buttonVariants({ option, size, variant }),
+                    mbFull ? 'w-full md:w-fit' : '',
+                    buttonClassName
+                )}
+            >
+                {props.children}
+            </p>
+            <div className="absolute top-0 left-0 w-full h-full rounded-[8px] outline outline-4 outline-primary-50 bg-primary-50 z-30"></div>
+        </div>
+    );
+});
+
+OutlinedTextButton.displayName = "OutlinedTextButton";
+
+
+export { TextButton, OutlinedTextButton };

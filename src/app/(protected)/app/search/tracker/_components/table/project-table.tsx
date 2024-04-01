@@ -103,7 +103,7 @@ export function ProjectTable<TData, TValue>({
       if (!isNaN(index) && index >= 0 && index < data.length) {
         // @ts-ignore
         let projectId = data[index].id;
-        router.push(`/dashboard/serp-tracker/${projectId}`);
+        router.push(`/app/search/tracker/${projectId}`);
       } else {
         console.log("Invalid index");
       }

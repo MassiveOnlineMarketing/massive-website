@@ -11,6 +11,12 @@ const Dialog = DialogPrimitive.Root
 
 const DialogTrigger = DialogPrimitive.Trigger
 
+const DialogTriggerNoButton = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'>>(
+  (props, ref) => <div ref={ref} {...props} />
+);
+
+DialogTriggerNoButton.displayName = 'DialogTriggerNoButton';
+
 const DialogPortal = DialogPrimitive.Portal
 
 const DialogClose = DialogPrimitive.Close
@@ -121,6 +127,7 @@ export {
   DialogOverlay,
   DialogClose,
   DialogTrigger,
+  DialogTriggerNoButton,
   DialogContent,
   DialogHeader,
   DialogFooter,

@@ -14,7 +14,7 @@ export const DeleteProjectButton = ({ projectId }: { projectId: string }) => {
   const handleClick = async () => {
     deleteProjectById(projectId)
 
-    router.push('dashboard/serp-tracker')
+    router.push('app/search/tracker')
     toast({
       title: 'Project deleted',
       variant: 'success',

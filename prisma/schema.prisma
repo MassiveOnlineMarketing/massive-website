@@ -102,7 +102,25 @@ model Project {
   noChange    Int?
   notFound    Int?
 
+  results ProjectResult[]
+
   @@unique([id])
+}
+
+model ProjectResult {
+  id         String   @id @default(cuid())
+  projectId  String
+  improved   Int?
+  worsened   Int?
+  total      Int?
+  topThree   Int?
+  topTen     Int?
+  topHundred Int?
+  noChange   Int?
+  notFound   Int?
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
 
 model Keyword {

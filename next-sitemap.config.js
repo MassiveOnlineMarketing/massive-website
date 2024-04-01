@@ -44,7 +44,7 @@ module.exports = {
         {
           userAgent: '*',
           allow: '/',
-          disallow: ['/dashboard/', '/auth/', '/api/'],
+          disallow: ['/app/', '/auth/', '/api/'],
         },
         // {
         //   userAgent: 'test-bot',

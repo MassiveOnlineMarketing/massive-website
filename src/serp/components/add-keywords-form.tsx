@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { KeywordsSchema } from '../schema'
 
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/website/features/dialog/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogTriggerNoButton } from '@/website/features/dialog/dialog'
 import { useProjectDetails } from '../project-details-context'
 import { useKeywords } from '../hooks/useKeywords'
 import { splitAndTrimKeywords } from '../lib/utils'
@@ -57,9 +57,9 @@ const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactN
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen} >
-        <DialogTrigger className={buttonClassName}>
+        <DialogTriggerNoButton className={buttonClassName} onClick={() => setOpen(true)}>
           {children}
-        </DialogTrigger>
+        </DialogTriggerNoButton>
         <DialogContent>
           <DialogHeader>
             Please enter the keywords you want to track
