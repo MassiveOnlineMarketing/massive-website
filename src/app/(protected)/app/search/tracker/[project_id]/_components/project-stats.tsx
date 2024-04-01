@@ -110,9 +110,9 @@ const Card = ({ title, number, yesterdaysNumber, numberOfKeywords }: CardProps) 
         "mt-2 text-4xl font-semibold text-gray-700",
       )}>{number}</p>
       {yesterdaysNumber &&
-        <div className='mt-4 inline-flex items-center gap-2'>
+        <div className='mt-4 inline-flex items-center gap-2 text-xs'>
           <p className={cn(
-            percentageDifference > 0 ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500",
+            percentageDifference > 0 ? "bg-green-100 text-green-500" : percentageDifference < 0 ? "bg-red-100 text-red-500" : "bg-white text-gray-800",
             'px-2 py-1 w-fit rounded-[4px]'
           )}>{percentageDifference}%</p>
           <p>vs Yesterday</p>

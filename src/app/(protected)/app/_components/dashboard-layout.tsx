@@ -89,7 +89,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <div className="flex flex-row h-[calc(100vh-64px)]">
                     {/* <div className='lg:block hidden'> */}
                     {/* Primary sidebar */}
-                    <PrimarySidebar navigation={navigation} pathname={pathname} isActive={isActive} />
+                    <PrimarySidebar navigation={navigation} pathname={pathname} isActive={isActive} setSecondarySidebarOpen={setSecondarySidebarOpen}/>
 
                     {/* Secondery sidebar */}
                     {currentNavigation && <SecondarySidebar navigation={currentNavigation} secondarySidebarOpen={secondarySidebarOpen} setSecondarySidebarOpen={setSecondarySidebarOpen} />}
