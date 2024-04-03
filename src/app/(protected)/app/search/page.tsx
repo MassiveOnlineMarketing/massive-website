@@ -45,8 +45,10 @@ const Page = () => {
   useEffect(() => {
     async function fetchData() {
       const result1 = await getLatestKeywordResultWithTags('clsnsgql50005tdch125hvhbn')
+      console.time("keywordResults");
       const keywordResults = await getLatestSerpResults('clsnsgql50005tdch125hvhbn')
       const keywordDetails = await getKeywordsByProjectId('clsnsgql50005tdch125hvhbn')
+      console.timeEnd("keywordResults");
 
       setKeywordDetails(keywordDetails);
 

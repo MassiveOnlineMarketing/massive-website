@@ -12,8 +12,11 @@ import MobileSidebar from './mobile-sidebar';
 
 // Assets
 import {
+    ComputerDesktopIcon,
+    CreditCardIcon,
     FolderIcon,
     HomeIcon,
+    MagnifyingGlassIcon,
     UsersIcon,
 } from '@heroicons/react/24/outline'
 import {
@@ -29,8 +32,9 @@ export type NavigationProps = {
 
 const navigation = [
     { name: 'Dashboard', href: '/app', icon: HomeIcon },
-    { name: 'Serp', href: '/app/search', icon: UsersIcon },
-    { name: 'Website', href: '/app/website', icon: FolderIcon }
+    { name: 'Search', href: '/app/search', icon: MagnifyingGlassIcon },
+    { name: 'Website', href: '/app/website', icon: ComputerDesktopIcon },
+    { name: 'Billing', href: '/app/billing', icon: CreditCardIcon },
 ]
 
 const searchNavigation = [
