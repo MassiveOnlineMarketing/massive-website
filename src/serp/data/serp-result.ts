@@ -1,6 +1,7 @@
 'use server'
 
 import { db } from "@/lib/db";
+import { SerpResult } from "@prisma/client";
 
 type serpProps = {
   keywordId: string;
@@ -30,4 +31,27 @@ export const insertSERPResults = async (
   });
 
   return { success: "SERP Results inserted!", resultInsert };
+}
+
+interface ResultType {
+  // replace `any` with the actual type of the results
+  [keywordId: string]: SerpResult[];
+}
+export const getLatestSerpResultsWithTags = async (keywordIds: string[]) => {
+  const results: ResultType = {};
+
+  for (const keywordId of keywordIds) {
+    results[keywordId] = await db.serpResult.findMany({
+      where: {
+        keywordId: keywordId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 10,
+    });
+  }
+  console.log('🟢 result');
+
+  return results;
 }

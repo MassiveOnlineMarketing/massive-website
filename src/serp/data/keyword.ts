@@ -67,6 +67,9 @@ export const getKeywordsByProjectId = async (projectId: string) => {
     where: {
       projectId,
     },
+    include: {
+      tags: true,
+    },
   });
 
   // console.log('🟢 keywords', keywords);

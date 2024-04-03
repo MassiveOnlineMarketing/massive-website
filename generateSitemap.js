@@ -48,7 +48,7 @@ async function generateSitemap() {
                 xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9"
             },
             url: allPaths.map(path => ({
-                loc: `${process.env.NEXT_PUBLIC_WEBSITE_URl}${path}`,
+                loc: `${process.env.NEXT_PUBLIC_WEBSITE_URL}${path}`,
                 lastmod: new Date().toISOString(),
                 changefreq: 'daily',
                 priority: 0.7

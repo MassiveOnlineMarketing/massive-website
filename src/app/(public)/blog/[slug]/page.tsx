@@ -32,21 +32,22 @@ import { BookOpenIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 // Schema
 import generateSchema from "@/website/schema/generate-schema";
+import axios from "axios";
 
 
-type pageProps = {
-    params: {
-        slug: string
-    }
-}
+// type pageProps = {
+//     params: {
+//         slug: string
+//     }
+// }
 
 
-export default async function BlogPage({ params }: pageProps) {
-    console.log('page', params.slug)
+export default async function BlogPage({ params: { slug = 'home' } }) {
+    console.log('page', slug)
 
     let blogData = null;
     try {
-        const response = await fetchBlogPostById(params.slug);
+        const response = await fetchBlogPostById(slug);
         blogData = response.props.page
     } catch (error) {
         console.error('error', error)
@@ -91,14 +92,14 @@ export default async function BlogPage({ params }: pageProps) {
                                 </div>
                                 <div aria-label="separator" className="w-[6px] h-[6px] bg-gray-500 rounded-full"></div>
                                 <div className="flex items-center gap-2">
-                                    <BookOpenIcon className='w-5 h-5' aria-label="book icon"  />
+                                    <BookOpenIcon className='w-5 h-5' aria-label="book icon" />
                                     <p aria-label="reading time">{blogData.timeToRead} minuten</p>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <Image className="mx-auto max-w-[800px] w-full rounded-2xl" priority={true}  src={`${PAYLOAD_BACKEND_URL}${blogData.heroImage.url}`} alt={blogData.heroImage.alt} width={blogData.heroImage.width} height={blogData.heroImage.height} />
+                    <Image className="mx-auto max-w-[800px] w-full rounded-2xl" priority={true} src={`${PAYLOAD_BACKEND_URL}${blogData.heroImage.url}`} alt={blogData.heroImage.alt} width={blogData.heroImage.width} height={blogData.heroImage.height} />
 
                     <article className={`mt-[44px] max-w-[800px] mx-auto`}>
                         <RenderBlocks layout={blogData.layout} />
@@ -133,7 +134,15 @@ export default async function BlogPage({ params }: pageProps) {
     )
 }
 
-
+export async function generateStaticParams() {
+    try {
+        const response = await axios(`${process.env.PAYLOAD_BACKEND_URL}/api/blog-posts?limit=1000`)
+        const pages: BlogPost[] = response.data.docs;
+        return pages.filter(page => page.visable === true).map(page => page.slug)
+    } catch (error) {
+        return []
+    }
+}
 
 
 export async function generateMetadata({ params: { slug = 'home' } }) {

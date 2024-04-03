@@ -5,6 +5,7 @@ import { auth } from "@/auth/auth";
 import { getKeywordsByProjectId } from "./data/keyword";
 import { getLatestKeywordResultWithTagByKeywordId } from "./data/result";
 import { getProjectById } from "./data/project";
+import { getLatestSerpResultsWithTags } from "./data/serp-result";
 
 export const stringToArray = (str: string) => {
   const obj_keywords = str.split('\n')
@@ -26,6 +27,21 @@ export const getLatestKeywordResultWithTags = async (projectId: string) => {
 
   if (keywordsIds && keywordsIds.length > 0) {
     const keywordResults = await getLatestKeywordResultWithTagByKeywordId(keywordsIds);
+
+    return keywordResults;
+  }
+}
+
+export const getLatestSerpResults = async (projectId: string) => {
+
+  const allKeywords = await getKeywordsByProjectId(projectId);
+
+  const keywordsIds = allKeywords?.map((keyword) => {
+    return keyword.id;
+  });
+
+  if (keywordsIds && keywordsIds.length > 0) {
+    const keywordResults = await getLatestSerpResultsWithTags(keywordsIds);
 
     return keywordResults;
   }
