@@ -26,7 +26,13 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
   refreshToken          String?                @db.Text
+  credits               Int                    @default(10)
   Project               Project[]
+
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 }
 
 model Account {
@@ -159,6 +165,9 @@ model Result {
   bestPosition    Int?
   latestChange    Int?
   createdAt       DateTime @default(now())
+
+  relatedSearches Json?
+  peopleAlsoAsk   Json?
 
   keyword Keyword @relation(fields: [keywordId], references: [id], onDelete: Cascade)
 }

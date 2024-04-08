@@ -14,6 +14,7 @@ import {
     Bars3Icon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import Credits from '@/dashboard/components/credits';
 
 
 const TopBar = ({
@@ -38,6 +39,7 @@ const TopBar = ({
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
 
                 <div className="flex items-center gap-x-4 lg:gap-x-6 ml-auto">
+                    <Credits />
                     {/* Separator */}
                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />
 

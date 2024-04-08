@@ -1,5 +1,6 @@
 // app/api/serp.ts
 
+import { decrementUserCredits } from "@/auth/data/user";
 import { insertKeywords } from "@/serp/data/keyword";
 import { insertUserResults } from "@/serp/data/result";
 import { insertSERPResults } from "@/serp/data/serp-result";
@@ -14,14 +15,14 @@ interface Data {
   language: string;
   country: string;
   domainUrl: string;
-
+  userId: string;
 }
 
 export async function POST(request: Request) {
 
   const data: Data = await request.json();
 
-  const { projectId, keyword, language, country, domainUrl } = data;
+  const { projectId, keyword, language, country, domainUrl, userId } = data;
 
 
 
@@ -41,7 +42,9 @@ export async function POST(request: Request) {
 
   console.timeEnd('addKeywordToProject'); // End the timer
 
-
+  console.log('route/userId', userId);
+  // decrement user credits
+  await decrementUserCredits(userId, keywords.keywordResponse.length);
 
   // Return the processed data
   return new Response(JSON.stringify(userResultsArrays), {

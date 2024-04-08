@@ -81,6 +81,7 @@ export const {
 
       // add role to jwt
       token.role = existingUser.role;
+      token.credits = existingUser.credits;
 
       // add customField to jwt
       token.customField = "test";
@@ -98,6 +99,7 @@ export const {
     async session({ session, token }: any) {
       // console.log('session', { session, token })
 
+      // * Add extra data to the session
       // add id to session
       if (token.sub && session.user) {
         session.user.id = token.sub;
@@ -112,10 +114,12 @@ export const {
       // ! also set in next-auth.d.ts
       if (session.user) {
         session.user.customField = token.customField as string;
+        session.user.credits = token.credits as number;
       }
 
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
+      session.credits = token.credits;
       session.email = token.email;
 
       return session;

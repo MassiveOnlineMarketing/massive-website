@@ -1,40 +1,43 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { KeywordsSchema } from '../schema'
-
-import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogTriggerNoButton } from '@/website/features/dialog/dialog'
 import { useProjectDetails } from '../project-details-context'
-import { useKeywords } from '../hooks/useKeywords'
-import { splitAndTrimKeywords } from '../lib/utils'
 import { useProcessNewKeywords } from '../hooks/useProcessNewKeywords'
 
-type Schema = z.infer<typeof KeywordsSchema>
+// utils
+import { KeywordsSchema } from '../schema'
+import { z } from 'zod'
+import { splitAndTrimKeywords } from '../lib/utils'
 
-type ResultResponse = {
-  keywordId: string;
-  keywordName: string;
-  position: number;
-  url: string;
-  metaTitle: string;
-  metaDescription: string;
-  firstPosition: number;
-  bestPosition: number;
-}
+// components
+import { Dialog, DialogContent, DialogHeader, DialogTriggerNoButton } from '@/website/features/dialog/dialog'
+import { useToast } from '@/website/features/toast/use-toast'
+
+type Schema = z.infer<typeof KeywordsSchema>
 
 const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactNode , buttonClassName?: string}) => {
   const [open, setOpen] = React.useState(false)
   const { projectDetails } = useProjectDetails()
-  const { processNewKeywords, isLoading } = useProcessNewKeywords()
-
+  const { processNewKeywords, isLoading, error } = useProcessNewKeywords()
+  const {toast} = useToast()
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors }
   } = useForm<Schema>({})
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        description: error,
+        variant: 'destructive',
+        duration: 3000
+      })
+    }
+  }, [error])
+
 
   const onSubmit = async (data: Schema) => {
     setOpen(false)
@@ -51,8 +54,6 @@ const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactN
       reset()
     }
   }
-
-
 
   return (
     <>

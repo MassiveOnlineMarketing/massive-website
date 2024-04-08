@@ -22,6 +22,7 @@ export const publicDynamicRoutes = [
   "/zakelijke-website-laten-maken",
   "/professionele-webshop-laten-maken",
   "/search-engine-optimization",
+  '/api/webhooks',
 
   "/vragenlijst",	
 ]

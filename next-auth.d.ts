@@ -7,7 +7,7 @@ export type ExtendedUser = DefaultSession["user"] & {
   isOAuth: boolean;
   customField?: string;
 
-
+  credits: number;
   refreshToken?: string;
 };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form"
 import { ProjectSchema } from "../schema"
@@ -8,15 +8,16 @@ import { ProjectSchema } from "../schema"
 import { useRouter } from "next/navigation";
 
 import { z } from "zod"
-import { useToast } from "@/website/features/toast/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/website/features/dialog/dialog'
-import { TextButton } from "@/components/ui/text-button";
 import { useCurrentUser } from "@/auth/hooks/use-current-user";
-import { createProject } from "../data/project";
-import { useKeywords } from "../hooks/useKeywords";
 import { splitAndTrimKeywords } from "../lib/utils";
 import { useProject } from "../hooks/useProject";
 import { useProcessNewKeywords } from "../hooks/useProcessNewKeywords";
+
+// components
+import { Loader2 } from "lucide-react";
+import { TextButton } from "@/components/ui/text-button";
+import { useToast } from "@/website/features/toast/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/website/features/dialog/dialog'
 
 
 type Schema = z.infer<typeof ProjectSchema>
@@ -37,8 +38,9 @@ export const CreateProjectForm = () => {
   const [open, setOpen] = useState(false)
 
   const user = useCurrentUser()
+  const { toast } = useToast()
   const { createNewProjectAndToast } = useProject()
-  const { processNewKeywords } = useProcessNewKeywords()
+  const { processNewKeywords, isLoading, error } = useProcessNewKeywords()
 
   const {
     register,
@@ -47,8 +49,19 @@ export const CreateProjectForm = () => {
     formState: { errors }
   } = useForm<Schema>({})
 
+  useEffect(() => {
+    if (error) {
+      toast({
+        description: error,
+        variant: 'destructive',
+        duration: 3000
+      })
+    }
+  }, [error])
+
+
+
   const onSubmit: SubmitHandler<Schema> = async data => {
-    // TODO: Toast
     console.log('we are setting up the project, you will be redirected once it is done')
     if (!user?.id) {
       return
@@ -142,7 +155,10 @@ export const CreateProjectForm = () => {
               {...register("keywords")}
             />
 
-            <button type="submit">Submit</button>
+            <button type="submit">
+              {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+              Submit
+            </button>
           </form>
         </DialogContent>
       </Dialog>
