@@ -6,7 +6,7 @@ import { db } from "../lib/db";
 import authConfig from "../../auth.config";
 import { getUserById } from "./data/user";
 import { ExtendedUser } from "../../next-auth";
-import { updateGoogleRefreshToken } from "../lib/tokens";
+import { updateGoogleRefreshToken, updateGoogleSearchConsoleAuthenticated } from "../lib/tokens";
 
 export const {
   handlers: { GET, POST },
@@ -32,29 +32,42 @@ export const {
     async signIn({ user, account }) {
       // console.log('signIn', { user, account, })
 
-      // Allow OAuth without email verification
+      // * Allow OAuth without email verification
       if (account?.provider !== "credentials") {
         // Store the refresh token
         if (account?.provider === "google" && account.refresh_token) {
-
+          
           (user as ExtendedUser).refreshToken = account.refresh_token;
-
+          
+          // ! old
           // console.log("refresh token ", account.refresh_token)
           // Update the refresh token in the database
           // if (user.email) {
           //   await updateUserRefreshToken(user.email, account.refresh_token);
           // }
         }
+
+        // * Check if the user has Google Search Console connection
+        if (account?.provider === "google" && account.scope ){
+          // console.log("account", account) 
+          if (account.scope && account.scope.includes('https://www.googleapis.com/auth/webmasters.readonly')) {
+
+            updateGoogleSearchConsoleAuthenticated(user.id as string, true);
+            // (user as ExtendedUser).isGoogleSearchConsoleAuthenticated = true;
+            console.log("Google Search Console connection")
+          }
+        }
         return true;
       }
 
-      // only triggers when email has been used to create an account
+      // * only triggers when email has been used to create an account
       if (user.id) {
         const existingUser = await getUserById(user.id);
 
-        // Prevent sign in without email verification
+        // * Prevent sign in without email verification
         if (!existingUser?.emailVerified) return false;
 
+        // * Two factor authentication
         // if (existingUser.isTwoFactorEnabled) {
         //   const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
 
@@ -82,14 +95,18 @@ export const {
       // add role to jwt
       token.role = existingUser.role;
       token.credits = existingUser.credits;
+      token.refreshToken = existingUser.refreshToken;
+      
 
       // add customField to jwt
       token.customField = "test";
+      token.isGoogleSearchConsoleAuthenticated = existingUser.isGoogleSearchConsoleAuthenticated;
 
-      // add refersh and acces token to jwt --> Google login search console connection 
+      // add refresh and acces token to jwt --> Google login search console connection 
       if (account && account.refresh_token) {
         token.accesToken = account.access_token;
         token.refreshToken = account.refresh_token;
+        token.isGoogleSearchConsoleAuthenticated = account.isGoogleSearchConsoleAuthenticated;
         await updateGoogleRefreshToken(token.sub, account.refresh_token);
       }
       return token;
@@ -119,6 +136,7 @@ export const {
 
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
+      session.isGoogleSearchConsoleAuthenticated = token.isGoogleSearchConsoleAuthenticated;
       session.credits = token.credits;
       session.email = token.email;
 

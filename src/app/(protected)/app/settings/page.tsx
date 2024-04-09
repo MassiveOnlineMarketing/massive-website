@@ -1,6 +1,6 @@
 import { auth, signOut } from '@/auth/auth'
 import { Button } from '@/components/ui/button'
-import { ReauthenticateButton } from '@/auth/components/reauthenticate-button'
+import { AuthenticateGoogleSearchConsoleButton } from '@/auth/components/authenticate-google-search-console-access-button'
 import React from 'react'
 import { AuthenticateGoogleAds } from '@/auth/components/authenticate-google-ads'
 
@@ -23,9 +23,10 @@ const page = async () => {
       </form>
 
 
-
-      <ReauthenticateButton />
+      <div className='flex flex-col'>
+      <AuthenticateGoogleSearchConsoleButton />
       <AuthenticateGoogleAds />
+      </div>
 
     </div>
   )

@@ -13,6 +13,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import TagSelection from './_components/table/tag-selection'
 import { useFetchKeywordResults } from '@/serp/hooks/useFetchKeywordResults'
 import { useKeywords } from '@/serp/hooks/useKeywords'
+import { useSession } from 'next-auth/react'
 
 
 type pageProps = {
@@ -27,7 +28,7 @@ const Page = ({ params }: pageProps) => {
   const { filteredResults, isDialogOpen, setIsDialogOpen } = useKeywordResults()
   const { projectDetails, authorized, fetchProjectDetails } = useProjectDetails()
   const { deleteKeywords, cancelDelete, confirmDelete } = useKeywords()
-
+  const refresh_token = useSession().data?.refreshToken
 
 
 
@@ -67,6 +68,8 @@ const Page = ({ params }: pageProps) => {
           <DataTable
             columns={columns(handleKeywordsDelete)}
             data={filteredResults}
+            projectDetails={projectDetails}
+            refresh_token={refresh_token}
           />
         </>
       }

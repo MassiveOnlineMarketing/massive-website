@@ -56,12 +56,32 @@ type UpdateProjectDetailsSchema = z.infer<typeof UpdateProjectSchema>;
  * @returns The updated project.
  */
 export const updateProjectDetails = async (projectId: string, data: UpdateProjectDetailsSchema) => {
-  const project = await db.project.update({
-    where: { id: projectId },
-    data,
-  });
+  if (data.gscSite) {
+    const project = await db.project.update({
+      where: { id: projectId },
+      data: {
+        projectName: data.projectName,
+        domainUrl: data.domainUrl,
+        language: data.language,
+        country: data.country,
+        gscUrl: data.gscSite,
+      }
+    });
 
-  return project;
+    return project;
+  } else {
+    const project = await db.project.update({
+      where: { id: projectId },
+      data: {
+        projectName: data.projectName,
+        domainUrl: data.domainUrl,
+        language: data.language,
+        country: data.country,
+      },
+    });
+
+    return project;
+  }
 }
 
 /**

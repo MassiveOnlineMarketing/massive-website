@@ -12,11 +12,22 @@ import { useToast } from "@/website/features/toast/use-toast"
 
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/website/features/dialog/dialog'
 import { PencilIcon } from "@heroicons/react/24/outline"
+import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated"
+import axios from "axios"
+import { useSession } from "next-auth/react"
 
 
 
 type Schema = z.infer<typeof UpdateProjectSchema>
 
+type Site = {
+  premissionLevel: string,
+  siteUrl: string,
+}
+
+type Res = {
+  siteEntry: Site[]
+}
 
 /**
  * Component for updating project information.
@@ -26,8 +37,25 @@ type Schema = z.infer<typeof UpdateProjectSchema>
 export const UpdateProjectInfoForm = () => {
 
   const { toast } = useToast()
-  const [ open, setOpen ] = useState(false)
+  const [open, setOpen] = useState(false)
   const { updateProjectDetailsState, projectDetails } = useProjectDetails()
+  const [sites, setSites] = useState<Site[]>()
+  const isGscAuthenticated = useIsGscAuthenticated()
+
+  const refresh_token = useSession().data?.refreshToken
+
+  const fetchConnectedSites = async () => {
+    const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/get_sites?refresh_token=${refresh_token}`
+    console.log('url', url)
+    const res = await axios(url)
+    setSites(res.data.siteEntry)
+  }
+
+  useEffect(() => {
+    if (isGscAuthenticated) {
+      fetchConnectedSites()
+    }
+  }, [isGscAuthenticated])
 
   const {
     register,
@@ -43,6 +71,9 @@ export const UpdateProjectInfoForm = () => {
       setValue("domainUrl", projectDetails.domainUrl);
       setValue("language", projectDetails.language);
       setValue("country", projectDetails.country);
+      if (projectDetails.gscUrl) {
+        setValue("gscSite", projectDetails.gscUrl);
+      }
     }
   }, [projectDetails, setValue]);
 
@@ -57,7 +88,7 @@ export const UpdateProjectInfoForm = () => {
         variant: "success",
         duration: 4000,
       })
-      
+
       updateProjectDetailsState(result)
     } else {
       toast({
@@ -66,7 +97,7 @@ export const UpdateProjectInfoForm = () => {
         duration: 4000,
       })
     }
-  } 
+  }
 
   return (
     <>
@@ -123,6 +154,24 @@ export const UpdateProjectInfoForm = () => {
               <option value="nl">Netherlands</option>
             </select>
             {errors.country && <span>This field is required</span>}
+
+            <p>Connect Google Search Console</p>
+            {isGscAuthenticated ? (
+              <>
+                <p>Authenticated</p>
+                <select
+                  className="border-2 border-black"
+                  {...register("gscSite", { required: false })}
+                >
+                  <option value="">Select a site</option>
+                  {sites && sites.map((site: Site) => {
+                    return <option key={site.siteUrl} value={site.siteUrl}>{site.siteUrl}</option>
+                  })}
+                </select>
+              </>
+            ) : (
+              <p>Not authenticated</p>
+            )}
 
             <button type="submit">Save</button>
           </form>

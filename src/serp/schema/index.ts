@@ -27,4 +27,5 @@ export const UpdateProjectSchema = z.object({
   country: z.string().length(2).refine(value => ['nl', 'us', 'de', 'fr'].includes(value), {
     message: "Country must be one of 'nl', 'en', 'de', 'fr'",
   }).optional(),
+  gscSite: z.string().optional(),
 });

@@ -28,19 +28,25 @@ import { cn } from "@/lib/utils";
 
 import { DataTablePagination } from "./pagination-table";
 import { DataTableTopBar } from "./top-bar";
-import { Result } from "@prisma/client";
+import { Project, Result, SerpResult } from "@prisma/client";
 import axios from "axios";
 
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps, Area, AreaChart, Brush } from 'recharts';
+import { getTopTenSerpResults } from "@/serp/data/serp-result";
+import { useCurrentRole } from "@/auth/hooks/use-current-role";
+import { useCurrentUser } from "@/auth/hooks/use-current-user";
+import KeywordDetailsRow from "./keyword-details-row";
+import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated";
 // npm install recharts
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  projectDetails: Project;
+  refresh_token?: string;
 }
 
-type SearchConsoleData = {
+export type SearchConsoleData = {
   [date: string]: {
     clicks: number;
     ctr: number;
@@ -49,9 +55,13 @@ type SearchConsoleData = {
   };
 };
 
+const isAdmin = false;
+
 export function DataTable<TData, TValue>({
   columns,
   data,
+  projectDetails,
+  refresh_token,
 }: DataTableProps<TData, TValue>) {
   // sorting state
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -95,6 +105,10 @@ export function DataTable<TData, TValue>({
 
   const [keywordData, setKeywordData] = React.useState<Result | null>(null);
   const [searchConsoleData, setSearchConsoleData] = React.useState<SearchConsoleData | null>(null);
+  const [topTenResults, setTopTenResults] = React.useState<SerpResult[]>([]);
+  const gscAuthenticated = useIsGscAuthenticated()
+
+
 
 
   const handleClickRow = (id: string) => (event: React.MouseEvent<HTMLTableRowElement>) => {
@@ -108,8 +122,14 @@ export function DataTable<TData, TValue>({
       console.log(item); // Check what the object looks like
       setKeywordData(item as Result);
 
+      if (gscAuthenticated) {
+        // @ts-ignore
+        fetchSearchConsoleData(item.keywordName);
+      }
+
       // @ts-ignore
-      getSearchConsoleData(item.keywordName);
+      fetchTopTenResults(item.keywordId);
+
     } else {
       console.log("Invalid index");
     }
@@ -117,18 +137,32 @@ export function DataTable<TData, TValue>({
     console.log('id', index)
   }
 
-  const getSearchConsoleData = async (keyword: string) => {
+  const fetchSearchConsoleData = async (keyword: string) => {
+    if (!projectDetails.gscUrl) {
+      return;
+    }
+    if (!refresh_token) {
+      return;
+    }
+    const gscSite = projectDetails.gscUrl;
     const encodedKeyword = encodeURIComponent(keyword);
-    const url = `http://127.0.0.1:5000/api/keyword_data?keyword=${encodedKeyword}`;
+    const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/keyword_data?keyword=${encodedKeyword}&site_url=${gscSite}&refresh_token=${refresh_token}`;
     const res = await axios(url);
 
     console.log('search console data', res.data)
     setSearchConsoleData(res.data);
   }
 
+  const fetchTopTenResults = async (keywordId: string) => {
+    const res = await getTopTenSerpResults(keywordId);
+    setTopTenResults(res);
+  }
+
   const deselectAllRows = () => {
     setRowSelection({});
   }
+
+
 
   const numberOfVisibleColumns = table.getVisibleFlatColumns().length;
 
@@ -211,10 +245,15 @@ export function DataTable<TData, TValue>({
                     <tr >
                       {keywordData ? (
                         <td className="p-3" colSpan={numberOfVisibleColumns}>
-                          {searchConsoleData && (
-                            <SearchConsoleChart searchConsoleData={searchConsoleData} />
-                          )}
-                          <KeywordDetailsRow keywordData={keywordData} />
+                          <KeywordDetailsRow 
+                            gscAuthenticated={gscAuthenticated} 
+                            searchConsoleData={searchConsoleData}
+                            keywordData={keywordData}
+                            topTenResults={topTenResults}
+                            projectDetails={projectDetails}
+                          />
+
+                          <ResultDetail keywordData={keywordData} topTenSerpResults={topTenResults} />
                           <div>
 
                           </div>
@@ -227,9 +266,6 @@ export function DataTable<TData, TValue>({
                     </tr>
                   )}
                 </>
-                // // keyword details
-
-
               ))
             ) : (
               <TableRow>
@@ -257,163 +293,73 @@ export function DataTable<TData, TValue>({
 
 
 
-const KeywordDetailsRow = ({ keywordData }: { keywordData: Result }) => {
-
+const ResultDetail = ({ keywordData, topTenSerpResults }: { keywordData: Result, topTenSerpResults: SerpResult[] }) => {
+  console.log('search console data')
   return (
-    <div>
-      <KeywordIdeas keywordData={keywordData} />
+    <div className="mt-10">
+      <h2 className="text-xl">Result details</h2>
+      <div>
+        <p>Meta Title: {keywordData.metaTitle}</p>
+        <p>Meta Description: {keywordData.metaDescription}</p>
+        <p>Url: <a href={keywordData.url || ''} target="_blank" rel="noopener noreferrer">{keywordData.url}</a></p>
+      </div>
 
+      <div className="flex">
+        <div className="max-w-[600px]">
+          <h2 className="text-2xl mt-8">top ten results</h2>
+          <ul>
+            {topTenSerpResults.map((result) => (
+              <li key={result.id} className="mb-8">
+                <a href={result.url || ''} target="_blank" rel="noopener noreferrer">
+                  <p>{new URL(result.url).hostname}</p>
+                  <p className="text-xl">{result.metaTitle}</p>
+                  <p className="text-sm">{result.metaDescription}</p>
+                  <p className="mt-2"><span className="font-semibold">Url: </span>{result.url}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
 
+        <div className="ml-auto">
+          <div>
+            {Array.isArray(keywordData.relatedSearches) && keywordData.relatedSearches.length > 0 ? (
+              <>
+                <h2 className="text-xl">RelatedSearches</h2>
+                <ul>
+                  {keywordData.relatedSearches.map((relatedSearch: any) => (
+                    <li key={relatedSearch.query}>{relatedSearch.query}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p className="text-xl">No related searches</p>
+            )}
+          </div>
+          <div className="mt-10">
+            {Array.isArray(keywordData.peopleAlsoAsk) && keywordData.peopleAlsoAsk.length > 0 ? (
+              <>
+                <h2 className="text-xl">People also searched for</h2>
+                <ul>
+                  {keywordData.peopleAlsoAsk.map((peopleAlsoSearchedFor: any) => (
+                    <li key={peopleAlsoSearchedFor.question}>{peopleAlsoSearchedFor.question}</li>
+                  ))}
+                </ul>
+              </>
+            ) :
+              (
+                <p className="text-xl">peopleAlsoAsk</p>
+              )
+            }
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
 
-const KeywordIdeas = ({ keywordData }: { keywordData: Result }) => {
-
-  return (
-    <div className="flex mt-10">
-      <div>
-        {Array.isArray(keywordData.relatedSearches) && keywordData.relatedSearches.length > 0 ? (
-          <>
-            <h2 className="text-xl">RelatedSearches</h2>
-            <ul>
-              {keywordData.relatedSearches.map((relatedSearch: any) => (
-                <li key={relatedSearch.query}>{relatedSearch.query}</li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <p className="text-xl">No related searches</p>
-        )}
-      </div>
-      <div>
-        {Array.isArray(keywordData.peopleAlsoAsk) && keywordData.peopleAlsoAsk.length > 0 ? (
-          <>
-            <h2 className="text-xl">People also searched for</h2>
-            <ul>
-              {keywordData.peopleAlsoAsk.map((peopleAlsoSearchedFor: any) => (
-                <li key={peopleAlsoSearchedFor.question}>{peopleAlsoSearchedFor.question}</li>
-              ))}
-            </ul>
-          </>
-        ) :
-          (
-            <p className="text-xl">peopleAlsoAsk</p>
-
-          )
-        }
-      </div>
-    </div>
-  )
-}
 
 
-const SearchConsoleChart = ({ searchConsoleData }: { searchConsoleData: SearchConsoleData }) => {
-  // Convert your data into an array of objects
-  const data = Object.entries(searchConsoleData).map(([date, data]) => ({
-    date,
-    ...data
-  }));
 
 
-  return (
-    <div className="flex w-full">
-      <div style={{ width: '100%', height: 100 }}>
-        <h2 className="mx-auto w-fit">Clicks</h2>
-        <ResponsiveContainer>
-          <AreaChart
-            data={data}
-            margin={{ left: -30 }}
-          >
-            <defs>
-              <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="date" hide={true} />
-            <YAxis axisLine={false} />
-            <Tooltip />
-            <Area type="monotone" dataKey="clicks" stroke="#8884d8" fill="url(#colorClicks)" />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
 
-      <div style={{ width: '100%', height: 100 }}>
-        <h2 className="mx-auto w-fit">CTR</h2>
-        <ResponsiveContainer>
-          <AreaChart
-            data={data}
-            margin={{ left: -30 }}
-          >
-            <defs>
-              <linearGradient id="colorCtr" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="date" hide={true} />
-            <YAxis axisLine={false} />
-            <Tooltip />
-            <Area type="monotone" dataKey="ctr" stroke="#82ca9d" fill="url(#colorCtr)" />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
-
-      <div style={{ width: '100%', height: 100 }}>
-        <h2 className="mx-auto w-fit">Impressions</h2>
-        <ResponsiveContainer>
-          <AreaChart
-            data={data}
-            margin={{ left: -30 }}
-          >
-            <defs>
-              <linearGradient id="colorImpressions" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#ffc658" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#ffc658" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="date" hide={true} />
-            <YAxis axisLine={false} />
-            <Tooltip />
-            <Area type="monotone" dataKey="impressions" stroke="#ffc658" fill="url(#colorImpressions)" />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
-
-      <div style={{ width: '100%', height: 100 }}>
-        <h2 className="mx-auto w-fit">Position</h2>
-        <ResponsiveContainer>
-          <AreaChart
-            data={data}
-            margin={{ left: -30 }}
-          >
-            <defs>
-              <linearGradient id="colorPosition" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#ff7300" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#ff7300" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="date" hide={true} />
-            <YAxis axisLine={false} />
-            <Tooltip content={<CustomTooltip />} />
-            <Area type="monotone" dataKey="position" stroke="#ff7300" fill="url(#colorPosition)" />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
-};
-
-
-const CustomTooltip = ({ active, payload, label }: TooltipProps<string, string>) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="custom-tooltip" style={{ backgroundColor: '#ffff', padding: '5px', border: '1px solid #ccc' }}>
-        <p className="label">{`${label} : ${payload[0].value}`}</p>
-      </div>
-    );
-  }
-
-  return null;
-};

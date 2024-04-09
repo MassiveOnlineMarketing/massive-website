@@ -55,3 +55,18 @@ export const getLatestSerpResultsWithTags = async (keywordIds: string[]) => {
 
   return results;
 }
+
+export const getTopTenSerpResults = async (keywordId: string) => {
+
+  const results = await db.serpResult.findMany({
+    where: {
+      keywordId: keywordId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: 10,
+  });
+
+  return results;
+}
