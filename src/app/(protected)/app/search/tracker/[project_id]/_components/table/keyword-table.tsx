@@ -211,9 +211,8 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row, index) => (
-                <>
+                <React.Fragment key={row.id}>
                   <TableRow
-                    key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     className={cn(
                       "border-",
@@ -265,7 +264,7 @@ export function DataTable<TData, TValue>({
                       )}
                     </tr>
                   )}
-                </>
+                </React.Fragment>
               ))
             ) : (
               <TableRow>
