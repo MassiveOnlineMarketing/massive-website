@@ -46,7 +46,7 @@ export const UpdateProjectInfoForm = () => {
 
   const fetchConnectedSites = async () => {
     const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/get_sites?refresh_token=${refresh_token}`
-    console.log('url', url)
+    // console.log('url', url)
     const res = await axios(url)
     setSites(res.data.siteEntry)
   }

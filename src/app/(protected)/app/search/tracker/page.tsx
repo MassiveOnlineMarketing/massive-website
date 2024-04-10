@@ -48,7 +48,7 @@ const Page = () => {
 
   // row actions
   const handleProjectDelete = (projectId: string) => {
-    console.log('delete', projectId)
+    // console.log('delete', projectId)
     setprojectToDelete(projectId);
     setIsDialogOpen(true);
   }

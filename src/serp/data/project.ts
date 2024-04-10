@@ -14,7 +14,7 @@ export const getProjectById = async (projectId: string) => {
     where: { id: projectId },
   });
 
-  console.log('project');
+  // console.log('project');
 
   return project;
 }

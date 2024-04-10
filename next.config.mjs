@@ -29,26 +29,11 @@ const nextConfig = {
       },
       {
         protocol: "http",
-        hostname: "172.104.158.177",
-        port: "4000",
-      },
-      {
-        protocol: "http",
-        hostname: "172.104.158.177",
-        port: "",
-      },
-      {
-        protocol: "http",
         hostname: "localhost",
         port: "4000",
       },
-      {
-        protocol: "http",
-        hostname: "172.104.158.177",
-        port: "8000",
-      },
-
-
+          
+      // Linode server
       {
         protocol: 'https',
         hostname: 'api.massiveonlinemarketing.nl',

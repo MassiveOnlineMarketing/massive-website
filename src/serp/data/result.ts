@@ -118,7 +118,7 @@ export const getLatestKeywordResultWithTagByKeywordId = async (keywordIds: strin
     };
   });
 
-  console.log('latestResults');
+  // console.log('latestResults');
 
   return latestResults;
 }

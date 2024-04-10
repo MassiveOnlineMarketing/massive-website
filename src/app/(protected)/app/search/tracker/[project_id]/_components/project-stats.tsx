@@ -7,7 +7,7 @@ export const ProjectStats = ({ data }: { data: KeywordResultWithTagProp[] }) => 
   const { projectDetails, latestResult, yesterdaysResult, loading } = useProjectDetails()
   const { selectedTags } = useKeywordResults()
   // console.log('re render project stats')
-  console.log('tags', selectedTags)
+  // console.log('tags', selectedTags)
 
   if (loading) {
     return <div>loading...</div>
@@ -44,8 +44,8 @@ export const ProjectStats = ({ data }: { data: KeywordResultWithTagProp[] }) => 
     }
   })
 
-  console.log('latestResult', latestResult)
-  console.log('yesterdaysResult', yesterdaysResult)
+  // console.log('latestResult', latestResult)
+  // console.log('yesterdaysResult', yesterdaysResult)
 
   return (
     <>
@@ -96,7 +96,7 @@ type CardProps = {
 
 
 const Card = ({ title, number, yesterdaysNumber, numberOfKeywords }: CardProps) => {
-  console.log('number', numberOfKeywords)
+  // console.log('number', numberOfKeywords)
 
   let percentageDifference = 0;
   if (yesterdaysNumber) {

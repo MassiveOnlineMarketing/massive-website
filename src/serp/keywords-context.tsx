@@ -34,7 +34,7 @@ export const KeywordsProvider: FC<KeywordsProviderProps> = ({ children }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
 
-console.log('keywords', results)
+// console.log('keywords', results)
 
   // * FILTER KEYWORDS
   const filteredResults = useMemo(() => {

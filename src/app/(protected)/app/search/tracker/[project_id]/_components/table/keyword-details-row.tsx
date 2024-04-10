@@ -45,7 +45,7 @@ export default KeywordDetailsRow
 
 const SearchConsoleChart = ({ searchConsoleData }: { searchConsoleData: SearchConsoleData }) => {
 
-    // Convert your data into an array of objects
+    // Convert data into an array of objects also round the numbers
     const data = Object.entries(searchConsoleData).map(([date, data]) => ({
         date,
         clicks: Number(data.clicks.toFixed(1)),

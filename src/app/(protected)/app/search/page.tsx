@@ -38,85 +38,86 @@ interface DomainCountProps {
 type CountsProps = { [domain: string]: DomainCountProps };
 
 const Page = () => {
-  const [data, setData] = useState<DataProps[]>([]);
-  const [keywordDetails, setKeywordDetails] = useState<KeywordDetailsProps[]>([]);
-  const [domainCounts, setDomainCounts] = useState<CountsProps>({});
+  // const [data, setData] = useState<DataProps[]>([]);
+  // const [keywordDetails, setKeywordDetails] = useState<KeywordDetailsProps[]>([]);
+  // const [domainCounts, setDomainCounts] = useState<CountsProps>({});
 
-  useEffect(() => {
-    async function fetchData() {
-      const result1 = await getLatestKeywordResultWithTags('clsnsgql50005tdch125hvhbn')
-      console.time("keywordResults");
-      const keywordResults = await getLatestSerpResults('clsnsgql50005tdch125hvhbn')
-      const keywordDetails = await getKeywordsByProjectId('clsnsgql50005tdch125hvhbn')
-      console.timeEnd("keywordResults");
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const result1 = await getLatestKeywordResultWithTags('clsnsgql50005tdch125hvhbn')
+  //     console.time("keywordResults");
+  //     const keywordResults = await getLatestSerpResults('clsnsgql50005tdch125hvhbn')
+  //     const keywordDetails = await getKeywordsByProjectId('clsnsgql50005tdch125hvhbn')
+  //     console.timeEnd("keywordResults");
 
-      setKeywordDetails(keywordDetails);
+  //     setKeywordDetails(keywordDetails);
 
-      if (Array.isArray(keywordDetails) && keywordResults) {
-        const keywordsWithDetails = keywordDetails.map((keyword) => {
-          const keywordResultsForThisKeyword = keywordResults[keyword.id];
-          return {
-            ...keyword,
-            result: keywordResultsForThisKeyword, // changed from 'results'
-          };
-        });
-        setData(keywordsWithDetails);
-        // console.log('keywordsWithDetails', keywordsWithDetails);
-      } else {
-        console.log('keywordDetails is not an array or keywordResults is undefined:', keywordDetails, keywordResults);
-      }
+  //     if (Array.isArray(keywordDetails) && keywordResults) {
+  //       const keywordsWithDetails = keywordDetails.map((keyword) => {
+  //         const keywordResultsForThisKeyword = keywordResults[keyword.id];
+  //         return {
+  //           ...keyword,
+  //           result: keywordResultsForThisKeyword, // changed from 'results'
+  //         };
+  //       });
+  //       setData(keywordsWithDetails);
+  //       // console.log('keywordsWithDetails', keywordsWithDetails);
+  //     } else {
+  //       console.log('keywordDetails is not an array or keywordResults is undefined:', keywordDetails, keywordResults);
+  //     }
 
-      //   console.log('result3', result3)
-      console.log('keywordResults', keywordResults)
-      console.log(keywordDetails)
-    }
-    fetchData()
-  }, [])
+  //     //   console.log('result3', result3)
+  //     console.log('keywordResults', keywordResults)
+  //     console.log(keywordDetails)
+  //   }
+  //   fetchData()
+  // }, [])
 
-  const countDomains = (results: SerpResult[], keyword: string, id: string, tags: Tag[], createdAt: Date) => {
-    const domainCounts: { [domain: string]: { count: number, keywords: KeywordObject[] } } = {};
+  // const countDomains = (results: SerpResult[], keyword: string, id: string, tags: Tag[], createdAt: Date) => {
+  //   const domainCounts: { [domain: string]: { count: number, keywords: KeywordObject[] } } = {};
 
-    results.forEach(({ url, position }) => {
-      const domain = new URL(url).hostname.replace('www.', '');
-      if (!domainCounts[domain]) {
-        domainCounts[domain] = { count: 0, keywords: [] };
-      }
-      domainCounts[domain].count += 1;
-      domainCounts[domain].keywords.push({ keyword, id, tags, url, position, createdAt });
-    });
+  //   results.forEach(({ url, position }) => {
+  //     const domain = new URL(url).hostname.replace('www.', '');
+  //     if (!domainCounts[domain]) {
+  //       domainCounts[domain] = { count: 0, keywords: [] };
+  //     }
+  //     domainCounts[domain].count += 1;
+  //     domainCounts[domain].keywords.push({ keyword, id, tags, url, position, createdAt });
+  //   });
 
-    // console.log('domainCounts', domainCounts)
+  //   // console.log('domainCounts', domainCounts)
 
-    return domainCounts;
-  };
+  //   return domainCounts;
+  // };
 
-  useEffect(() => {
-    console.log('data', data)
-    const counts = data.map(item => countDomains(item.result, item.keyword, item.id, item.tags, item.createdAt)).reduce((acc, counts) => {
-      Object.entries(counts).forEach(([domain, { count, keywords }]) => {
-        if (!acc[domain]) {
-          acc[domain] = { count: 0, keywords: [] };
-        }
-        acc[domain].count += count;
-        acc[domain].keywords = [...acc[domain].keywords, ...keywords];
-      });
-      return acc;
-    }, {});
-    setDomainCounts(counts);
-    console.log('counts', counts)
-  }, [data]); // Add data as a dependency
+  // useEffect(() => {
+  //   console.log('data', data)
+  //   const counts = data.map(item => countDomains(item.result, item.keyword, item.id, item.tags, item.createdAt)).reduce((acc, counts) => {
+  //     Object.entries(counts).forEach(([domain, { count, keywords }]) => {
+  //       if (!acc[domain]) {
+  //         acc[domain] = { count: 0, keywords: [] };
+  //       }
+  //       acc[domain].count += count;
+  //       acc[domain].keywords = [...acc[domain].keywords, ...keywords];
+  //     });
+  //     return acc;
+  //   }, {});
+  //   setDomainCounts(counts);
+  //   console.log('counts', counts)
+  // }, [data]); // Add data as a dependency
 
 
+  // {domainCounts && <SomeComponent data={domainCounts} />}
+
+  // <ul>
+  //   {/* {Object.entries(domainCounts).map(([domain, count]) => (
+  //     <li key={domain}>{domain}: {count}</li>
+  //   ))} */}
+  // </ul>
 
   return (
     <div>search page
-      {domainCounts && <SomeComponent data={domainCounts} />}
-
-      <ul>
-        {/* {Object.entries(domainCounts).map(([domain, count]) => (
-          <li key={domain}>{domain}: {count}</li>
-        ))} */}
-      </ul>
+     
     </div>
   )
 }

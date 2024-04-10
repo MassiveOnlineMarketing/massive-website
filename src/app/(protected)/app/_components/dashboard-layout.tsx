@@ -57,13 +57,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     useEffect(() => {
         if (pathname.startsWith('/app/website')) {
             setCurrentNavigation(websiteNavigation)
-            console.log('websiteNavigation')
+            // console.log('websiteNavigation')
         } else if (pathname.startsWith('/app/search')) {
             setCurrentNavigation(searchNavigation)
-            console.log('searchNavigation')
+            // console.log('searchNavigation')
         } else {
             setCurrentNavigation(undefined)
-            console.log('undefined')
+            // console.log('undefined')
         }
     }, [pathname])
 

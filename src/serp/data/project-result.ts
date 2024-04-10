@@ -12,7 +12,7 @@ export const getLatestProjectResult = async (projectId: string) => {
         },
     });
 
-    console.log('result');
+    // console.log('result');
 
     return result;
 }
@@ -40,7 +40,7 @@ export const getYesterdayProjectResults = async (projectId: string) => {
         },
     });
 
-    console.log('yesterday results');
+    // console.log('yesterday results');
 
     return results;
 }

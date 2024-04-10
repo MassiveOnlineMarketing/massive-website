@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
     setSelectedRowIndex(prevId => prevId === id ? null : id);
     if (!isNaN(index) && index >= 0 && index < data.length) {
       let item = data[index];
-      console.log(item); // Check what the object looks like
+      // console.log(item); // Check what the object looks like
       setKeywordData(item as Result);
 
       if (gscAuthenticated) {
@@ -134,7 +134,7 @@ export function DataTable<TData, TValue>({
       console.log("Invalid index");
     }
 
-    console.log('id', index)
+    // console.log('id', index)
   }
 
   const fetchSearchConsoleData = async (keyword: string) => {
@@ -293,7 +293,7 @@ export function DataTable<TData, TValue>({
 
 
 const ResultDetail = ({ keywordData, topTenSerpResults }: { keywordData: Result, topTenSerpResults: SerpResult[] }) => {
-  console.log('search console data')
+  // console.log('search console data')
   return (
     <div className="mt-10">
       <h2 className="text-xl">Result details</h2>
