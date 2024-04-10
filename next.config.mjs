@@ -53,6 +53,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'api.massiveonlinemarketing.nl',
         port: '8000',
+      },
+      {
+        protocol: 'http',
+        hostname: 'payload.massiveonlinemarketing.nl',
+        port: '4000',
       }
     ],
   },
