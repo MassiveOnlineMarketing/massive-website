@@ -47,6 +47,13 @@ const nextConfig = {
         hostname: "172.104.158.177",
         port: "8000",
       },
+
+
+      {
+        protocol: 'https',
+        hostname: 'api.massiveonlinemarketing.nl',
+        port: '8000',
+      }
     ],
   },
 
