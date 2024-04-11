@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export const ProjectStats = ({ data }: { data: KeywordResultWithTagProp[] }) => {
   const { projectDetails, latestResult, yesterdaysResult, loading } = useProjectDetails()
   const { selectedTags } = useKeywordResults()
-  // console.log('re render project stats')
+  console.log('re render project stats')
   // console.log('tags', selectedTags)
 
   if (loading) {

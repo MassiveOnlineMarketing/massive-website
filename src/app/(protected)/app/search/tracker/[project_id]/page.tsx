@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useKeywordResults } from '@/serp/keywords-context'
 import { useProjectDetails } from '@/serp/project-details-context'
 
@@ -14,6 +14,9 @@ import TagSelection from './_components/table/tag-selection'
 import { useFetchKeywordResults } from '@/serp/hooks/useFetchKeywordResults'
 import { useKeywords } from '@/serp/hooks/useKeywords'
 import { useSession } from 'next-auth/react'
+import { fetch7LatestResults } from '@/serp/data/project'
+import { ProjectResult } from '@prisma/client'
+import ProjectStatsBarChart from './_components/project-stats-bar-chart'
 
 
 type pageProps = {
@@ -30,6 +33,9 @@ const Page = ({ params }: pageProps) => {
   const { deleteKeywords, cancelDelete, confirmDelete } = useKeywords()
   const refresh_token = useSession().data?.refreshToken
 
+  console.log('re render page')
+
+  const [sevenLatestProjectResults, setSevenLatestProjectResults] = useState<ProjectResult[]>([])
 
 
   const fetchKeywordResults = useFetchKeywordResults();
@@ -38,6 +44,22 @@ const Page = ({ params }: pageProps) => {
     if (projectId) {
       fetchKeywordResults(projectId);
     }
+  }, []);
+
+  useEffect(() => {
+    async function fetchResults() {
+      if (projectId) {
+        const res = await fetch7LatestResults(projectId);
+
+        if (res) {
+          setSevenLatestProjectResults(res);
+        } else {
+          console.error('Failed to fetch 7 latest results');
+        }
+      }
+    }
+
+    fetchResults();
   }, []);
 
 
@@ -61,9 +83,15 @@ const Page = ({ params }: pageProps) => {
 
   return (
     <div className='p-6 mb-16'>
+      {
+        sevenLatestProjectResults.length > 0 && (
+          <ProjectStatsBarChart props={sevenLatestProjectResults} />
+        )
+      }
 
       {projectDetails &&
         <>
+          {/* <ProjectStatsBarChart props={sevenLatestProjectResults} /> */}
           <ProjectStats data={filteredResults} />
           <DataTable
             columns={columns(handleKeywordsDelete)}

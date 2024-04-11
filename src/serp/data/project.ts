@@ -107,3 +107,19 @@ export const createProject = async (userId: string, projectName: string, domainU
 
   return project;
 }
+
+export const fetch7LatestResults = async (projectId: string) => {
+  const results = await db.projectResult.findMany({
+    where: {
+      projectId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: 7,
+  });
+
+  // console.log('results', results)
+
+  return results;
+}
