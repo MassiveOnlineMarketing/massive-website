@@ -1,22 +1,22 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { ProjectResult } from '@prisma/client'
 import { useKeywordResults } from '@/serp/keywords-context'
 import { useProjectDetails } from '@/serp/project-details-context'
+import { getSession, useSession } from 'next-auth/react'
 
 // Table
 import { DataTable } from './_components/table/keyword-table'
 import { columns } from './_components/table/columns'
 
-import { ProjectStats } from './_components/project-stats'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from '@/components/ui/alert-dialog'
 import TagSelection from './_components/table/tag-selection'
 import { useFetchKeywordResults } from '@/serp/hooks/useFetchKeywordResults'
 import { useKeywords } from '@/serp/hooks/useKeywords'
-import { useSession } from 'next-auth/react'
 import { fetch7LatestResults } from '@/serp/data/project'
-import { ProjectResult } from '@prisma/client'
-import ProjectStatsBarChart from './_components/project-stats-bar-chart'
+import ProjectStats from './_components/project-stats-bar-chart'
+import { Session } from 'next-auth'
 
 
 type pageProps = {
@@ -31,37 +31,27 @@ const Page = ({ params }: pageProps) => {
   const { filteredResults, isDialogOpen, setIsDialogOpen } = useKeywordResults()
   const { projectDetails, authorized, fetchProjectDetails } = useProjectDetails()
   const { deleteKeywords, cancelDelete, confirmDelete } = useKeywords()
-  const refresh_token = useSession().data?.refreshToken
+  const [sessionData, setSessionData] = useState<Session | null>(null);
+
+  useEffect(() => {
+    getSession().then(session => {
+      console.log('sessionData changed', session);
+      setSessionData(session);
+    });
+  }, []);
 
   console.log('re render page')
-
-  const [sevenLatestProjectResults, setSevenLatestProjectResults] = useState<ProjectResult[]>([])
 
 
   const fetchKeywordResults = useFetchKeywordResults();
 
   useEffect(() => {
+    console.log('fetching keyword results')
     if (projectId) {
+      console.log('fetching keyword results project id', projectId)
       fetchKeywordResults(projectId);
     }
-  }, []);
-
-  useEffect(() => {
-    async function fetchResults() {
-      if (projectId) {
-        const res = await fetch7LatestResults(projectId);
-
-        if (res) {
-          setSevenLatestProjectResults(res);
-        } else {
-          console.error('Failed to fetch 7 latest results');
-        }
-      }
-    }
-
-    fetchResults();
-  }, []);
-
+  }, [projectId]);
 
 
   const handleKeywordsDelete = (keywordId: string) => {
@@ -69,10 +59,11 @@ const Page = ({ params }: pageProps) => {
   }
 
   useEffect(() => {
+    console.log('fetching project results')
     if (!projectId) return
-
+    console.log('fetching project results project id', projectId)
     fetchProjectDetails(projectId)
-  }, [])
+  }, [projectId])
 
 
   if (!authorized) {
@@ -83,25 +74,22 @@ const Page = ({ params }: pageProps) => {
 
   return (
     <div className='p-6 mb-16'>
-      {
-        sevenLatestProjectResults.length > 0 && (
-          <ProjectStatsBarChart props={sevenLatestProjectResults} />
-        )
-      }
 
+      {/*
       {projectDetails &&
         <>
-          {/* <ProjectStatsBarChart props={sevenLatestProjectResults} /> */}
-          <ProjectStats data={filteredResults} />
+          <ProjectStats filteredResults={filteredResults} />
           <DataTable
             columns={columns(handleKeywordsDelete)}
             data={filteredResults}
             projectDetails={projectDetails}
-            refresh_token={refresh_token}
+            refresh_token={sessionData.refresh_token}
           />
         </>
       }
+    */}
 
+{/*
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent className='bg-white'>
           <AlertDialogHeader>Are you sure you want to delete this keyword?</AlertDialogHeader>
@@ -112,6 +100,7 @@ const Page = ({ params }: pageProps) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      */}
     </div>
   )
 }

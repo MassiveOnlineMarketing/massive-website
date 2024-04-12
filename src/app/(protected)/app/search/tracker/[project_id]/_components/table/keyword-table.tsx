@@ -63,6 +63,7 @@ export function DataTable<TData, TValue>({
   projectDetails,
   refresh_token,
 }: DataTableProps<TData, TValue>) {
+  console.log('re render table')
   // sorting state
   const [sorting, setSorting] = React.useState<SortingState>([]);
   // filtering state

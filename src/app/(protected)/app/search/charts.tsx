@@ -137,6 +137,7 @@ const Charts = () => {
                 <SimpleCardOne />
                 <PieChartOne />
                 <SimpleCardTwo />
+                <PieChartTwo />
             </div>
             <div className='flex gap-2 w-full h-[500px]'>
                 <ChartOne barColor='#D1D5DB' activeBarColor='#1F2937' />
@@ -386,6 +387,62 @@ const SimpleCardTwo = () => {
             </div>
 
         </div>
+    );
+}
+
+
+const PieChartTwo = () => {
+    const COLORS = ['#cbd5e1', '#28a745'];
+
+    const data = [
+        { name: 'other', value: 26 },
+        { name: 'Improved', value: 4 },
+    ]
+
+
+    return (
+        <div className='py-4 px-6 bg-white rounded-xl shadow-sm w-[297px] h-full flex gap-6 items-center'>
+            <PieChart
+                width={60}
+                height={60}
+            >
+                <Pie
+                    data={data}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={20}
+                    outerRadius={30}
+                    fill="#8884d8"
+                    dataKey="value"
+                >
+                    {PIE_CHART_DATA.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                </Pie>
+                <g>
+
+                    <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="#28a745">
+                        4
+                    </text>
+                </g>
+            </PieChart>
+            <div className='h-fit'>
+                <h2 className='mr-auto text-lg font-semibold text-gray-800'>Improved</h2>
+                <p className='text-sm text-gray-500 '>Vs Yesterday</p>
+            </div>
+
+        </div>
+    )
+}
+
+const renderActiveShapePieChartTwo = (props: any) => {
+    const { cx, cy, fill, value } = props;
+    return (
+        <g>
+            <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} fontSize={14}>
+                {value}
+            </text>
+        </g>
     );
 }
 

@@ -81,7 +81,7 @@ export const ProjectStats = ({ data }: { data: KeywordResultWithTagProp[] }) => 
             <Card title="Worsend" number={latestResult?.worsened ?? 0} yesterdaysNumber={yesterdaysResult?.worsened ?? 0} numberOfKeywords={latestResult?.total ?? 0} />
           </>
         )}
-      </div>
+      </div> 
 
     </>
   )

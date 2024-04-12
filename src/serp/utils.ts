@@ -52,6 +52,14 @@ export const projectRouteAuth = async (projectId: string) => {
 
   const session = await auth();
   const projectUserId = await getProjectById(projectId);
+  const userRole = session?.user.role;
 
-  return session?.user.id === projectUserId?.userId;
+  let isAuthorized = false;
+
+  if (session?.user.id === projectUserId?.userId || userRole === 'ADMIN') {
+    isAuthorized = true;
+  }
+
+
+  return isAuthorized;
 }
