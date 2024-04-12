@@ -17,15 +17,15 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuGroup,
-    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
     DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu"
+import { OutlinedTextButton } from "@/components/ui/text-button";
 
 // Assets
-import { ArrowDownTrayIcon, MagnifyingGlassIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
+import { ArrowDownTrayIcon, MagnifyingGlassIcon, TrashIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/20/solid";
 
 // Topbar components
@@ -33,11 +33,11 @@ import { AddTagToKeywords } from "@/serp/components/add-tag-to-keyword";
 import TagSelection from "./tag-selection";
 import { DeleteTagFromKeyword } from "@/serp/components/delete-tag-from-keyword";
 import { AddNewTagInput } from "@/serp/components/add-new-tag-input";
-import { DeleteKeywords } from "@/serp/components/delete-keywords";
 import { SortingRows } from "./row-sorting";
 import { downloadToExcel } from "@/serp/lib/xlsx";
 import AddKeywordsFrom from "@/serp/components/add-keywords-form";
-import { OutlinedTextButton } from "@/components/ui/text-button";
+import { DeleteKeywordSelectedRowButton } from "@/serp/components/delete-keyword-selected-row-button";
+
 
 interface TopBarProps<TData> {
     table: Table<TData>;
@@ -49,14 +49,12 @@ interface TopBarProps<TData> {
 }
 
 export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, setSorting }: TopBarProps<TData>) {
-    const [tagPopoverOpen, setTagPopoverOpen] = useState(false)
-
     return (
         <div className="flex items-center">
             <TagSelection />
 
             {/* Selected rows */}
-            <div className="mr-auto">
+            <div >
                 {table.getSelectedRowModel().rows.length > 0 && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -66,17 +64,26 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>
-                                <DropdownMenuItem className="bg-red-200 text-red-500">
-                                    <DeleteKeywords selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} >
-                                        {table.getSelectedRowModel().rows.length > 1 ? <span>Delete Keywords</span> : <span>Delete Keyword</span>}
-                                    </DeleteKeywords>
-                                </DropdownMenuItem>
                                 <AddTagToKeywords selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} />
                                 <DeleteTagFromKeyword selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} />
                                 <AddNewTagInput selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} />
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
+                )}
+            </div>
+            <div className="mr-auto">
+                {table.getSelectedRowModel().rows.length > 0 && (
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <DeleteKeywordSelectedRowButton selectedRows={table.getSelectedRowModel()} >
+                                <OutlinedTextButton outlineClassName="outline-red-50 bg-red-50" size='smD' className="ml-1" buttonClassName="px-2"><TrashIcon className="w-5 h-5 text-red-500" /></OutlinedTextButton>
+                            </DeleteKeywordSelectedRowButton>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {table.getSelectedRowModel().rows.length > 1 ? <p>Delete Keywords</p> : <p>Delete Keyword</p>}
+                        </TooltipContent>
+                    </Tooltip>
                 )}
             </div>
 
@@ -106,9 +113,9 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
                     <TooltipTrigger>
                         <div className=" ml-2 relative w-fit h-fit m-1">
                             <AddKeywordsFrom buttonClassName=" h-[32px] px-2 rounded-lg  inline-flex items-center justify-center whitespace-nowrap shadow-base bg-white z-40 rounded-lg relative">
-                                <PlusIcon className="w-5 h-5" />
+                                <PlusIcon className="w-5 h-5 text-green-500" />
                             </AddKeywordsFrom>
-                            <div className="absolute top-0 left-0 w-full h-full rounded-[8px] outline outline-4 outline-primary-50 bg-primary-50 z-30"></div>
+                            <div className="absolute top-0 left-0 w-full h-full rounded-[8px] outline outline-4 outline-green-50 bg-green-50 z-30"></div>
                         </div>
                     </TooltipTrigger>
                     <TooltipContent>

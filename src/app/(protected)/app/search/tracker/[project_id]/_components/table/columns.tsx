@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowsUpDownIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
 import { Result } from "@prisma/client"
 
+import { format } from 'date-fns';
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 // export type Payment = {
@@ -178,7 +179,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     header: "Date Retrieved",
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
-      return date.toLocaleDateString(); // or any other format you prefer
+      return format(date, 'MM/dd/yyyy'); // or any other format you prefer
     },
   },
   // * Actions

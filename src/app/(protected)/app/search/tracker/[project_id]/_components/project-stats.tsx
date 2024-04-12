@@ -1,20 +1,18 @@
 
 import React from 'react'
-import { ProjectResult } from '@prisma/client'
-import { KeywordResultWithTagProp } from '@/serp/keywords-context'
+
+// state
+import { useFilteredKeywordResults } from '@/serp/hooks/useFilteredResults'
+
+// charts
 import ProjectStatsPieChart from './project-stats-pie-chart'
+import { Cell, Pie, PieChart } from 'recharts'
 
-interface ProjectStatsProps {
-    filteredResults: KeywordResultWithTagProp[]
-}
+// TODO: average position not working 
+const ProjectStats = () => {
+    const filteredResults  = useFilteredKeywordResults ()
 
-const ProjectStats = ({ filteredResults }: ProjectStatsProps) => {
-
-    console.log('Render ProjectStats')
-
-    const keywords = filteredResults
-
-    const numberOfKeywords = keywords.length
+    const numberOfKeywords = filteredResults.length
     let numberOfKeywordsInTop3 = 0
     let numberOfKeywordsInTop10 = 0
     let numberOfKeywordsInTop100 = 0
@@ -23,7 +21,7 @@ const ProjectStats = ({ filteredResults }: ProjectStatsProps) => {
     let averagePosition = 99
     let positionSum = 0
 
-    keywords.forEach(keyword => {
+    filteredResults.forEach(keyword => {
         if (keyword.position && keyword.position <= 3) {
             numberOfKeywordsInTop3++
         }
@@ -110,7 +108,34 @@ const ProjectStats = ({ filteredResults }: ProjectStatsProps) => {
             </div>
             {/* Other Cards*/}
             {data.map((item, index) => (
-                <ProjectStatsPieChart key={index} data={item.data} title={item.title} pieColor={item.pieColor} />
+                <div key={item.title} className='py-4 px-6 bg-white rounded-xl shadow-sm w-full h-full flex gap-6 items-center'>
+                <PieChart
+                    width={60}
+                    height={60}
+                >
+                    <Pie
+                        data={item.data}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={20}
+                        outerRadius={30}
+                        fill="#8884d8"
+                        dataKey="value"
+                    >
+                        <Cell fill={item.pieColor} />
+                        <Cell fill='#cbd5e1' />
+                    </Pie>
+                    <g>
+                        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="#28a745">
+                            {item.data[0].value}
+                        </text>
+                    </g>
+                </PieChart>
+                <div className='h-fit'>
+                    <h2 className='mr-auto text-lg font-semibold text-gray-800'>{item.title}</h2>
+                    <p className='text-sm text-gray-500 '>Vs Yesterday</p>
+                </div>
+            </div>
             ))}
         </div>
     )

@@ -1,13 +1,17 @@
 import { Tag } from '@prisma/client';
 import { addTagToKeywords, deleteTagFromKeywords } from '../data/keyword';
 import { useToast } from '@/website/features/toast/use-toast';
-import { useKeywordResults } from '../keywords-context';
 import { useMemo } from 'react';
 import { ensureArray } from '../lib/utils';
+import { useKeywordResultsStore } from '@/lib/zustand/keyword-results-store';
 
 export const useTags = () => {
   const { toast } = useToast();
-  const { results, setResults, setSelectedTags } = useKeywordResults();
+  // const { results, setResults } = useKeywordResults();
+
+  const results = useKeywordResultsStore((state) => state.keywordResults);
+  // ! Check if we dont need to use updateResults instead of setResults
+  const setResults = useKeywordResultsStore((state) => state.setKeywordResults);
 
   /**
    * ? Adds a tag to the results based on the provided keyword IDs.
@@ -110,7 +114,7 @@ export const useTags = () => {
     try {
 
       // batch the keywords in batches of 50 and then request deleteTagFromkeywords
-       
+      
       const batchSize = 50;
       const keywordIdsArray = ensureArray(keywordIds);
       const batches = [];
@@ -162,13 +166,14 @@ export const useTags = () => {
   }
 
 
+  const keywordResults = useKeywordResultsStore((state) => state.keywordResults)
   /**
    * ? Calculates the unique tags from the results array.
    * 
    * @returns An array of unique tags.
    */
   const uniqueTags = useMemo(() => {
-    const allTags = results.reduce((acc: Tag[], result) => {
+    const allTags = keywordResults.reduce((acc: Tag[], result) => {
       result.tags?.forEach(tag => {
         if (tag && !acc.some(existingTag => existingTag.name === tag.name)) {
           acc.push({ id: tag.id, name: tag.name });
@@ -177,17 +182,10 @@ export const useTags = () => {
       return acc;
     }, []);
     return allTags;
-  }, [results]);
+  }, [keywordResults]);
 
 
-  /**
-   * Updates the selected tags.
-   * @param {string[]} tags - The new selected tags.
-   */
-  const updateSelectedTags = (tags: string[]) => {
-    setSelectedTags(tags);
-  };
 
 
-  return { addTagAndToast, deleteTagAndToast, uniqueTags, updateSelectedTags };
+  return { addTagAndToast, deleteTagAndToast, uniqueTags };
 };

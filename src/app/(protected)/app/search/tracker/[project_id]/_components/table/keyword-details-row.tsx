@@ -11,7 +11,7 @@ type Props = {
     searchConsoleData?: SearchConsoleData | null,
     keywordData: Result,
     topTenResults: SerpResult[],
-    projectDetails: Project
+    projectDetails?: Project
 }
 
 
@@ -57,10 +57,10 @@ const SearchConsoleChart = ({ searchConsoleData }: { searchConsoleData: SearchCo
 
     return (
         <div className="flex w-full h-fit">
-            <Chart title="Clicks" data={data} color="#8884d8" dataKey="clicks" />
-            <Chart title="CTR" data={data} color="#82ca9d" dataKey="ctr" />
-            <Chart title="Impressions" data={data} color="#ffc658" dataKey="impressions" />
-            <Chart title="Position" data={data} color="#ff7300" dataKey="position" />
+            <Chart title="Clicks" data={data} color="#6B7280" dataKey="clicks" />
+            <Chart title="CTR" data={data} color="#6B7280" dataKey="ctr" />
+            <Chart title="Impressions" data={data} color="#6B7280" dataKey="impressions" />
+            <Chart title="Position" data={data} color="#6B7280" dataKey="position" />
         </div>
     );
 };

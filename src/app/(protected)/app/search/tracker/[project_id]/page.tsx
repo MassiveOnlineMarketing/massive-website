@@ -1,108 +1,79 @@
-'use client'
+import React from 'react'
+import { auth } from '@/auth/auth'
 
-import React, { useEffect, useState } from 'react'
-import { ProjectResult } from '@prisma/client'
-import { useKeywordResults } from '@/serp/keywords-context'
-import { useProjectDetails } from '@/serp/project-details-context'
-import { getSession, useSession } from 'next-auth/react'
+// types
+import { KeywordResultWithTagProp } from '@/serp/serp-types'
 
-// Table
-import { DataTable } from './_components/table/keyword-table'
-import { columns } from './_components/table/columns'
+import { getProjectById } from '@/serp/data/project'
+import { getLatestKeywordResultWithTags, projectRouteAuth } from '@/serp/utils'
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from '@/components/ui/alert-dialog'
-import TagSelection from './_components/table/tag-selection'
-import { useFetchKeywordResults } from '@/serp/hooks/useFetchKeywordResults'
-import { useKeywords } from '@/serp/hooks/useKeywords'
-import { fetch7LatestResults } from '@/serp/data/project'
-import ProjectStats from './_components/project-stats-bar-chart'
-import { Session } from 'next-auth'
+import Test from './test'
+
+// state setting components 
+import SetProjectDetails from './_components/state/setProjectDetails'
+import SetKeywordResults from './_components/state/setKeywordResults'
 
 
 type pageProps = {
-  params: {
-    project_id: string
-  }
+    params: {
+        project_id: string
+    }
 }
 
-const Page = ({ params }: pageProps) => {
-  const projectId = params.project_id
+const Page = async ({ params }: pageProps) => {
+    const projectId = params.project_id
 
-  const { filteredResults, isDialogOpen, setIsDialogOpen } = useKeywordResults()
-  const { projectDetails, authorized, fetchProjectDetails } = useProjectDetails()
-  const { deleteKeywords, cancelDelete, confirmDelete } = useKeywords()
-  const [sessionData, setSessionData] = useState<Session | null>(null);
-
-  useEffect(() => {
-    getSession().then(session => {
-      console.log('sessionData changed', session);
-      setSessionData(session);
-    });
-  }, []);
-
-  console.log('re render page')
-
-
-  const fetchKeywordResults = useFetchKeywordResults();
-
-  useEffect(() => {
-    console.log('fetching keyword results')
-    if (projectId) {
-      console.log('fetching keyword results project id', projectId)
-      fetchKeywordResults(projectId);
+    let isUserAuthorized = false
+    isUserAuthorized = await projectRouteAuth(projectId)
+    if (!isUserAuthorized) {
+        return <div>not authorized</div>
     }
-  }, [projectId]);
+
+    // * Fetch initial state for the project details
+    const projectDetails = await getProjectById(projectId)
+
+    // * Fetch initial state for the keyword results
+    // TODO: extract to a function
+    let keywordResults: KeywordResultWithTagProp[] = []
+    try {
+        const result = await getLatestKeywordResultWithTags(projectId);
+        if (result && result.length > 0) {
+
+            const flattenedKeywords = result.flat();
+            const filteredKeywords = flattenedKeywords.filter(result => result !== undefined) as KeywordResultWithTagProp[];
+
+            // check if the result is empty, happens after routing to project page when keywords are processed yet
+            if (filteredKeywords[0].id === undefined) {
+                console.log('no result')
+            } else {
+                keywordResults = filteredKeywords
+            }
+
+        } else {
+            throw new Error("Failed to fetch keywords.");
+        }
+    } catch (error) {
+        console.error("Failed to fetch keywords:", error);
+    }
 
 
-  const handleKeywordsDelete = (keywordId: string) => {
-    deleteKeywords([keywordId])
-  }
+    if (!projectDetails) {
+        return <div className='w-full h-full flex items-center justify-center'>loading...</div>
+    }
 
-  useEffect(() => {
-    console.log('fetching project results')
-    if (!projectId) return
-    console.log('fetching project results project id', projectId)
-    fetchProjectDetails(projectId)
-  }, [projectId])
+    // * Fetch the refresh token
+    const user = await auth()
 
-
-  if (!authorized) {
-    return <div>you are not authorized to view this page</div>
-  }
-
-  // console.log('filteredResults', filteredResults)
-
-  return (
-    <div className='p-6 mb-16'>
-
-      {/*
-      {projectDetails &&
-        <>
-          <ProjectStats filteredResults={filteredResults} />
-          <DataTable
-            columns={columns(handleKeywordsDelete)}
-            data={filteredResults}
-            projectDetails={projectDetails}
-            refresh_token={sessionData.refresh_token}
-          />
-        </>
-      }
-    */}
-
-{/*
-      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <AlertDialogContent className='bg-white'>
-          <AlertDialogHeader>Are you sure you want to delete this keyword?</AlertDialogHeader>
-          <AlertDialogFooter>
-
-            <AlertDialogCancel onClick={cancelDelete}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className='bg-red-200 hover:bg-red-300 text-red-500 hover:text-red-600 border border-red-300 px-[24px] py-[12px] rounded-lg'>Confirm</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      */}
-    </div>
-  )
+    return (
+        <div className='p-6 mb-16'>
+            {projectDetails && <SetProjectDetails projectDetails={projectDetails} />}
+            {keywordResults && <SetKeywordResults keywordResults={keywordResults} />}
+            <Test
+                refresh_token={user?.refreshToken}
+            />
+        </div>
+    )
 }
 
 export default Page
+

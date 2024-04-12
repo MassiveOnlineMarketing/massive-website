@@ -1,13 +1,24 @@
 'use client'
 
-import { useCurrentUser } from '@/auth/hooks/use-current-user'
-import { userTotalKeywordCount } from '@/serp/actions/user-total-keyword-count'
 import React, { useEffect } from 'react'
 
-const Credits = () => {
-    const [dailySerpSpend, setDailySerpSpend] = React.useState(0)
+import { userTotalKeywordCount } from '@/serp/actions/user-total-keyword-count'
+import { ExtendedUser } from '../../../next-auth'
 
-    const user = useCurrentUser()
+/**
+ * `Credits` is a React component that displays the user's credits and daily SERP API spend.
+ * 
+ * This component is responsible for fetching and displaying the total keyword count for a user,
+ * which represents the daily spend for using the SERP Dashboard. It also displays the user's remaining credits.
+ * 
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {ExtendedUser} props.user - The user object containing the user's details and credits.
+ * 
+ * @returns {JSX.Element} A JSX element containing the user's credits and daily SERP API spend.
+ */
+const Credits = ({ user }: { user: ExtendedUser }): JSX.Element => {
+    const [dailySerpSpend, setDailySerpSpend] = React.useState(0)
 
     useEffect(() => {
         const getTotalKeywordCount = async () => {
@@ -20,7 +31,7 @@ const Credits = () => {
         }
 
         getTotalKeywordCount()
-    }, [])
+    }, [user])
 
 
 

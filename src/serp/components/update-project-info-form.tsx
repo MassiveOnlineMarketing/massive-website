@@ -1,20 +1,25 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { useProjectDetails } from "../project-details-context"
+import axios from "axios"
 
+// From
 import { z } from "zod"
 import { UpdateProjectSchema } from "../schema"
 import { useForm } from "react-hook-form"
+import { useProjectDetailsStore } from "@/lib/zustand/project-details-store"
 
-import { updateProjectDetails } from "../data/project"
+// Hooks
 import { useToast } from "@/website/features/toast/use-toast"
-
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/website/features/dialog/dialog'
-import { PencilIcon } from "@heroicons/react/24/outline"
-import axios from "axios"
 import { useSession } from "next-auth/react"
 import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated"
+
+import { updateProjectDetails } from "../data/project"
+
+// components
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/website/features/dialog/dialog'
+import { PencilIcon } from "@heroicons/react/24/outline"
+
 
 
 
@@ -23,10 +28,6 @@ type Schema = z.infer<typeof UpdateProjectSchema>
 type Site = {
   premissionLevel: string,
   siteUrl: string,
-}
-
-type Res = {
-  siteEntry: Site[]
 }
 
 /**
@@ -38,24 +39,48 @@ export const UpdateProjectInfoForm = () => {
 
   const { toast } = useToast()
   const [open, setOpen] = useState(false)
-  const { updateProjectDetailsState, projectDetails } = useProjectDetails()
-  const [sites, setSites] = useState<Site[]>()
+  const updateProjectDetailsState = useProjectDetailsStore((state) => state.updateProjectDetails)
+  
+  const user = useSession()
   const isGscAuthenticated = useIsGscAuthenticated()
+  
+  // Form data
+  const [sites, setSites] = useState<Site[]>()
+  const projectDetails = useProjectDetailsStore(state => state)
 
-  const refresh_token = useSession().data?.refreshToken
 
-  const fetchConnectedSites = async () => {
-    const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/get_sites?refresh_token=${refresh_token}`
-    // console.log('url', url)
+  useEffect(() => {
+    if (open) {
+      let refreshToken = null as string | null
+
+      if (projectDetails.projectName && projectDetails.domainUrl && projectDetails.language && projectDetails.country) {
+        setValue("projectName", projectDetails.projectName);
+        setValue("domainUrl", projectDetails.domainUrl);
+        setValue("language", projectDetails.language);
+        setValue("country", projectDetails.country);
+        if (projectDetails.gscUrl) {
+          setValue("gscSite", projectDetails.gscUrl);
+        }
+      }
+
+      if (user.data?.refreshToken && isGscAuthenticated) {
+
+        refreshToken = user.data.refreshToken
+        fetchConnectedSites(refreshToken);
+      } else {
+        console.log('No Token')
+      }
+
+    }
+  }, [open]);
+
+  const fetchConnectedSites = async (refreshToken: string) => {
+    const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/get_sites?refresh_token=${refreshToken}`
     const res = await axios(url)
     setSites(res.data.siteEntry)
   }
 
-  useEffect(() => {
-    if (isGscAuthenticated) {
-      fetchConnectedSites()
-    }
-  }, [isGscAuthenticated])
+
 
   const {
     register,
@@ -65,20 +90,11 @@ export const UpdateProjectInfoForm = () => {
     setValue
   } = useForm<Schema>();
 
-  useEffect(() => {
-    if (projectDetails) {
-      setValue("projectName", projectDetails.projectName);
-      setValue("domainUrl", projectDetails.domainUrl);
-      setValue("language", projectDetails.language);
-      setValue("country", projectDetails.country);
-      if (projectDetails.gscUrl) {
-        setValue("gscSite", projectDetails.gscUrl);
-      }
-    }
-  }, [projectDetails, setValue]);
 
   const onSubmit = async (data: Schema) => {
-    const result = await updateProjectDetails(projectDetails!.id, data)
+
+    if (!projectDetails.id) throw new Error("No project id found")
+    const result = await updateProjectDetails(projectDetails.id, data)
 
     if (result.id) {
       setOpen(false)
@@ -99,10 +115,11 @@ export const UpdateProjectInfoForm = () => {
     }
   }
 
+
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen} >
-        <DialogTrigger>
+        <DialogTrigger >
           <PencilIcon className="h-4 w-4" />
         </DialogTrigger>
         <DialogContent>

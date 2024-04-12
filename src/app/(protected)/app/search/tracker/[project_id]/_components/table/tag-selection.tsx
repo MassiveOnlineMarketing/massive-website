@@ -1,5 +1,4 @@
 import React from 'react';
-import { useKeywordResults } from '@/serp/keywords-context'; // Adjust the import path
 import { useTags } from '@/serp/hooks/useTags';
 
 import {
@@ -17,10 +16,13 @@ import {
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { cn } from "@/lib/utils"
 import { OutlinedButton } from '@/components/ui/button';
+import { useKeywordResultsStore } from '@/lib/zustand/keyword-results-store';
 
 const TagSelection = () => {
-  const { selectedTags } = useKeywordResults();
-  const { uniqueTags, updateSelectedTags } = useTags();
+  const { uniqueTags } = useTags();
+
+  const updateSelectedTags = useKeywordResultsStore((state) => state.setSelectedTags);
+  const selectedTags = useKeywordResultsStore((state) => state.selectedTags);
 
   const [tagPopoverOpen, setTagPopoverOpen] = React.useState(false)
 

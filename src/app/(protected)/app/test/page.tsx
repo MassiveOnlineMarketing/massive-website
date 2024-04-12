@@ -3,7 +3,6 @@
 import { updateUserCredits } from '@/auth/actions/user';
 import { addCreditsToUser } from '@/auth/data/user';
 import { useCurrentUser } from '@/auth/hooks/use-current-user';
-import Credits from '@/dashboard/components/credits';
 import React, { useEffect } from 'react'
 
 const Page = () => {
@@ -31,7 +30,6 @@ const Page = () => {
     <div>
         <button onClick={handleClick}>click me</button>
         {user?.credits}
-        <Credits />
     </div>
   )
 }

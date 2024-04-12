@@ -6,6 +6,7 @@ import { RenderResultResponse } from 'next/dist/server/render-result';
 import { useCurrentUser } from '@/auth/hooks/use-current-user';
 import { decrementDisplayCredits } from '@/auth/actions/credits';
 import { useToast } from '@/website/features/toast/use-toast';
+import { ProjectDetailsState } from '@/lib/zustand/project-details-store';
 
 export function useProcessNewKeywords() {
   const { addResults } = useKeywords();
@@ -23,7 +24,8 @@ export function useProcessNewKeywords() {
    * @param keywordsArray - The array of keywords to process.
    * @param project - The project object containing project details.
    */
-  const processNewKeywords = async (keywordsArray: string[], project: Project) => {
+  const processNewKeywords = async (keywordsArray: string[], project: ProjectDetailsState) => {
+    // console.log('keywordsArray', keywordsArray)
     setIsLoading(true);
     setError(null);
 

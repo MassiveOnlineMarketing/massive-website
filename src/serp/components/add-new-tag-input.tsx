@@ -15,7 +15,6 @@ export const AddNewTagInput = ({ selectedRows, onActionFinished }: { selectedRow
     try {
       console.log('Adding tag:', inputValue);
       const response = await getTagsByName(inputValue);
-      console.log('Tag response:', response);
 
       if (response === null) {
         const createTagResponse = await createNewTag(inputValue);

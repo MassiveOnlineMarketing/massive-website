@@ -1,7 +1,12 @@
+import { KeywordResultWithTagProp } from "../serp-types";
+
+// hooks
+import { useState } from "react";
 import { useToast } from "@/website/features/toast/use-toast";
+import { useKeywordResultsStore } from "@/lib/zustand/keyword-results-store";
+
+// actions
 import { deleteKeywordsById } from "../data/keyword";
-import { getKeywordResultById } from "../data/result";
-import { KeywordResultWithTagProp, useKeywordResults } from "../keywords-context";
 
 /**
  * Custom hook for managing keywords.
@@ -10,40 +15,25 @@ import { KeywordResultWithTagProp, useKeywordResults } from "../keywords-context
  */
 export const useKeywords = () => {
   const { toast } = useToast();
-  const { setResults, results, setIsDialogOpen, setKeywordsToDelete, keywordsToDelete } = useKeywordResults();
+  const [keywordsToDelete, setKeywordsToDelete] = useState<string[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false); // [project_id]
 
-
-  /**
-   * ?Adds keywords to the results array, fetched from database.
-   * 
-   * @param keywordId - An array of keyword IDs to be added.
-   */
-  const addKeywords = async (keywordId: string[]) => {
-    const newKeywords = await getKeywordResultById(keywordId)
-
-    setResults([...results, ...newKeywords])
-  };
-
+  const results = useKeywordResultsStore((state) => state.keywordResults);
+  const setResults = useKeywordResultsStore((state) => state.setKeywordResults);
+  const updateKeywordResults = useKeywordResultsStore((state) => state.updateKeywordResults);
 
 
   /**
    * ? Deletes the selected keywords and updates the results.
    */
   const deleteKeywords = (keywordId: string[]) => {
-    console.log('delete', keywordId)
-
     setKeywordsToDelete(keywordId);
     setIsDialogOpen(true);
-
-    console.log('delete state', keywordId);
   }
 
   const confirmDelete = async () => {
-    console.log('confirmDelete', keywordsToDelete);
-
     if (keywordsToDelete !== null) {
       const responses = await deleteKeywordsById(keywordsToDelete);
-      console.log('responses', responses);
       // if response is only one array show tost else console.log
       if (responses.length === 1) {
         toast({
@@ -73,7 +63,7 @@ export const useKeywords = () => {
     console.log('cancelDelete');
   }
 
-  
+
   /**
    * ? Adds new keyword results to the existing results.
    * * If the newResults array is empty, it removes all empty arrays from the results.
@@ -81,14 +71,7 @@ export const useKeywords = () => {
    * @param newResults - An array of KeywordResultWithTagProp objects representing the new keyword results to be added.
    */
   const addResults = (newResults: KeywordResultWithTagProp[]) => {
-    if (newResults.length === 0) {
-      // @ts-ignore
-      setResults(prevResults => prevResults.filter(result => result.length !== 0));
-      return;
-    }
-    
-    // @ts-ignore
-    setResults(prevResults => [...prevResults, ...newResults]);
+    updateKeywordResults(newResults);
   };
 
 
@@ -100,11 +83,12 @@ export const useKeywords = () => {
   }
 
   return {
-    addKeywords,
     deleteKeywords,
     confirmDelete,
     cancelDelete,
     addResults,
-    resetResults
+    resetResults,
+    isDialogOpen,
+    setIsDialogOpen
   }
 }

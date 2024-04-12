@@ -9,6 +9,7 @@ interface props
     children: React.ReactNode;
     mbFull?: boolean;
     buttonClassName?: string;
+    outlineClassName?: string;
 }
 
 const TextButton = React.forwardRef<HTMLParagraphElement, props>(({ className, option, size, variant, mbFull, ...props }, ref) => {
@@ -28,7 +29,7 @@ const TextButton = React.forwardRef<HTMLParagraphElement, props>(({ className, o
 
 TextButton.displayName = "TextButton";
 
-const OutlinedTextButton = React.forwardRef<HTMLParagraphElement, props>(({ className, buttonClassName, option, size, variant, mbFull, ...props }, ref) => {
+const OutlinedTextButton = React.forwardRef<HTMLParagraphElement, props>(({ className, outlineClassName, buttonClassName, option, size, variant, mbFull, ...props }, ref) => {
     return (
         <div className={cn("relative w-fit h-fit m-1", className)}>
             <p
@@ -43,7 +44,11 @@ const OutlinedTextButton = React.forwardRef<HTMLParagraphElement, props>(({ clas
             >
                 {props.children}
             </p>
-            <div className="absolute top-0 left-0 w-full h-full rounded-[8px] outline outline-4 outline-primary-50 bg-primary-50 z-30"></div>
+            <div className={cn(
+                "absolute top-0 left-0 w-full h-full rounded-[8px] outline outline-4 outline-primary-50 bg-primary-50 z-30",
+                outlineClassName
+            )}>
+            </div>
         </div>
     );
 });

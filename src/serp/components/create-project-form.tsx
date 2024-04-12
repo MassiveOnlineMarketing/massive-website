@@ -7,6 +7,7 @@ import { ProjectSchema } from "../schema"
 // import { createProject } from "../actions/create-project";
 import { useRouter } from "next/navigation";
 
+// hooks
 import { z } from "zod"
 import { useCurrentUser } from "@/auth/hooks/use-current-user";
 import { splitAndTrimKeywords } from "../lib/utils";
@@ -21,17 +22,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/website/fe
 
 
 type Schema = z.infer<typeof ProjectSchema>
-
-type ResultResponse = {
-  keywordId: string;
-  keywordName: string;
-  position: number;
-  url: string;
-  metaTitle: string;
-  metaDescription: string;
-  firstPosition: number;
-  bestPosition: number;
-}
 
 export const CreateProjectForm = () => {
   const router = useRouter()

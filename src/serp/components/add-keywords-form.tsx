@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useProjectDetails } from '../project-details-context'
 import { useProcessNewKeywords } from '../hooks/useProcessNewKeywords'
 
 // utils
@@ -13,12 +12,13 @@ import { splitAndTrimKeywords } from '../lib/utils'
 // components
 import { Dialog, DialogContent, DialogHeader, DialogTriggerNoButton } from '@/website/features/dialog/dialog'
 import { useToast } from '@/website/features/toast/use-toast'
+import { useProjectDetailsStore } from '@/lib/zustand/project-details-store'
 
 type Schema = z.infer<typeof KeywordsSchema>
 
 const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactNode , buttonClassName?: string}) => {
   const [open, setOpen] = React.useState(false)
-  const { projectDetails } = useProjectDetails()
+  const projectDetails = useProjectDetailsStore(state => state)
   const { processNewKeywords, isLoading, error } = useProcessNewKeywords()
   const {toast} = useToast()
   const {
@@ -36,11 +36,13 @@ const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactN
         duration: 3000
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
 
   const onSubmit = async (data: Schema) => {
     setOpen(false)
+    console.log('data', data)
 
     if (!projectDetails) {
       return

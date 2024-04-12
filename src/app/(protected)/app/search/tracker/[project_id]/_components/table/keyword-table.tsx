@@ -37,12 +37,12 @@ import { useCurrentRole } from "@/auth/hooks/use-current-role";
 import { useCurrentUser } from "@/auth/hooks/use-current-user";
 import KeywordDetailsRow from "./keyword-details-row";
 import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated";
+import { useProjectDetailsStore } from "@/lib/zustand/project-details-store";
 // npm install recharts
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  projectDetails: Project;
   refresh_token?: string;
 }
 
@@ -60,10 +60,8 @@ const isAdmin = false;
 export function DataTable<TData, TValue>({
   columns,
   data,
-  projectDetails,
   refresh_token,
 }: DataTableProps<TData, TValue>) {
-  console.log('re render table')
   // sorting state
   const [sorting, setSorting] = React.useState<SortingState>([]);
   // filtering state
@@ -76,6 +74,7 @@ export function DataTable<TData, TValue>({
 
 
   const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(null);
+  const projectDetails = useProjectDetailsStore(state => state);
 
   const table = useReactTable({
     data,
@@ -139,7 +138,7 @@ export function DataTable<TData, TValue>({
   }
 
   const fetchSearchConsoleData = async (keyword: string) => {
-    if (!projectDetails.gscUrl) {
+    if (!projectDetails || !projectDetails.gscUrl) {
       return;
     }
     if (!refresh_token) {
@@ -250,7 +249,6 @@ export function DataTable<TData, TValue>({
                             searchConsoleData={searchConsoleData}
                             keywordData={keywordData}
                             topTenResults={topTenResults}
-                            projectDetails={projectDetails}
                           />
 
                           <ResultDetail keywordData={keywordData} topTenSerpResults={topTenResults} />

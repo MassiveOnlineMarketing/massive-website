@@ -95,7 +95,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     {/* Primary sidebar */}
                     <PrimarySidebar navigation={navigation} pathname={pathname} isActive={isActive} setSecondarySidebarOpen={setSecondarySidebarOpen}/>
 
-                    {/* Secondery sidebar */}
+                    {/* Secondery sidebar 
+                    */}
                     {currentNavigation && <SecondarySidebar navigation={currentNavigation} secondarySidebarOpen={secondarySidebarOpen} setSecondarySidebarOpen={setSecondarySidebarOpen} />}
                     {/* </div> */}
 
