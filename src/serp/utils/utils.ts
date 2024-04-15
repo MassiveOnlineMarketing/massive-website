@@ -2,19 +2,11 @@
 
 import { auth } from "@/auth/auth";
 
-import { getKeywordsByProjectId } from "./data/keyword";
-import { getLatestKeywordResultWithTagByKeywordId } from "./data/result";
-import { getProjectById } from "./data/project";
-import { getLatestSerpResultsWithTags } from "./data/serp-result";
+import { getKeywordsByProjectId } from "../data/keyword";
+import { getLatestKeywordResultWithTagByKeywordId } from "../data/result";
+import { getProjectById } from "../data/project";
+import { getLatestSerpResultsWithTags } from "../data/serp-result";
 
-export const stringToArray = (str: string) => {
-  const obj_keywords = str.split('\n')
-    .map(s => s.trim())
-    .filter(Boolean);
-
-  // console.log('🟢 Keywords:', obj_keywords);
-  return obj_keywords;
-}
 
 export const getLatestKeywordResultWithTags = async (projectId: string) => {
   // console.log('🟢 projectId', projectId)
@@ -32,6 +24,12 @@ export const getLatestKeywordResultWithTags = async (projectId: string) => {
   }
 }
 
+/**
+ * ? Retrieves the latest search engine results page (SERP) results for a given project.
+ * 
+ * @param projectId - The ID of the project.
+ * @returns A promise that resolves to an array of keyword results.
+ */
 export const getLatestSerpResults = async (projectId: string) => {
 
   const allKeywords = await getKeywordsByProjectId(projectId);
@@ -48,6 +46,12 @@ export const getLatestSerpResults = async (projectId: string) => {
 }
 
 
+/**
+ * ? Checks if the current user is authorized to access a project route.
+ * 
+ * @param projectId - The ID of the project.
+ * @returns A boolean indicating whether the user is authorized or not.
+ */
 export const projectRouteAuth = async (projectId: string) => {
 
   const session = await auth();

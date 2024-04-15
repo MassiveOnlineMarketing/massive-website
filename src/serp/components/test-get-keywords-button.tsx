@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import React from 'react'
-import { getLatestKeywordResultWithTags } from '../utils';
+import { getLatestKeywordResultWithTags } from '../utils/utils';
 
 export const TestGetKeywordsButton = ({
   projectId

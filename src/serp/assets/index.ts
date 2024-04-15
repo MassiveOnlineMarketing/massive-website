@@ -1,1 +1,0 @@
-import ArrowUpDown from './ArrowUpDown.svg';

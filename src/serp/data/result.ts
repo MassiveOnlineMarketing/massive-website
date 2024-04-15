@@ -51,45 +51,12 @@ export const getKeywordResultById = async (keywordId: string[]) => {
   return keywordResult;
 }
 
-// export const getLatestKeywordResultByKeywordId = async (keywordIds: string[]) => {
-//   const latestResults = [];
 
-//   for (const keywordId of keywordIds) {
-//     const latestResult = await db.result.findFirst({
-//       where: {
-//         keywordId: keywordId
-//       },
-//       orderBy: {
-//         createdAt: 'desc'
-//       }
-//     });
-
-//     if (latestResult) {
-//       latestResults.push(latestResult);
-//     }
-//   }
-//   return latestResults;
-// }
-
-export const getLatestKeywordResultByKeywordId = async (keywordIds: string[]) => {
-  const results = await db.result.findMany({
-    where: {
-      keywordId: {
-        in: keywordIds,
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-
-  const latestResults = keywordIds.map(id => {
-    return results.find(result => result.keywordId === id);
-  });
-
-  return latestResults;
-}
-
+/**
+ * Retrieves the latest keyword results along with their associated tags by keyword IDs.
+ * @param keywordIds - An array of keyword IDs.
+ * @returns An array of latest keyword results with associated tags.
+ */
 export const getLatestKeywordResultWithTagByKeywordId = async (keywordIds: string[]) => {
   const results = await db.result.findMany({
     where: {

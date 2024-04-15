@@ -5,7 +5,7 @@ import { auth } from '@/auth/auth'
 import { KeywordResultWithTagProp } from '@/serp/serp-types'
 
 import { getProjectById } from '@/serp/data/project'
-import { getLatestKeywordResultWithTags, projectRouteAuth } from '@/serp/utils'
+import { getLatestKeywordResultWithTags, projectRouteAuth } from '@/serp/utils/utils'
 
 import Test from './test'
 

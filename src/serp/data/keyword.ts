@@ -1,7 +1,8 @@
 'use server'
 
 import { db } from "@/lib/db";
-import { ensureArray, processArrayInBatches } from "../lib/utils";
+import { processArrayInBatches } from "../lib/utils";
+import { ensureArray } from "@/lib/utils";
 
 /**
  * ? Inserts an array of keywords into the database for a specific project.
@@ -119,82 +120,8 @@ export const addTagToKeywords = async (tagName: string, keywordIds: string[] | s
  * 
  * @param keywordIds - An array of keyword IDs or a single keyword ID.
  * @param tagName - The name of the tag to be deleted.
- * @returns A Promise that resolves to an array of updated keywords.
+ * @returns A promise that resolves to an array of updated keywords.
  */
-// export const deleteTagFromKeywords = async (keywordIds: string[] | string, tagName: string ) => {
-
-//   const keywordIdsArray = ensureArray(keywordIds);
-
-//   const updateKeywordsBatch = async (batch: string[]) => {
-//     const keywords = await Promise.all(batch.map((keywordId) =>
-//         db.keyword.update({
-//           where: {
-//             id: keywordId,
-//           },
-//           data: {
-//             tags: {
-//               disconnect: {
-//                 name: tagName,
-//               },
-//             },
-//           },
-//           include: {
-//             tags: true,
-//           },
-//         })
-//       )
-//     );
-  
-//     return keywords;
-//   }
-  
-//   const results = await processArrayInBatches(keywordIdsArray, updateKeywordsBatch, 50);
-  
-//   return results;
-// };
-
-
-
-// export const deleteTagFromKeywords = async (keywordIds: string[] | string, tagName: string ) => {
-//   const keywordIdsArray = Array.isArray(keywordIds) ? keywordIds : [keywordIds];
-
-//   console.log('🟢 keywordIdsArray', keywordIdsArray);
-
-//   // Fetch the keywords
-//   const keywords = await db.keyword.findMany({
-//     where: {
-//       id: {
-//         in: keywordIdsArray,
-//       },
-//       tags: {
-//         some: {
-//           name: tagName,
-//         },
-//       },
-//     },
-//     include: {
-//       tags: true,
-//     },
-//   });
-
-//   // Remove the tag from each keyword's tags array
-//   const updatedKeywords = keywords.map(keyword => ({
-//     ...keyword,
-//     tags: keyword.tags.filter(tag => tag.name !== tagName),
-//   }));
-
-//   // Update each keyword
-//   for (const keyword of updatedKeywords) {
-//     await db.keyword.update({
-//       where: { id: keyword.id },
-//       data: { tags: { set: keyword.tags.map(tag => ({ id: tag.id })) } },
-//     });
-//   }
-
-//   return updatedKeywords;
-// };
-
-
 export const deleteTagFromKeywords = async (keywordIds: string[] | string, tagName: string ) => {
   const keywordIdsArray = Array.isArray(keywordIds) ? keywordIds : [keywordIds];
 

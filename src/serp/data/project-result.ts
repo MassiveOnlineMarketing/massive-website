@@ -2,20 +2,6 @@
 
 import { db } from "@/lib/db";
 
-export const getLatestProjectResult = async (projectId: string) => {
-    const result = await db.projectResult.findFirst({
-        where: {
-            projectId: projectId,
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
-    });
-
-    // console.log('result');
-
-    return result;
-}
 
 /**
  * Retrieves the results of a project.

@@ -1,16 +1,4 @@
 /**
- * Ensures that the input is an array. If the input is already an array, it is returned as is.
- * If the input is not an array, it is wrapped in an array and returned.
- * 
- * @param input - The input value to ensure as an array.
- * @returns The input value as an array.
- */
-export function ensureArray(input: any | any[]) {
-  return Array.isArray(input) ? input : [input];
-}
-
-
-/**
  * Processes an array in batches and returns the results as a nested array.
  * 
  * @param array - The array to process in batches.

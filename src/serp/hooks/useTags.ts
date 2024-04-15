@@ -2,8 +2,8 @@ import { Tag } from '@prisma/client';
 import { addTagToKeywords, deleteTagFromKeywords } from '../data/keyword';
 import { useToast } from '@/website/features/toast/use-toast';
 import { useMemo } from 'react';
-import { ensureArray } from '../lib/utils';
 import { useKeywordResultsStore } from '@/lib/zustand/keyword-results-store';
+import { ensureArray } from '@/lib/utils';
 
 export const useTags = () => {
   const { toast } = useToast();
