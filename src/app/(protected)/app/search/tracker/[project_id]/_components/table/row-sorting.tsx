@@ -30,6 +30,10 @@ export function SortingRows({ sorting, setSorting }: SortingRowsProps) {
             label: 'Position'
         },
         {
+            id: 'keywordName',
+            label: 'Keyword'
+        },
+        {
             id: 'url',
             label: 'Url'
         },

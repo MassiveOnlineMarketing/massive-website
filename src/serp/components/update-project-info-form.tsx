@@ -48,7 +48,6 @@ export const UpdateProjectInfoForm = () => {
   const [sites, setSites] = useState<Site[]>()
   const projectDetails = useProjectDetailsStore(state => state)
 
-
   useEffect(() => {
     if (open) {
       let refreshToken = null as string | null
@@ -72,7 +71,7 @@ export const UpdateProjectInfoForm = () => {
       }
 
     }
-  }, [open]);
+  }, [open, projectDetails.gscUrl]);
 
   const fetchConnectedSites = async (refreshToken: string) => {
     const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/get_sites?refresh_token=${refreshToken}`

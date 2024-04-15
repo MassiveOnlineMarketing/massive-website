@@ -9,20 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button, OutlinedButton } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowsUpDownIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
+import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
 import { Result } from "@prisma/client"
 
 import { format } from 'date-fns';
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-// export type Payment = {
-//   id: string
-//   amount: number
-//   status: "pending" | "processing" | "success" | "failed"
-//   email: string
-// }
 
 
 
@@ -31,6 +23,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
   {
     id: "select",
     header: ({ table }) => (
+
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
@@ -42,12 +35,20 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
       />
     ),
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="rounded-[4px] border-gray-300 border-[1.5px]"
-      />
+      <div
+        onClick={(e) => {
+          e.stopPropagation()
+          e.nativeEvent.stopImmediatePropagation()
+        }}
+      >
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+          className="rounded-[4px] border-gray-300 border-[1.5px]"
+        />
+      </div>
+
     ),
     enableSorting: false,
     enableHiding: false,
@@ -57,7 +58,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "position",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500 mx-auto" >
+        <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
           Position
         </p>
       )
@@ -75,7 +76,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "keywordName",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500" >
+        <p className="flex font-medium text-gray-500" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
           Keyword
         </p>
       )
@@ -84,7 +85,11 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
   // * Url
   {
     accessorKey: "url",
-    header: "Found URL",
+    header: ({ column }) => (
+      <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
+        Url
+      </p>
+    ),
     cell: ({ row }) => {
       const url = row.getValue('url')
       if (url === null || url === undefined || url === "") {
@@ -107,7 +112,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "firstPosition",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500 mx-auto">
+        <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           First Position
         </p>
       )
@@ -125,7 +130,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "bestPosition",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500 mx-auto" >
+        <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Best Position
         </p>
       )
@@ -143,7 +148,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "latestChange",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500 mx-auto" >
+        <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Latest Change
         </p>
       )

@@ -26,7 +26,7 @@ export const AddTagToKeywords = ({ selectedRows, onActionFinished }: { selectedR
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>
         <DropdownMenuSubContent>
-          {uniqueTags.length === 0 && <DropdownMenuItem disabled>No tags to delete</DropdownMenuItem>}
+          {uniqueTags.length === 0 && <DropdownMenuItem disabled>No existing tags</DropdownMenuItem>}
           {uniqueTags.map((label) => (
             <DropdownMenuItem
               key={label.id}

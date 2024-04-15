@@ -116,6 +116,11 @@ export function DataTable<TData, TValue>({
     const keyword = data.find((keyword: any) => keyword.keywordId === id)
     let index = parseInt(id, 10);
 
+    if (selectedRowIndex === id) {
+      setSelectedRowIndex(null);
+      return;
+    }
+
     setSelectedRowIndex(prevId => prevId === id ? null : id);
     if (!isNaN(index) && index >= 0 && index < data.length) {
       let item = data[index];

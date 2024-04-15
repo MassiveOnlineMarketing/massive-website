@@ -58,27 +58,31 @@ const TagSelection = () => {
       </PopoverTrigger>
       <PopoverContent className="w-[250px] p-0">
         <Command>
-          <CommandInput placeholder="Search tag..." className="h-9" />
-          <CommandEmpty>No tags found.</CommandEmpty>
-          <CommandGroup>
-            {uniqueTags.map((tag) => (
-              <CommandItem
-                key={tag.name}
-                value={tag.name}
-                onSelect={(currentValue) => {
-                  toggleTag(tag.name)
-                }}
-              >
-                {tag.name}
-                <CheckIcon
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    selectedTags.includes(tag.name) ? "opacity-100" : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-            ))}
-          </CommandGroup>
+          <CommandInput placeholder={uniqueTags.length > 0 ? ("Search tag..."):('No existing tags')}  className="h-9" />
+          {
+            uniqueTags.length > 0 && (
+              <CommandGroup>
+                {uniqueTags.map((tag) => (
+                  <CommandItem
+                    key={tag.name}
+                    value={tag.name}
+                    onSelect={(currentValue) => {
+                      toggleTag(tag.name)
+                    }}
+                  >
+                    {tag.name}
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        selectedTags.includes(tag.name) ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+
+            )
+          }
         </Command>
       </PopoverContent>
     </Popover>
