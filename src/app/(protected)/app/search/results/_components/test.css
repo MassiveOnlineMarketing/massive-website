@@ -1,0 +1,35 @@
+.myBrush .recharts-brush .recharts-brush-slider {
+    fill: #7857FE;
+  }
+  
+  .myBrush .recharts-brush .recharts-brush-texts text {
+    fill: #000;
+    font-size: 12px;
+  }
+
+  .recharts-brush-slide{
+    fill: green;
+    border-radius: 6px;
+  }
+
+.recharts-layer.recharts-brush > g > rect {
+    stroke: #fff !important;
+    /* Your styles here */
+  }
+
+  .recharts-layer.recharts-brush > g > rect {
+    stroke: #000 !important;
+    background-color: blue;
+    height: 40px;
+    width: 40px;
+}
+.recharts-brush{
+    border-left-width: 10px;
+    border-right-width: 10px;
+}
+
+.recharts-brush-traveller {
+    stroke: #000 !important;
+    fill: #000 !important;
+    height: 20px;
+}

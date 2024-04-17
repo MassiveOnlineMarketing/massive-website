@@ -41,7 +41,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.1",
-    "data-fns": "^1.1.0",
+    "date-fns": "^2.30.0",
     "dotenv": "^16.3.2",
     "escape-html": "^1.0.3",
     "framer-motion": "^11.0.3",

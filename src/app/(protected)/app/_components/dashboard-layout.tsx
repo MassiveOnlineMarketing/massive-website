@@ -39,7 +39,8 @@ const navigation = [
 
 const searchNavigation = [
     { name: 'Dashboard', href: '/app/search/', icon: HomeIcon },
-    { name: 'Results', href: '/app/search/tracker', icon: UsersIcon },
+    { name: 'Results', href: '/app/search/results', icon: UsersIcon },
+    { name: 'Keywords', href: '/app/search/keywords', icon: MagnifyingGlassIcon },
 ]
 
 const websiteNavigation = [
@@ -93,18 +94,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <div className="flex flex-row h-[calc(100vh-64px)]">
                     {/* <div className='lg:block hidden'> */}
                     {/* Primary sidebar */}
-                    <PrimarySidebar navigation={navigation} pathname={pathname} isActive={isActive} setSecondarySidebarOpen={setSecondarySidebarOpen}/>
+                    <PrimarySidebar navigation={navigation} pathname={pathname} isActive={isActive} setSecondarySidebarOpen={setSecondarySidebarOpen} />
 
-                    {/* Secondery sidebar 
-                    */}
-                    {currentNavigation && <SecondarySidebar navigation={currentNavigation} secondarySidebarOpen={secondarySidebarOpen} setSecondarySidebarOpen={setSecondarySidebarOpen} />}
                     {/* </div> */}
 
 
                     {/* Content */}
                     <div className="w-full h-full p-[8px] relative ">
-                        <div className="absolute inset-0 bg-transparent box-content inner-shadow lg:rounded-tl-3xl border-2 overflow-hidden">
-                            <div className=" p-3 h-full overflow-y-auto bg-primary-50">
+                        {/* Secondery sidebar 
+                        */}
+                        <div className="absolute inset-0 bg-transparent box-content inner-shadow lg:rounded-tl-3xl border-2 overflow-hidden flex">
+                            {currentNavigation && <SecondarySidebar navigation={currentNavigation} secondarySidebarOpen={secondarySidebarOpen} setSecondarySidebarOpen={setSecondarySidebarOpen} />}
+                            <div className=" p-3 h-full w-full overflow-y-auto bg-primary-50">
                                 {children}
                             </div>
                         </div>

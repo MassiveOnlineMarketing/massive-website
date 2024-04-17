@@ -1,44 +1,23 @@
 "use client";
 
 import React, { useEffect } from "react";
-
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
+import axios from "axios";
 import { cn } from "@/lib/utils";
 
-import { DataTablePagination } from "./pagination-table";
-import { DataTableTopBar } from "./top-bar";
-import { Project, Result, SerpResult } from "@prisma/client";
-import axios from "axios";
+import { Result, SerpResult } from "@prisma/client";
 
-
+// Hooks and Stores
 import { getTopTenSerpResults } from "@/serp/data/serp-result";
-import { useCurrentRole } from "@/auth/hooks/use-current-role";
-import { useCurrentUser } from "@/auth/hooks/use-current-user";
-import KeywordDetailsRow from "./keyword-details-row";
 import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated";
 import { useProjectDetailsStore } from "@/lib/zustand/project-details-store";
-// npm install recharts
+
+// Components
+import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable,} from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableHead, TableHeader,TableRow } from "@/components/ui/table";
+import KeywordDetailsRow from "./keywords-details-row";
+import { DataTableTopBar } from "./topbar";
+import { DataTablePagination } from "./pagination";
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -55,9 +34,8 @@ export type SearchConsoleData = {
   };
 };
 
-const isAdmin = false;
 
-export function DataTable<TData, TValue>({
+function DataTable<TData, TValue>({
   columns,
   data,
   refresh_token,
@@ -71,6 +49,8 @@ export function DataTable<TData, TValue>({
   // Row selection state
   const [rowSelection, setRowSelection] = React.useState({})
   // console.log('rowSelection', rowSelection)
+
+  console.log('render table')
 
 
   const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(null);
@@ -143,6 +123,8 @@ export function DataTable<TData, TValue>({
   }
 
   const fetchSearchConsoleData = async (keyword: string) => {
+    console.log('keyword', keyword)
+    console.log('refresh_token', refresh_token)
     if (!projectDetails || !projectDetails.gscUrl) {
       return;
     }
@@ -293,6 +275,7 @@ export function DataTable<TData, TValue>({
   );
 }
 
+export default DataTable;
 
 
 

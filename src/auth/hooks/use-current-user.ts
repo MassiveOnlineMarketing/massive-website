@@ -5,3 +5,9 @@ export const useCurrentUser = () => {
 
   return session.data?.user;
 };
+
+export const useCurrentUserRefreshToken = () => {
+  const session = useSession();
+
+  return session.data?.refreshToken;
+}

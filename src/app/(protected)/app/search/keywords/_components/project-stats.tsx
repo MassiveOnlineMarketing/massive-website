@@ -5,7 +5,6 @@ import React from 'react'
 import { useFilteredKeywordResults } from '@/serp/hooks/useFilteredResults'
 
 // charts
-import ProjectStatsPieChart from './project-stats-pie-chart'
 import { Cell, Pie, PieChart } from 'recharts'
 
 // TODO: average position not working 

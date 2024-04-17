@@ -1,6 +1,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import './fields.css';
 
 export interface InputFieldProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -41,6 +42,22 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
   }
 );
 InputField.displayName = "InputField";
+
+const InputFieldApp = React.forwardRef<HTMLInputElement, InputFieldProps>(
+  ({ className, label, ...props }, ref) => {
+    return (
+      <input
+        ref={ref}
+        className={cn(
+          "inline-flex w-full mt-3 justify-between  p-4 rounded-xl border border-primary-100 bg-primary-50/50 placeholder-gray-400 ring-primary-500 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+InputFieldApp.displayName = "InputFieldApp";
 
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
@@ -119,4 +136,4 @@ const TestInput = React.forwardRef<HTMLInputElement, TestFieldProps>(
   }
 );
 TestInput.displayName = "TestInput";
-export { InputField, Textarea, CheckField, CheckInput, TestInput };  
+export { InputField, InputFieldApp, Textarea, CheckField, CheckInput, TestInput };  

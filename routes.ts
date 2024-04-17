@@ -58,7 +58,7 @@ export const DEFAULT_LOGIN_REDIRECT = "/app";
  * @type {string}
  */
 export const DEFAULT_MULTISTEP_FORM_ROUTE = "/vragenlijst";
-
+export const DEFAULT_APP_SETTING_PAGE = "/app/settings";
 
 /**
  * The base URL of the website.

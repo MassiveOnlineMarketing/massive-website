@@ -17,7 +17,7 @@ type Props = {
 
 
 const KeywordDetailsRow = ({ gscAuthenticated, searchConsoleData, keywordData, topTenResults, projectDetails }: Props) => {
-
+    console.log('render row')
 
     return (
         <div>
@@ -53,7 +53,6 @@ const SearchConsoleChart = ({ searchConsoleData }: { searchConsoleData: SearchCo
         impressions: Number(data.impressions.toFixed(1)),
         position: Number(data.position.toFixed(1))
     }));
-
 
     return (
         <div className="flex w-full h-fit">
