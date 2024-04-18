@@ -107,7 +107,6 @@ function Page({ params }: Props) {
     return (
         <div className='px-6 w-full'>
             <BreadCrumbsSearchKeywords />
-            {googleSearchProjectDetails.id}
             {keywordResults ? (
                 <ProjectStats />
             ) : (

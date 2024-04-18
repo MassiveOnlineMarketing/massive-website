@@ -5,18 +5,21 @@ import axios from "axios";
 import { cn } from "@/lib/utils";
 
 import { GoogleSearchResult, GoogleSearchSerpResult } from "@prisma/client";
+import { PythonApiKeywordDetailSearchConsoleData } from "@/dashboard/types";
 
 // Hooks and Stores
 import { getTopTenSerpResults } from "@/dashboard/google-search/data/google-search-serp-result";
 import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated";
 import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
+import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
 
 // Components
-import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable,} from "@tanstack/react-table";
-import { Table, TableBody, TableCell, TableHead, TableHeader,TableRow } from "@/components/ui/table";
-import KeywordDetailsRow from "./keywords-details-row";
+import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import KeywordDetailsRow from "./keyword-details-row/keywords-details-row";
 import { DataTableTopBar } from "./topbar";
 import { DataTablePagination } from "./pagination";
+import KeywordTableHead from "./keyword-table-head";
 
 
 interface DataTableProps<TData, TValue> {
@@ -25,14 +28,7 @@ interface DataTableProps<TData, TValue> {
   refresh_token?: string;
 }
 
-export type SearchConsoleData = {
-  [date: string]: {
-    clicks: number;
-    ctr: number;
-    impressions: number;
-    position: number;
-  };
-};
+
 
 
 function DataTable<TData, TValue>({
@@ -55,6 +51,7 @@ function DataTable<TData, TValue>({
 
   const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(null);
   const projectDetails = useGoogleSearchProjectDetailsStore(state => state.ProjectDetails);
+  const websiteDetails = useWebsiteDetailsStore(state => state.WebsiteDetails);
 
   const table = useReactTable({
     data,
@@ -84,7 +81,7 @@ function DataTable<TData, TValue>({
 
 
   const [keywordData, setKeywordData] = React.useState<GoogleSearchResult | null>(null);
-  const [searchConsoleData, setSearchConsoleData] = React.useState<SearchConsoleData | null>(null);
+  const [searchConsoleData, setSearchConsoleData] = React.useState<PythonApiKeywordDetailSearchConsoleData | null>(null);
   const [topTenResults, setTopTenResults] = React.useState<GoogleSearchSerpResult[]>([]);
   const gscAuthenticated = useIsGscAuthenticated()
 
@@ -125,13 +122,15 @@ function DataTable<TData, TValue>({
   const fetchSearchConsoleData = async (keyword: string) => {
     console.log('keyword', keyword)
     console.log('refresh_token', refresh_token)
-    if (!projectDetails || !projectDetails.gscUrl) {
+    console.log('projectDetails', projectDetails)
+
+    if (!projectDetails || !websiteDetails?.gscUrl) {
       return;
     }
     if (!refresh_token) {
       return;
     }
-    const gscSite = projectDetails.gscUrl;
+    const gscSite = websiteDetails.gscUrl;
     const encodedKeyword = encodeURIComponent(keyword);
     const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/keyword_data?keyword=${encodedKeyword}&site_url=${gscSite}&refresh_token=${refresh_token}`;
     const res = await axios(url);
@@ -155,6 +154,8 @@ function DataTable<TData, TValue>({
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-8 mt-8">
+      <KeywordTableHead />
+
       {/* Top bar */}
       <DataTableTopBar
         table={table}
@@ -166,20 +167,20 @@ function DataTable<TData, TValue>({
 
 
       {/* Keywords Table */}
-      <div className="rounded-md mt-6">
+      <div className="rounded-md mt-3">
         <Table>
-          <TableHeader className="rouded-lg overflow-hidden bg-primary-50">
+          <TableHeader className="rouded-md overflow-hidden bg-primary-50">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className=" rounded-lg">
+              <TableRow key={headerGroup.id} className=" rounded-md shadow-sm">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       className={
                         // add rounded corners to first and last cell
                         header.column.getIndex() === 0
-                          ? "rounded-l-2xl overflow-hidden "
+                          ? "rounded-l-md overflow-hidden "
                           : header.column.getIndex() === numberOfVisibleColumns - 1
-                            ? "rounded-r-2xl "
+                            ? "rounded-r-md "
                             : ""
                       }
                       key={header.id}>
@@ -202,8 +203,7 @@ function DataTable<TData, TValue>({
                   <TableRow
                     data-state={row.getIsSelected() && "selected"}
                     className={cn(
-                      "border-",
-                      index % 2 !== 0 ? 'bg-gray-50' : ''
+                      { "border-t border-gray-200": index !== 0 },
                     )}
                     // handle click row, open keyword detail
                     onClick={handleClickRow(row.id)}
@@ -230,14 +230,13 @@ function DataTable<TData, TValue>({
                   {row.id === selectedRowIndex && (
                     <tr >
                       {keywordData ? (
-                        <td className="p-3" colSpan={numberOfVisibleColumns}>
-                          <KeywordDetailsRow 
-                            gscAuthenticated={gscAuthenticated} 
+                        <td className="pt-6" colSpan={numberOfVisibleColumns}>
+                          <KeywordDetailsRow
+                            gscAuthenticated={gscAuthenticated}
                             searchConsoleData={searchConsoleData}
-
+                            topTenResults={topTenResults}
+                            keywordData={keywordData}
                           />
-
-                          <ResultDetail keywordData={keywordData} topTenSerpResults={topTenResults} />
                           <div>
 
                           </div>
@@ -275,73 +274,6 @@ function DataTable<TData, TValue>({
 }
 
 export default DataTable;
-
-
-
-const ResultDetail = ({ keywordData, topTenSerpResults }: { keywordData: GoogleSearchResult, topTenSerpResults: GoogleSearchSerpResult[] }) => {
-  // console.log('search console data')
-  return (
-    <div className="mt-10">
-      <h2 className="text-xl">Result details</h2>
-      <div>
-        <p>Meta Title: {keywordData.metaTitle}</p>
-        <p>Meta Description: {keywordData.metaDescription}</p>
-        <p>Url: <a href={keywordData.url || ''} target="_blank" rel="noopener noreferrer">{keywordData.url}</a></p>
-      </div>
-
-      <div className="flex">
-        <div className="max-w-[600px]">
-          <h2 className="text-2xl mt-8">top ten results</h2>
-          <ul>
-            {topTenSerpResults.map((result) => (
-              <li key={result.id} className="mb-8">
-                <a href={result.url || ''} target="_blank" rel="noopener noreferrer">
-                  <p>{new URL(result.url).hostname}</p>
-                  <p className="text-xl">{result.metaTitle}</p>
-                  <p className="text-sm">{result.metaDescription}</p>
-                  <p className="mt-2"><span className="font-semibold">Url: </span>{result.url}</p>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="ml-auto">
-          <div>
-            {Array.isArray(keywordData.relatedSearches) && keywordData.relatedSearches.length > 0 ? (
-              <>
-                <h2 className="text-xl">RelatedSearches</h2>
-                <ul>
-                  {keywordData.relatedSearches.map((relatedSearch: any) => (
-                    <li key={relatedSearch.query}>{relatedSearch.query}</li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <p className="text-xl">No related searches</p>
-            )}
-          </div>
-          <div className="mt-10">
-            {Array.isArray(keywordData.peopleAlsoAsk) && keywordData.peopleAlsoAsk.length > 0 ? (
-              <>
-                <h2 className="text-xl">People also searched for</h2>
-                <ul>
-                  {keywordData.peopleAlsoAsk.map((peopleAlsoSearchedFor: any) => (
-                    <li key={peopleAlsoSearchedFor.question}>{peopleAlsoSearchedFor.question}</li>
-                  ))}
-                </ul>
-              </>
-            ) :
-              (
-                <p className="text-xl">peopleAlsoAsk</p>
-              )
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 
 

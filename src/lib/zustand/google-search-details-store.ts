@@ -16,8 +16,8 @@ export type GoogleSearchConsoleProjectDetails = {
     language: string;
     country: string;
     gscUrl: string | null;
-    createdAt: Date | null;
-    updatedAt: Date | null;
+    createdAt: Date ;
+    updatedAt: Date;
     websiteId: string;
 }
 

@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 
 
 import { PythonApiSite } from "@/dashboard/types";
-import { Website } from "@prisma/client";
+import { GoogleSearchProject, Website } from "@prisma/client";
 
 import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated";
 import { GoogleSearchProjectSchema } from "@/dashboard/schema";
@@ -34,12 +34,12 @@ import { useRouter } from "next/navigation";
 interface GoogleSearchProjectFormDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
-    website?: Website | null;
+    googleSearchProject?: GoogleSearchProject | null;
 }
 
 type Schema = z.infer<typeof GoogleSearchProjectSchema>
 
-const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps> = ({ open, setOpen, website }) => {
+const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps> = ({ open, setOpen, googleSearchProject }) => {
     const isGscAuthenticated = useIsGscAuthenticated()
     const user = useSession()
 
@@ -53,9 +53,9 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
     // const currentGoogleSearchProject = useGoogleSearchProjectDetailsStore(state => state.ProjectDetails)
 
     // TODO: Change this to use the project details store
-    let currentWebsiteDetails: Website | null = null
-    if (website) {
-        currentWebsiteDetails = website
+    let currentWebsiteDetails: GoogleSearchProject | null = null
+    if (googleSearchProject) {
+        currentWebsiteDetails = googleSearchProject
     }
 
     const {
@@ -70,15 +70,11 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
     useEffect(() => {
         if (open) {
             // TODO: Set the values of the form fields if the website is already created --> change to search project
-            // if (currentWebsiteDetails) {
-            //     setValue('websiteName', currentWebsiteDetails.websiteName)
-            //     setValue('domainUrl', currentWebsiteDetails.domainUrl)
-            //     if (currentWebsiteDetails.gscUrl && currentWebsiteDetails.gscUrl !== '') {
-            //         setValue('gscUrl', currentWebsiteDetails.gscUrl)
-            //     } else {
-            //         setValue('gscUrl', '')
-            //     }
-            // }
+            if (currentWebsiteDetails) {
+                setValue('projectName', currentWebsiteDetails.projectName)
+                setValue('language', currentWebsiteDetails.language)
+                setValue('country', currentWebsiteDetails.country)
+            }
 
             if (user.data?.refreshToken && isGscAuthenticated) {
                 fetchConnectedSites(user.data.refreshToken);
@@ -104,7 +100,7 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
 
         try {
             let res;
-            if (website) {
+            if (googleSearchProject) {
                 res = await updateGoogleSearchProject(user.data.user.id, data)
             } else {
                 res = await createGoogleSearchProject(user.data.user.id, currentWebsite.id, currentWebsite.domainUrl, data)
@@ -112,15 +108,17 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
                 console.log('res', res)
 
                 // router.push(`/app/search/keywords/${res.id}`)
-            
+
             }
 
             if (res) {
+                // TODO: Refresh the project details store
+                // TODO: Keywords need to be added to the project
                 setProjectDetails(res)
                 setOpen(false)
                 reset()
                 toast({
-                    description: "Website created successfully",
+                    description: "Google Search Campaign created successfully",
                     variant: "success",
                     duration: 5000,
                 })
@@ -128,7 +126,7 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
         } catch (error) {
             console.error('Error creating website:', error);
             toast({
-                description: "An error occurred while creating the website. Please try again.",
+                description: "An error occurred while creating the Google Search Campaign. Please try again.",
                 variant: "destructive",
                 duration: 5000,
             })
@@ -166,13 +164,13 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
         { value: 'CN', label: 'China' },
     ]
 
-    
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
                 <DialogHeader>
                     <h2 className="font-medium text-2xl text-gray-800">
-                        {currentWebsiteDetails ? 'Update your Website' : 'Setup Google Search Campaign'}
+                        {currentWebsiteDetails ? `Update ${currentWebsiteDetails.projectName}` : 'Setup Google Search Campaign'}
                     </h2>
                     <p className="font-medium text-base text-gray-500 pt-[4px]">
                         Please enter the details of your Campaign
@@ -234,12 +232,19 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
                     />
                     {errors.country && <ErrorField error={'* Location is Required'} />}
 
-                    <p className="mt-7">Keywords</p>
-                    <TextareaApp
-                        rows={5}
-                        placeholder='Enter the keywords you want to track, seperated by enter.'
-                        {...register('keywords')}
-                    />
+                    {
+                        !currentWebsiteDetails && (
+                            <>
+                                <p className="mt-7">Keywords</p>
+                                <TextareaApp
+                                    rows={5}
+                                    placeholder='Enter the keywords you want to track, seperated by enter.'
+                                    {...register('keywords')}
+                                />  
+                            </>
+                        )
+                    }
+
 
                     <button
                         type="submit"

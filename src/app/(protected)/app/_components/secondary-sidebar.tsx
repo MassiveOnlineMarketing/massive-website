@@ -81,8 +81,6 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
     }
 
     const isActive = (href: string, pathname: string) => {
-        console.log('pathname', pathname);
-        console.log('href', href);
         return (href === '/app' && pathname === href) || (pathname.includes(href) && href !== '/app');
     };
 
@@ -173,7 +171,7 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
                 </Tooltip>
             </div>
 
-            <GoogleSearchProjectFormDialog open={openGoogleSearchProjectDialog} setOpen={setOpenGoogleSearchProjectDialog} website={null} />
+            <GoogleSearchProjectFormDialog open={openGoogleSearchProjectDialog} setOpen={setOpenGoogleSearchProjectDialog} googleSearchProject={null} />
             <WebsiteFormDialog open={openWebsiteDialog} setOpen={setOpenWebsiteDialog} website={currentWebsite} />
         </div>
     )

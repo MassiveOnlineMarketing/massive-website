@@ -27,7 +27,7 @@ import TopBar from './topbar';
 export type NavigationProps = {
     name: string,
     href: string,
-    icon: any
+    icon: React.ElementType
 }
 
 const navigation = [

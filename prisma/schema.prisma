@@ -33,8 +33,8 @@ model User {
   stripeSubscriptionId   String?               @unique @map(name: "stripe_subscription_id")
   stripePriceId          String?               @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime?             @map(name: "stripe_current_period_end")
-  Website                Website[]
-  GoogleSearchProject    GoogleSearchProject[]
+  website                Website[]
+  googleSearchProject    GoogleSearchProject[]
 }
 
 model Account {
@@ -100,7 +100,7 @@ model Website {
   gscUrl              String?
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
-  GoogleSearchProject GoogleSearchProject[]
+  googleSearchProject GoogleSearchProject[]
   user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -138,7 +138,7 @@ model GoogleSearchProjectResult {
   averagePosition       Int
   createdAt             DateTime @default(now())
 
-  GoogleSearchProject GoogleSearchProject @relation(fields: [googleSearchProjectId], references: [id], onDelete: Cascade)
+  googleSearchProject GoogleSearchProject @relation(fields: [googleSearchProjectId], references: [id], onDelete: Cascade)
 }
 
 model GoogleSearchKeyword {
@@ -147,8 +147,8 @@ model GoogleSearchKeyword {
   keyword               String
   createdAt             DateTime @default(now())
 
-  GoogleSearchProject GoogleSearchProject      @relation(fields: [googleSearchProjectId], references: [id], onDelete: Cascade)
-  GoogleSerpResult    GoogleSearchSerpResult[]
+  googleSearchProject GoogleSearchProject      @relation(fields: [googleSearchProjectId], references: [id], onDelete: Cascade)
+  googleSerpResult    GoogleSearchSerpResult[]
   Result              GoogleSearchResult[]
   tags                GoogleSearchKeywordTag[]
 }

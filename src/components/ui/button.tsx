@@ -39,6 +39,7 @@ const buttonVariants = cva(
         // bg-gradient-to-b from-[#fff]/60 to-[#fff]/50
 
         dashboard: 'p-2 bg-white shadow-base rounded-lg',
+        appWhite: 'bg-white text-gray-800 shadow-base rounded-lg',
 
         'ts-prop': ' '
       },
