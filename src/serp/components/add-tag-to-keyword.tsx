@@ -3,7 +3,7 @@
 import React from 'react'
 
 import { DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuPortal, DropdownMenuSubContent } from '@/components/ui/dropdown-menu'
-import { Tag } from '@prisma/client'
+import { GoogleSearchKeywordTag } from '@prisma/client'
 import { useTags } from '../hooks/useTags'
 
 
@@ -13,7 +13,7 @@ export const AddTagToKeywords = ({ selectedRows, onActionFinished }: { selectedR
   const keywordIds = selectedRows.rows.map((row: any) => row.original.keywordId);
 
 
-  const handleAddClick = async (tag: Tag) => {
+  const handleAddClick = async (tag: GoogleSearchKeywordTag) => {
     console.log('label', tag)
     await addTagAndToast(tag, keywordIds)
     onActionFinished()

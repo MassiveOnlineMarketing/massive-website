@@ -1,9 +1,9 @@
 // app/api/serp.ts
 
 import { decrementUserCredits } from "@/auth/data/user";
-import { insertKeywords } from "@/serp/data/keyword";
-import { insertUserResults } from "@/serp/data/result";
-import { insertSERPResults } from "@/serp/data/serp-result";
+import { insertKeywords } from "@/dashboard/google-search/data/google-search-keyword";
+import { insertUserResults } from "@/dashboard/google-search/data/google-search-result";
+import { insertSERPResults } from "@/dashboard/google-search/data/google-search-serp-result";
 import axios from "axios";
 
 const BATCH_SIZE = 100;

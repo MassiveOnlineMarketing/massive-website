@@ -10,7 +10,7 @@ import {
 } from "@radix-ui/react-icons"
 import { Table } from "@tanstack/react-table"
 
-import { Button, OutlinedButton } from "@/components/ui/button"
+import { OutlinedButton } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
@@ -19,26 +19,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
-import { cn } from "@/lib/utils"
-
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
 }
-
 
 export function DataTablePagination<TData>({
   table,

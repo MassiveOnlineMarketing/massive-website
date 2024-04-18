@@ -16,9 +16,9 @@ export const getYesterdayProjectResults = async (projectId: string) => {
     const yesterdayEnd = new Date(yesterdayStart);
     yesterdayEnd.setHours(23, 59, 59, 999);
 
-    const results = await db.projectResult.findFirst({
+    const results = await db.googleSearchProjectResult.findFirst({
         where: {
-            projectId: projectId,
+            googleSearchProjectId: projectId,
             createdAt: {
                 gte: yesterdayStart,
                 lt: yesterdayEnd,

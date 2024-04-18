@@ -6,7 +6,6 @@ import { useWebsiteDetailsStore } from '@/lib/zustand/website-details-store';
 
 // Utils
 import { useCurrentUser } from '@/auth/hooks/use-current-user';
-import { getProjectByUserId } from '@/serp/data/project';
 import { cn } from '@/lib/utils';
 
 // Components 
@@ -17,7 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 // Assets
 import { ChevronDownIcon, CubeTransparentIcon } from '@heroicons/react/24/outline';
 import { getWebsiteByUserId } from '@/dashboard/data/website';
-import CreateWebsiteFormDialog from './create-website-form-dialog';
+import CreateWebsiteFormDialog from './website-form-dialog';
 
 
 
@@ -111,7 +110,7 @@ const WebsiteSelectionButton = () => {
                                     className='px-6 py-[16px]'
                                     onSelect={() => setWebsiteDialogOpen(true)}
                                 >
-                                    Create new Website
+                                    Add new Website
                                 </CommandItem>
                             </CommandGroup>
                         </Command>

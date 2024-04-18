@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from "@/lib/db";
-import { processArrayInBatches } from "../lib/utils";
+import { processArrayInBatches } from "../../../serp/lib/utils";
 import { ensureArray } from "@/lib/utils";
 
 /**
@@ -18,13 +18,13 @@ export const insertKeywords = async (
 ) => {
   // Map the keywords to keyword objects
   const keywordObjects = keywords.map((keyword) => ({
-    projectId,
+    googleSearchProjectId: projectId,
     keyword,
   }));
 
   // Use prisma.$transaction to insert all keywords at once
   const results = await db.$transaction(
-    keywordObjects.map((keywordObject) => db.keyword.create({ data: keywordObject }))
+    keywordObjects.map((keywordObject) => db.googleSearchKeyword.create({ data: keywordObject }))
   );
 
   // Map the results to the response format
@@ -46,7 +46,7 @@ export const insertKeywords = async (
 export const deleteKeywordsById = async (keywordIds: string[]) => {
   const deletedKeywords = [];
   for (const id of keywordIds) {
-    const keyword = await db.keyword.delete({
+    const keyword = await db.googleSearchKeyword.delete({
       where: {
         id: id,
       },
@@ -64,9 +64,9 @@ export const deleteKeywordsById = async (keywordIds: string[]) => {
  * @returns A promise that resolves to an array of keywords.
  */
 export const getKeywordsByProjectId = async (projectId: string) => {
-  const keywords = await db.keyword.findMany({
+  const keywords = await db.googleSearchKeyword.findMany({
     where: {
-      projectId,
+      googleSearchProjectId: projectId,
     },
     include: {
       tags: true,
@@ -92,7 +92,7 @@ export const addTagToKeywords = async (tagName: string, keywordIds: string[] | s
 
   const updateKeywordsBatch = async (batch: string[]) => {
     const keywords = await Promise.all(batch.map(keywordId => {
-      return db.keyword.update({
+      return db.googleSearchKeyword.update({
         where: {
           id: keywordId,
         },
@@ -129,7 +129,7 @@ export const deleteTagFromKeywords = async (keywordIds: string[] | string, tagNa
   console.log('🟢 tagName', tagName);
 
   // Fetch the tag
-  const tag = await db.tag.findUnique({
+  const tag = await db.googleSearchKeywordTag.findUnique({
     where: {
       name: tagName,
     },
@@ -141,7 +141,7 @@ export const deleteTagFromKeywords = async (keywordIds: string[] | string, tagNa
 
   // Disconnect the tag from each keyword
   const disconnectPromises = keywordIdsArray.map(keywordId =>
-    db.keyword.update({
+    db.googleSearchKeyword.update({
       where: { id: keywordId },
       data: {
         tags: {

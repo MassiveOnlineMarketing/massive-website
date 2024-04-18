@@ -1,8 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { getKeywordsByProjectId } from '@/dashboard/google-search/data/google-search-keyword';
 import React from 'react'
-import { getKeywordsByProjectId } from '../data/keyword';
 
 const GetKeywordsButton = ({
   projectId

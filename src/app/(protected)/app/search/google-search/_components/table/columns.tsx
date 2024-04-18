@@ -12,13 +12,13 @@ import {
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
-import { Result } from "@prisma/client"
+import { GoogleSearchResult } from "@prisma/client"
 
 import { format } from 'date-fns';
 
 
 
-export const columns = (handleKeywordsDelete: (keywordsId: string) => void): ColumnDef<Result>[] => [
+export const columns = (handleKeywordsDelete: (keywordsId: string) => void): ColumnDef<GoogleSearchResult>[] => [
   // * Select column
   {
     id: "select",

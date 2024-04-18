@@ -105,7 +105,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         */}
                         <div className="absolute inset-0 bg-transparent box-content inner-shadow lg:rounded-tl-3xl border-2 overflow-hidden flex">
                             {currentNavigation && <SecondarySidebar navigation={currentNavigation} secondarySidebarOpen={secondarySidebarOpen} setSecondarySidebarOpen={setSecondarySidebarOpen} />}
-                            <div className=" p-3 h-full w-full overflow-y-auto bg-primary-50">
+                            <div className="h-full w-full overflow-y-auto bg-primary-50">
                                 {children}
                             </div>
                         </div>

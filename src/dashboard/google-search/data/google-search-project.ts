@@ -2,7 +2,8 @@
 
 import { db } from "@/lib/db";
 import { z } from "zod";
-import { UpdateProjectSchema } from "../schema";
+import { UpdateProjectSchema } from "../../../serp/schema";
+
 
 /**
  * Retrieves a project by its ID.
@@ -10,7 +11,7 @@ import { UpdateProjectSchema } from "../schema";
  * @returns The project object.
  */
 export const getProjectById = async (projectId: string) => {
-  const project = await db.project.findUnique({
+  const project = await db.googleSearchProject.findUnique({
     where: { id: projectId },
   });
 
@@ -25,7 +26,7 @@ export const getProjectById = async (projectId: string) => {
  * @returns The deleted project.
  */
 export const deleteProjectById = async (projectId: string) => {
-  const project = await db.project.delete({
+  const project = await db.googleSearchProject.delete({
     where: {
       id: projectId,
     },
@@ -40,7 +41,7 @@ export const deleteProjectById = async (projectId: string) => {
  * @returns A promise that resolves to the project matching the user ID.
  */
 export const getProjectByUserId = async (userId: string) => {
-  const project = await db.project.findMany({
+  const project = await db.googleSearchProject.findMany({
     where: { userId },
   });
 
@@ -57,7 +58,7 @@ type UpdateProjectDetailsSchema = z.infer<typeof UpdateProjectSchema>;
  */
 export const updateProjectDetails = async (projectId: string, data: UpdateProjectDetailsSchema) => {
   if (data.gscSite) {
-    const project = await db.project.update({
+    const project = await db.googleSearchProject.update({
       where: { id: projectId },
       data: {
         projectName: data.projectName,
@@ -70,7 +71,7 @@ export const updateProjectDetails = async (projectId: string, data: UpdateProjec
 
     return project;
   } else {
-    const project = await db.project.update({
+    const project = await db.googleSearchProject.update({
       where: { id: projectId },
       data: {
         projectName: data.projectName,
@@ -94,24 +95,25 @@ export const updateProjectDetails = async (projectId: string, data: UpdateProjec
  * @param country - The country of the project.
  * @returns The created project.
  */
-export const createProject = async (userId: string, projectName: string, domainUrl: string, language: string, country: string) => {
-  const project = await db.project.create({
-    data: {
-      userId,
-      projectName,
-      domainUrl,
-      language,
-      country,
-    },
-  });
+// export const createProject = async (userId: string, projectName: string, domainUrl: string, language: string, country: string) => {
+//   const project = await db.project.create({
+//     data: {
+//       userId,
+//       projectName,
+//       domainUrl,
+//       language,
+//       country,
+//     },
+//   });
 
-  return project;
-}
+//   return project;
+// }
+
 
 export const fetch7LatestResults = async (projectId: string) => {
-  const results = await db.projectResult.findMany({
+  const results = await db.googleSearchProject.findMany({
     where: {
-      projectId,
+      id: projectId,
     },
     orderBy: {
       createdAt: 'desc',

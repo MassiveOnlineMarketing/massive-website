@@ -12,13 +12,13 @@ import { splitAndTrimKeywords } from '../lib/utils'
 // components
 import { Dialog, DialogContent, DialogHeader, DialogTriggerNoButton } from '@/website/features/dialog/dialog'
 import { useToast } from '@/website/features/toast/use-toast'
-import { useProjectDetailsStore } from '@/lib/zustand/project-details-store'
+import { useGoogleSearchProjectDetailsStore } from '@/lib/zustand/google-search-details-store'
 
 type Schema = z.infer<typeof KeywordsSchema>
 
 const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactNode , buttonClassName?: string}) => {
   const [open, setOpen] = React.useState(false)
-  const projectDetails = useProjectDetailsStore(state => state)
+  const projectDetails = useGoogleSearchProjectDetailsStore(state => state.ProjectDetails)
   const { processNewKeywords, isLoading, error } = useProcessNewKeywords()
   const {toast} = useToast()
   const {

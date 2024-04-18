@@ -9,7 +9,7 @@ import { Cell, Pie, PieChart } from 'recharts'
 
 // TODO: average position not working 
 const ProjectStats = () => {
-    const filteredResults  = useFilteredKeywordResults ()
+    const filteredResults  = useFilteredKeywordResults()
 
     const numberOfKeywords = filteredResults.length
     let numberOfKeywordsInTop3 = 0

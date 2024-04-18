@@ -1,4 +1,4 @@
-import { Project, Website } from "@prisma/client";
+import { Website } from "@prisma/client";
 import { create } from "zustand";
 
 

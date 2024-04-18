@@ -1,15 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
-
-import { Button } from '@/components/ui/button'
+import React from 'react'
 
 import { DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuPortal, DropdownMenuSubContent } from '@/components/ui/dropdown-menu'
 import { useTags } from '../hooks/useTags'
 
 
 export const DeleteTagFromKeyword = ({ selectedRows, onActionFinished }: { selectedRows: any, onActionFinished: () => void }) => {
-  const [open, setOpen] = useState(false)
   const { deleteTagAndToast } = useTags()
 
 

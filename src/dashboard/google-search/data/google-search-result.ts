@@ -32,7 +32,7 @@ export const insertUserResults = async (
     }
   })
 
-  const resultInsert = await db.result.createMany({
+  const resultInsert = await db.googleSearchResult.createMany({
     data: resultData
   });
 
@@ -40,7 +40,7 @@ export const insertUserResults = async (
 }
 
 export const getKeywordResultById = async (keywordId: string[]) => {
-  const keywordResult = await db.result.findMany({
+  const keywordResult = await db.googleSearchResult.findMany({
     where: {
       keywordId: {
         in: keywordId
@@ -58,7 +58,7 @@ export const getKeywordResultById = async (keywordId: string[]) => {
  * @returns An array of latest keyword results with associated tags.
  */
 export const getLatestKeywordResultWithTagByKeywordId = async (keywordIds: string[]) => {
-  const results = await db.result.findMany({
+  const results = await db.googleSearchResult.findMany({
     where: {
       keywordId: {
         in: keywordIds,

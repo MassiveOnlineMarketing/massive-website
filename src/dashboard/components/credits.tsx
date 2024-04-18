@@ -5,6 +5,13 @@ import React, { useEffect } from 'react'
 import { userTotalKeywordCount } from '@/serp/actions/user-total-keyword-count'
 import { ExtendedUser } from '../../../next-auth'
 
+
+type Props = {
+    id: String,
+    projectName: String,
+    keywordCount: Number
+} | null
+
 /**
  * `Credits` is a React component that displays the user's credits and daily SERP API spend.
  * 
@@ -26,7 +33,12 @@ const Credits = ({ user }: { user: ExtendedUser }): JSX.Element => {
                 const userId = user.id
                 const res = await userTotalKeywordCount(userId)
 
-                setDailySerpSpend(res)
+                if (res !== 0) {
+                    const totalKeywordCount = res.reduce((acc, project) => acc + project.keywordCount, 0)
+                    setDailySerpSpend(totalKeywordCount)
+                } else {
+                    setDailySerpSpend(0)
+                }
             }
         }
 

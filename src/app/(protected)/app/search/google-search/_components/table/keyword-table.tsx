@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 
-import { Result, SerpResult } from "@prisma/client";
+import { GoogleSearchResult, GoogleSearchSerpResult } from "@prisma/client";
 
 // Hooks and Stores
-import { getTopTenSerpResults } from "@/serp/data/serp-result";
+import { getTopTenSerpResults } from "@/dashboard/google-search/data/google-search-serp-result";
 import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated";
-import { useProjectDetailsStore } from "@/lib/zustand/project-details-store";
+import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
 
 // Components
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable,} from "@tanstack/react-table";
@@ -54,7 +54,7 @@ function DataTable<TData, TValue>({
 
 
   const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(null);
-  const projectDetails = useProjectDetailsStore(state => state);
+  const projectDetails = useGoogleSearchProjectDetailsStore(state => state.ProjectDetails);
 
   const table = useReactTable({
     data,
@@ -83,9 +83,9 @@ function DataTable<TData, TValue>({
   });
 
 
-  const [keywordData, setKeywordData] = React.useState<Result | null>(null);
+  const [keywordData, setKeywordData] = React.useState<GoogleSearchResult | null>(null);
   const [searchConsoleData, setSearchConsoleData] = React.useState<SearchConsoleData | null>(null);
-  const [topTenResults, setTopTenResults] = React.useState<SerpResult[]>([]);
+  const [topTenResults, setTopTenResults] = React.useState<GoogleSearchSerpResult[]>([]);
   const gscAuthenticated = useIsGscAuthenticated()
 
 
@@ -105,7 +105,7 @@ function DataTable<TData, TValue>({
     if (!isNaN(index) && index >= 0 && index < data.length) {
       let item = data[index];
       // console.log(item); // Check what the object looks like
-      setKeywordData(item as Result);
+      setKeywordData(item as GoogleSearchResult);
 
       if (gscAuthenticated) {
         // @ts-ignore
@@ -234,8 +234,7 @@ function DataTable<TData, TValue>({
                           <KeywordDetailsRow 
                             gscAuthenticated={gscAuthenticated} 
                             searchConsoleData={searchConsoleData}
-                            keywordData={keywordData}
-                            topTenResults={topTenResults}
+
                           />
 
                           <ResultDetail keywordData={keywordData} topTenSerpResults={topTenResults} />
@@ -279,7 +278,7 @@ export default DataTable;
 
 
 
-const ResultDetail = ({ keywordData, topTenSerpResults }: { keywordData: Result, topTenSerpResults: SerpResult[] }) => {
+const ResultDetail = ({ keywordData, topTenSerpResults }: { keywordData: GoogleSearchResult, topTenSerpResults: GoogleSearchSerpResult[] }) => {
   // console.log('search console data')
   return (
     <div className="mt-10">

@@ -1,3 +1,3 @@
-import { Result, Tag } from "@prisma/client";
+import { GoogleSearchResult, GoogleSearchKeywordTag } from "@prisma/client";
 
-export type KeywordResultWithTagProp = Result & { tags?: Tag[] };
+export type KeywordResultWithTagProp = GoogleSearchResult & { tags?: GoogleSearchKeywordTag[] };

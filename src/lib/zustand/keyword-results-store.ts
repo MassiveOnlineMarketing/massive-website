@@ -4,8 +4,10 @@ import { create } from "zustand"
 
 export type KeywordResultsActions = {
     setKeywordResults: (keywordResults: KeywordResultWithTagProp[]) => void;
-    setSelectedTags: (tags: string[]) => void;
     updateKeywordResults: (newKeywordResults: KeywordResultWithTagProp[]) => void;
+    resetKeywordResults: () => void;
+    setSelectedTags: (tags: string[]) => void;
+    resetSelectedTags: () => void;
 }
 
 export type KeywordResultsState = {
@@ -33,10 +35,21 @@ export const useKeywordResultsStore = create<KeywordResultsStore>((set) => ({
             keywordResults: [...state.keywordResults, ...newKeywordResults]
         }))
     },
+    resetKeywordResults: () => {
+        set({
+            keywordResults: []
+        })
+    },
 
     setSelectedTags: (tags: string[]) => {
         set({
             selectedTags: tags
         })
     },
+
+    resetSelectedTags: () => {
+        set({
+            selectedTags: []
+        })
+    }   
 }))

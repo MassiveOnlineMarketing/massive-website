@@ -1,9 +1,11 @@
-import { Tag } from '@prisma/client';
-import { addTagToKeywords, deleteTagFromKeywords } from '../data/keyword';
+import { GoogleSearchKeywordTag } from '@prisma/client';
+import { useKeywordResultsStore } from '@/lib/zustand/keyword-results-store';
+
+
 import { useToast } from '@/website/features/toast/use-toast';
 import { useMemo } from 'react';
-import { useKeywordResultsStore } from '@/lib/zustand/keyword-results-store';
 import { ensureArray } from '@/lib/utils';
+import { addTagToKeywords, deleteTagFromKeywords } from '@/dashboard/google-search/data/google-search-keyword';
 
 export const useTags = () => {
   const { toast } = useToast();
@@ -21,7 +23,7 @@ export const useTags = () => {
    * @param tag - The tag to be added to the results.
    * @param keywordIds - The keyword IDs to match against in the results.
    */
-  const addTagToResults = (tag: Tag, keywordIds: string[]) => {
+  const addTagToResults = (tag: GoogleSearchKeywordTag, keywordIds: string[]) => {
     const updatedResults = results.map(result => {
       if (keywordIds.includes(result.keywordId)) {
         // If tag is a string, convert it to an object with id and name properties
@@ -49,7 +51,7 @@ export const useTags = () => {
    * @param keywordIds - The ID(s) of the keywords to add the tag to.
    * @returns A promise that resolves with the response from adding the tag to keywords.
    */
-  const addTagAndToast = async (tag: Tag, keywordIds: string[] | string) => {
+  const addTagAndToast = async (tag: GoogleSearchKeywordTag, keywordIds: string[] | string) => {
     try {
       const tagResponse = await addTagToKeywords(tag.name, keywordIds);
       if (tagResponse) {
@@ -93,7 +95,7 @@ export const useTags = () => {
         const tagsToDelete = ensureArray(tagName);
         return {
           ...result,
-          tags: result.tags?.filter(tag => !tagsToDelete.includes(tag.name))
+          tags: result.tags?.filter((tag : GoogleSearchKeywordTag ) => !tagsToDelete.includes(tag.name))
         }
       }
       return result;
@@ -173,8 +175,8 @@ export const useTags = () => {
    * @returns An array of unique tags.
    */
   const uniqueTags = useMemo(() => {
-    const allTags = keywordResults.reduce((acc: Tag[], result) => {
-      result.tags?.forEach(tag => {
+    const allTags = keywordResults.reduce((acc: GoogleSearchKeywordTag[], result) => {
+      result.tags?.forEach((tag : GoogleSearchKeywordTag ) => {
         if (tag && !acc.some(existingTag => existingTag.name === tag.name)) {
           acc.push({ id: tag.id, name: tag.name });
         }

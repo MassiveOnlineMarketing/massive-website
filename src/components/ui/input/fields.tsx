@@ -76,6 +76,22 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 );
 Textarea.displayName = "Textarea";
 
+const TextareaApp = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, label, ...props }, ref) => {
+    return (
+      <textarea
+        ref={ref}
+        className={cn(
+          "inline-flex w-full mt-3 justify-between  p-4 rounded-xl border border-primary-100 bg-primary-50/50 placeholder-gray-400 ring-primary-500 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+TextareaApp.displayName = "TextareaApp";
+
 
 
 const CheckField = React.forwardRef<HTMLInputElement, CheckFieldProps>(
@@ -136,4 +152,4 @@ const TestInput = React.forwardRef<HTMLInputElement, TestFieldProps>(
   }
 );
 TestInput.displayName = "TestInput";
-export { InputField, InputFieldApp, Textarea, CheckField, CheckInput, TestInput };  
+export { InputField, InputFieldApp, Textarea, TextareaApp, CheckField, CheckInput, TestInput };  

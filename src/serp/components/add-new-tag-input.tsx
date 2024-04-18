@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { createNewTag, getTagsByName } from '../data/tags';
+import { createNewTag, getTagsByName } from '../../dashboard/google-search/data/google-search-keyword-tag';
 import { useTags } from '../hooks/useTags';
 
 export const AddNewTagInput = ({ selectedRows, onActionFinished }: { selectedRows: any, onActionFinished: () => void  }) => {

@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from "@/lib/db";
-import { SerpResult } from "@prisma/client";
+import { GoogleSearchSerpResult } from "@prisma/client";
 
 type serpProps = {
   keywordId: string;
@@ -26,7 +26,7 @@ export const insertSERPResults = async (
     }
   })
 
-  const resultInsert = await db.serpResult.createMany({
+  const resultInsert = await db.googleSearchSerpResult.createMany({
     data: resultData
   });
 
@@ -35,13 +35,13 @@ export const insertSERPResults = async (
 
 interface ResultType {
   // replace `any` with the actual type of the results
-  [keywordId: string]: SerpResult[];
+  [keywordId: string]: GoogleSearchSerpResult[];
 }
 export const getLatestSerpResultsWithTags = async (keywordIds: string[]) => {
   const results: ResultType = {};
 
   for (const keywordId of keywordIds) {
-    results[keywordId] = await db.serpResult.findMany({
+    results[keywordId] = await db.googleSearchSerpResult.findMany({
       where: {
         keywordId: keywordId,
       },
@@ -58,7 +58,7 @@ export const getLatestSerpResultsWithTags = async (keywordIds: string[]) => {
 
 export const getTopTenSerpResults = async (keywordId: string) => {
 
-  const results = await db.serpResult.findMany({
+  const results = await db.googleSearchSerpResult.findMany({
     where: {
       keywordId: keywordId,
     },

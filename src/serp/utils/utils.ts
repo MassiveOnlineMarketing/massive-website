@@ -2,10 +2,12 @@
 
 import { auth } from "@/auth/auth";
 
-import { getKeywordsByProjectId } from "../data/keyword";
-import { getLatestKeywordResultWithTagByKeywordId } from "../data/result";
-import { getProjectById } from "../data/project";
-import { getLatestSerpResultsWithTags } from "../data/serp-result";
+
+import { getLatestKeywordResultWithTagByKeywordId } from "../../dashboard/google-search/data/google-search-result";
+import { getProjectById } from "../../dashboard/google-search/data/google-search-project";
+import { getLatestSerpResultsWithTags } from "../../dashboard/google-search/data/google-search-serp-result";
+
+import { getKeywordsByProjectId } from "@/dashboard/google-search/data/google-search-keyword";
 
 
 export const getLatestKeywordResultWithTags = async (projectId: string) => {

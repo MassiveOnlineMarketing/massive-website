@@ -3,26 +3,33 @@
 import { db } from "@/lib/db"
 
 export const userTotalKeywordCount = async (userId: string) => {
-    const user = await db.user.findUnique({
+    const user = await db.googleSearchProject.findMany({
         where: {
-            id: userId
+            userId: userId
         },
         select: {
-            Project: {
+            id: true,
+            projectName: true,
+            keyword: {
                 select: {
-                    Keyword: true
+                    id: true,
                 }
             }
-        }
+        },
     })
 
     if (!user) {
         return 0
     }
 
-    const totalKeywords = user.Project.reduce((acc, project) => {
-        return acc + project.Keyword.length
-    }, 0)
 
-    return totalKeywords
+
+    const keywordCountPerProject = user.map((project) => ({
+        projectId: project.id,
+        projectName: project.projectName,
+        keywordCount: project.keyword.length,
+    }));
+
+
+    return keywordCountPerProject
 }

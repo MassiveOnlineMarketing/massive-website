@@ -9,7 +9,7 @@ import { db } from "@/lib/db";
  * @returns A promise that resolves to the tag object if found, or null if not found.
  */
 export const getTagsByName = async (tags: string) => {
-  const tag = await db.tag.findFirst({
+  const tag = await db.googleSearchKeywordTag.findFirst({
     where: {
       name: tags,
     },
@@ -26,7 +26,7 @@ export const getTagsByName = async (tags: string) => {
  * @returns The newly created tag.
  */
 export const createNewTag = async (tagName: string) => {
-  const tag = await db.tag.create({
+  const tag = await db.googleSearchKeywordTag.create({
     data: {
       name: tagName,
     },

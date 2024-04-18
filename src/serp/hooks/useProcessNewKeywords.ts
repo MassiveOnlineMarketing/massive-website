@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { processArrayInBatches } from '../lib/utils'; // adjust the path as needed
-import { Project } from '@prisma/client';
 import { useKeywords } from './useKeywords';
 import { RenderResultResponse } from 'next/dist/server/render-result';
 import { useCurrentUser } from '@/auth/hooks/use-current-user';
 import { decrementDisplayCredits } from '@/auth/actions/credits';
 import { useToast } from '@/website/features/toast/use-toast';
-import { ProjectDetailsState } from '@/lib/zustand/project-details-store';
+import { GoogleSearchConsoleProjectDetails } from '@/lib/zustand/google-search-details-store';
 
 export function useProcessNewKeywords() {
   const { addResults } = useKeywords();
@@ -24,8 +22,15 @@ export function useProcessNewKeywords() {
    * @param keywordsArray - The array of keywords to process.
    * @param project - The project object containing project details.
    */
-  const processNewKeywords = async (keywordsArray: string[], project: ProjectDetailsState) => {
+  const processNewKeywords = async (keywordsArray: string[], project: GoogleSearchConsoleProjectDetails) => {
     // console.log('keywordsArray', keywordsArray)
+
+    if (!project) {
+      setError('Project not found');
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -47,6 +52,7 @@ export function useProcessNewKeywords() {
       for (let i = 0; i < keywordsArray.length; i += BATCH_SIZE) {
         const batch = keywordsArray.slice(i, i + BATCH_SIZE);
         // console.log('batch', batch)
+        console.log('project', project)
 
         const payload = {
           projectId: project.id,

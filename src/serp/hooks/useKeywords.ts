@@ -4,9 +4,9 @@ import { KeywordResultWithTagProp } from "../serp-types";
 import { useState } from "react";
 import { useToast } from "@/website/features/toast/use-toast";
 import { useKeywordResultsStore } from "@/lib/zustand/keyword-results-store";
+import { deleteKeywordsById } from "@/dashboard/google-search/data/google-search-keyword";
 
 // actions
-import { deleteKeywordsById } from "../data/keyword";
 
 /**
  * Custom hook for managing keywords.

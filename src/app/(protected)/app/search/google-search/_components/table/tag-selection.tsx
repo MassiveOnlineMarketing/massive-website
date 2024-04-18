@@ -3,7 +3,6 @@ import { useTags } from '@/serp/hooks/useTags';
 
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,

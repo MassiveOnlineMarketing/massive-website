@@ -10,6 +10,8 @@ import { useSession } from "next-auth/react";
 
 
 import { PythonApiSite } from "@/dashboard/types";
+import { Website } from "@prisma/client";
+
 import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated";
 import { WebsiteDetailsSchema } from "@/dashboard/schema";
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
@@ -20,17 +22,19 @@ import { DEFAULT_APP_SETTING_PAGE } from "../../../../../routes";
 import { Dialog, DialogContent, DialogHeader } from '@/website/features/dialog/dialog'; // replace with your actual import
 import { InputFieldApp } from "@/components/ui/input/fields";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/input/select";
-import { createWebsite } from "@/dashboard/data/website";
+import { createWebsite, updateWebsite } from "@/dashboard/data/website";
 import { useToast } from "@/website/features/toast/use-toast";
 
-interface ProjectDialogProps {
+
+interface WebsiteFormDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
+    website?: Website | null;
 }
 
 type Schema = z.infer<typeof WebsiteDetailsSchema>
 
-const CreateWebsiteFormDialog: React.FC<ProjectDialogProps> = ({ open, setOpen }) => {
+const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({ open, setOpen, website }) => {
     const isGscAuthenticated = useIsGscAuthenticated()
     const user = useSession()
 
@@ -39,16 +43,32 @@ const CreateWebsiteFormDialog: React.FC<ProjectDialogProps> = ({ open, setOpen }
 
     const setWebsiteDetails = useWebsiteDetailsStore(state => state.setWebsiteDetails)
 
+    let currentWebsiteDetails: Website | null = null
+    if (website) {
+        currentWebsiteDetails = website
+    }
+
     const {
         register,
         handleSubmit,
         control,
         reset,
+        setValue,
         formState: { errors }
     } = useForm<Schema>({})
 
     useEffect(() => {
         if (open) {
+            if (currentWebsiteDetails) {
+                setValue('websiteName', currentWebsiteDetails.websiteName)
+                setValue('domainUrl', currentWebsiteDetails.domainUrl)
+                if (currentWebsiteDetails.gscUrl && currentWebsiteDetails.gscUrl !== '') {
+                    setValue('gscUrl', currentWebsiteDetails.gscUrl)
+                } else {
+                    setValue('gscUrl', '')
+                }
+            }
+
             if (user.data?.refreshToken && isGscAuthenticated) {
                 fetchConnectedSites(user.data.refreshToken);
             } else {
@@ -68,7 +88,13 @@ const CreateWebsiteFormDialog: React.FC<ProjectDialogProps> = ({ open, setOpen }
         if (!user.data?.user.id) return
 
         try {
-            const res = await createWebsite(user.data.user.id, data)
+            let res;
+            if (website) {
+                res = await updateWebsite(user.data.user.id, data, website.id)
+            } else {
+                res = await createWebsite(user.data.user.id, data)
+            }
+
             if (res) {
                 setWebsiteDetails(res)
                 setOpen(false)
@@ -95,7 +121,7 @@ const CreateWebsiteFormDialog: React.FC<ProjectDialogProps> = ({ open, setOpen }
             <DialogContent>
                 <DialogHeader>
                     <h2 className="font-medium text-2xl text-gray-800">
-                        Setup your website
+                        {currentWebsiteDetails ? 'Update your Website' : 'Setup your website'}
                     </h2>
                     <p className="font-medium text-base text-gray-500 pt-[4px]">
                         Please enter the details of your website
@@ -131,13 +157,14 @@ const CreateWebsiteFormDialog: React.FC<ProjectDialogProps> = ({ open, setOpen }
                         render={({ field }) => (
                             <Select onValueChange={field.onChange} value={field.value}>
                                 <SelectTrigger disabled={!isGscAuthenticated || !sites}>
-                                    <SelectValue placeholder={!isGscAuthenticated && "Please authenticate Google Account first" || !sites && 'No sites connected to Google Account' || 'Connect a Site'} className="placeholder-gray-400 text-gray-400" />
+                                    <SelectValue placeholder={!isGscAuthenticated && "Please authenticate Google Account first" || !sites && 'No sites connected to Google Account' || 'Connect a Website'} className="placeholder-gray-400 text-gray-400" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <p className="ml-4 text-gray-500">Available Sites</p>
                                     {sites && sites.map((site: PythonApiSite) => {
                                         return <SelectItem key={site.siteUrl} value={site.siteUrl}>{site.siteUrl}</SelectItem>
                                     })}
+                                    <SelectItem value='noWebsite'>No Website</SelectItem>
                                 </SelectContent>
                             </Select>
                         )}
@@ -150,7 +177,7 @@ const CreateWebsiteFormDialog: React.FC<ProjectDialogProps> = ({ open, setOpen }
                         type="submit"
                         className="mt-8 px-6 py-2 w-fit flex mx-auto rounded-lg text-lg font-semibold"
                     >
-                        Create
+                        {currentWebsiteDetails ? 'Update' : 'Create'}
                     </button>
 
                 </form>
@@ -159,4 +186,4 @@ const CreateWebsiteFormDialog: React.FC<ProjectDialogProps> = ({ open, setOpen }
     );
 };
 
-export default CreateWebsiteFormDialog;
+export default WebsiteFormDialog;

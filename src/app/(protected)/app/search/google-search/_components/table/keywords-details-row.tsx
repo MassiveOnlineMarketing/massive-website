@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { SearchConsoleData } from './keyword-table'
-import { Project, Result, SerpResult } from '@prisma/client'
+import { GoogleSearchKeyword, GoogleSearchProject, GoogleSearchSerpResult } from '@prisma/client'
 
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, TooltipProps, Area, AreaChart, Brush } from 'recharts';
 
@@ -9,14 +9,14 @@ import { XAxis, YAxis, Tooltip, ResponsiveContainer, TooltipProps, Area, AreaCha
 type Props = {
     gscAuthenticated?: boolean,
     searchConsoleData?: SearchConsoleData | null,
-    keywordData: Result,
-    topTenResults: SerpResult[],
-    projectDetails?: Project
+    // keywordData: GoogleSearchKeyword,
+    // topTenResults: GoogleSearchSerpResult[],
+    // projectDetails?: GoogleSearchProject
 }
 
 
 
-const KeywordDetailsRow = ({ gscAuthenticated, searchConsoleData, keywordData, topTenResults, projectDetails }: Props) => {
+const KeywordDetailsRow = ({ gscAuthenticated, searchConsoleData}: Props) => {
     console.log('render row')
 
     return (
