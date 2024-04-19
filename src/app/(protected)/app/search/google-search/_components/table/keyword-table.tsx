@@ -1,17 +1,9 @@
 "use client";
 
 import React from "react";
-import axios from "axios";
 import { cn } from "@/lib/utils";
 
-import { GoogleSearchResult, GoogleSearchSerpResult } from "@prisma/client";
-import { PythonApiKeywordDetailSearchConsoleData } from "@/dashboard/types";
-
-// Hooks and Stores
-import { getTopTenSerpResults } from "@/dashboard/google-search/data/google-search-serp-result";
-import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated";
-import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
-import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
+import { GoogleSearchResult } from "@prisma/client";
 
 // Components
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table";
@@ -29,8 +21,6 @@ interface DataTableProps<TData, TValue> {
 }
 
 
-
-
 function DataTable<TData, TValue>({
   columns,
   data,
@@ -45,14 +35,8 @@ function DataTable<TData, TValue>({
   // Row selection state
   const [rowSelection, setRowSelection] = React.useState({})
   // console.log('rowSelection', rowSelection)
-
-  console.log('render table')
-
-
-  const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(null);
-  const projectDetails = useGoogleSearchProjectDetailsStore(state => state.ProjectDetails);
-  const websiteDetails = useWebsiteDetailsStore(state => state.WebsiteDetails);
-
+ 
+  
   const table = useReactTable({
     data,
     columns,
@@ -78,19 +62,13 @@ function DataTable<TData, TValue>({
     },
     getPaginationRowModel: getPaginationRowModel(),
   });
+  
+  
 
-
+  const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(null);
   const [keywordData, setKeywordData] = React.useState<GoogleSearchResult | null>(null);
-  const [searchConsoleData, setSearchConsoleData] = React.useState<PythonApiKeywordDetailSearchConsoleData | null>(null);
-  const [topTenResults, setTopTenResults] = React.useState<GoogleSearchSerpResult[]>([]);
-  const gscAuthenticated = useIsGscAuthenticated()
-
-
-
 
   const handleClickRow = (id: string) => (event: React.MouseEvent<HTMLTableRowElement>) => {
-    // map over data and return the row that matches the id
-    const keyword = data.find((keyword: any) => keyword.keywordId === id)
     let index = parseInt(id, 10);
 
     if (selectedRowIndex === id) {
@@ -99,55 +77,19 @@ function DataTable<TData, TValue>({
     }
 
     setSelectedRowIndex(prevId => prevId === id ? null : id);
+
     if (!isNaN(index) && index >= 0 && index < data.length) {
       let item = data[index];
       // console.log(item); // Check what the object looks like
       setKeywordData(item as GoogleSearchResult);
-
-      if (gscAuthenticated) {
-        // @ts-ignore
-        fetchSearchConsoleData(item.keywordName);
-      }
-
-      // @ts-ignore
-      fetchTopTenResults(item.keywordId);
-
     } else {
       console.log("Invalid index");
     }
-
-    // console.log('id', index)
-  }
-
-  const fetchSearchConsoleData = async (keyword: string) => {
-    console.log('keyword', keyword)
-    console.log('refresh_token', refresh_token)
-    console.log('projectDetails', projectDetails)
-
-    if (!projectDetails || !websiteDetails?.gscUrl) {
-      return;
-    }
-    if (!refresh_token) {
-      return;
-    }
-    const gscSite = websiteDetails.gscUrl;
-    const encodedKeyword = encodeURIComponent(keyword);
-    const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/keyword_data?keyword=${encodedKeyword}&site_url=${gscSite}&refresh_token=${refresh_token}`;
-    const res = await axios(url);
-
-    console.log('search console data', res.data)
-    setSearchConsoleData(res.data);
-  }
-
-  const fetchTopTenResults = async (keywordId: string) => {
-    const res = await getTopTenSerpResults(keywordId);
-    setTopTenResults(res);
   }
 
   const deselectAllRows = () => {
     setRowSelection({});
   }
-
 
 
   const numberOfVisibleColumns = table.getVisibleFlatColumns().length;
@@ -232,14 +174,9 @@ function DataTable<TData, TValue>({
                       {keywordData ? (
                         <td className="pt-6" colSpan={numberOfVisibleColumns}>
                           <KeywordDetailsRow
-                            gscAuthenticated={gscAuthenticated}
-                            searchConsoleData={searchConsoleData}
-                            topTenResults={topTenResults}
                             keywordData={keywordData}
+                            refresh_token={refresh_token}
                           />
-                          <div>
-
-                          </div>
                         </td>
                       ) : (
                         <td colSpan={numberOfVisibleColumns}>
@@ -262,8 +199,6 @@ function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        {/* <DataTablePagination table={data} /> */}
-
       </div>
       <DataTablePagination table={table} />
       {/* Keyword Detail */}

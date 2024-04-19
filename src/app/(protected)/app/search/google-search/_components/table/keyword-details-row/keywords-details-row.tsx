@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { PythonApiKeywordDetailSearchConsoleData } from '@/dashboard/types';
 import { GoogleSearchKeyword, GoogleSearchProject, GoogleSearchSerpResult } from '@prisma/client'
@@ -12,24 +12,51 @@ import { KeywordResultWithTagProp } from '@/serp/serp-types';
 import { Button } from '@/components/ui/button';
 import RelatedSearchesComponent from './related-searches';
 import PeopleAlsoAsk from './people-also-ask';
+import axios from 'axios';
+import { getTopTenSerpResults } from '@/dashboard/google-search/data/google-search-serp-result';
 
 
 type Props = {
-    gscAuthenticated?: boolean,
-    searchConsoleData?: PythonApiKeywordDetailSearchConsoleData | null,
     keywordData: KeywordResultWithTagProp,
-    topTenResults: GoogleSearchSerpResult[],
+    refresh_token?: string
 }
 
 
 
-const KeywordDetailsRow = ({ gscAuthenticated, searchConsoleData, topTenResults, keywordData }: Props) => {
+const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
 
 
     const gscUrl = useWebsiteDetailsStore(state => state.WebsiteDetails?.gscUrl)
     const isGscConnected = gscUrl ? true : false
 
     const [showAll, setShowAll] = useState(false);
+
+    const [searchConsoleData, setSearchConsoleData] = useState<PythonApiKeywordDetailSearchConsoleData | null>(null);
+    const [topTenResults, setTopTenResults] = useState<GoogleSearchSerpResult[]>([]);
+
+    useEffect(() => {
+        setSearchConsoleData(null)
+        fetchSearchConsoleData(keywordData.keywordName)
+        fetchTopTenResults(keywordData.keywordId)
+    }, [keywordData])
+
+
+    const fetchSearchConsoleData = async (keyword: string) => {
+        if (!refresh_token || !gscUrl) {
+            return;
+        }
+        const encodedKeyword = encodeURIComponent(keyword);
+        const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/keyword_data?keyword=${encodedKeyword}&site_url=${gscUrl}&refresh_token=${refresh_token}`;
+        const res = await axios(url);
+
+        setSearchConsoleData(res.data);
+    }
+
+    const fetchTopTenResults = async (keywordId: string) => {
+        const res = await getTopTenSerpResults(keywordId);
+
+        setTopTenResults(res);
+    }
 
     return (
         <div>
