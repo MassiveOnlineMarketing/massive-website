@@ -62,8 +62,15 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
         <div>
             {isGscConnected ? (
                 <>
-                    {searchConsoleData && (
+                    {searchConsoleData ? (
                         <SearchConsoleChart searchConsoleData={searchConsoleData} />
+                    ) : (
+                        <div className='flex w-full gap-2 h-fit'>
+                            <div className='h-[128px] w-full bg-red-50'>gsc Not Connected</div>
+                            <div className='h-[128px] w-full bg-red-50'>gsc Not Connected</div>
+                            <div className='h-[128px] w-full bg-red-50'>gsc Not Connected</div>
+                            <div className='h-[128px] w-full bg-red-50'>gsc Not Connected</div>
+                        </div>
                     )}
                 </>
             ) : (
