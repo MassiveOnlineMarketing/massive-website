@@ -3,31 +3,30 @@
 // External libraries
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
-import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import { z } from "zod"
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-
-import { PythonApiSite } from "@/dashboard/types";
-import { GoogleSearchProject, Website } from "@prisma/client";
-
-import { useIsGscAuthenticated } from "@/auth/hooks/use-is-gsc-authenticated";
+// Internal libraries
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import { GoogleSearchProjectSchema } from "@/dashboard/schema";
-import { DEFAULT_APP_SETTING_PAGE } from "../../../../../routes";
 
+// Internal types
+import { PythonApiSite } from "@/dashboard/types";
+import { GoogleSearchProject } from "@prisma/client";
+
+// Internal functions
+import { createGoogleSearchProject, updateGoogleSearchProject } from "@/dashboard/data/google-search-project";
+
+// Store
+import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
+import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
 
 // Components
 import { Dialog, DialogContent, DialogHeader } from '@/website/features/dialog/dialog'; // replace with your actual import
 import { InputFieldApp, TextareaApp } from "@/components/ui/input/fields";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/input/select";
-import { createWebsite, updateWebsite } from "@/dashboard/data/website";
 import { useToast } from "@/website/features/toast/use-toast";
-import { createGoogleSearchProject, updateGoogleSearchProject } from "@/dashboard/data/google-search-project";
-import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
-import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
-import { useRouter } from "next/navigation";
-
 
 
 
@@ -40,11 +39,10 @@ interface GoogleSearchProjectFormDialogProps {
 type Schema = z.infer<typeof GoogleSearchProjectSchema>
 
 const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps> = ({ open, setOpen, googleSearchProject }) => {
-    const isGscAuthenticated = useIsGscAuthenticated()
     const user = useSession()
 
-    const [sites, setSites] = useState<PythonApiSite[]>()
     const { toast } = useToast();
+    // TODO: Route to the project page after creating the project
     const router = useRouter()
 
     const setProjectDetails = useGoogleSearchProjectDetailsStore(state => state.setProjectDetails)
@@ -75,20 +73,9 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
                 setValue('language', currentWebsiteDetails.language)
                 setValue('country', currentWebsiteDetails.country)
             }
-
-            if (user.data?.refreshToken && isGscAuthenticated) {
-                fetchConnectedSites(user.data.refreshToken);
-            } else {
-                console.error('No Token')
-            }
         }
     }, [open])
 
-    const fetchConnectedSites = async (refreshToken: string) => {
-        const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/get_sites?refresh_token=${refreshToken}`
-        const res = await axios(url)
-        setSites(res.data.siteEntry)
-    }
 
     const onSubmit: SubmitHandler<Schema> = async data => {
 
@@ -101,7 +88,7 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
         try {
             let res;
             if (googleSearchProject) {
-                res = await updateGoogleSearchProject(user.data.user.id, data)
+                res = await updateGoogleSearchProject(googleSearchProject.id, data)
             } else {
                 res = await createGoogleSearchProject(user.data.user.id, currentWebsite.id, currentWebsite.domainUrl, data)
                 // Set the project details in the store
@@ -240,7 +227,7 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
                                     rows={5}
                                     placeholder='Enter the keywords you want to track, seperated by enter.'
                                     {...register('keywords')}
-                                />  
+                                />
                             </>
                         )
                     }

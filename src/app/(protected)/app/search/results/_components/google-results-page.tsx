@@ -11,16 +11,13 @@ import {
     ResponsiveContainer,
     Tooltip,
     XAxis,
-    YAxis,
-    LineChart,
-    Line,
-    TooltipProps,
-    Brush
+    Brush,
+    TooltipProps
 } from "recharts";
 import { format, parse } from 'date-fns';
 
 import { constants } from "@/styles/styles";
-import './test.css';
+
 
 type GoogleResultPageProps = {
     chartData: Data[];
@@ -41,7 +38,7 @@ const GoogleResultPage = ({ chartData, currentData, comparedData, previousData, 
 
 
     return (
-        <div className="w-full px-6 ">
+        <div className="w-full mt-4 ">
             <div className="w-full flex gap-2">
                 <MetricsLabelGoogleChart title="Clicks" value={currentData.clicks} previousValue={previousData.clicks} show={showClicks} setShow={setShowClicks} />
                 <MetricsLabelGoogleChart title="CTR" value={currentData.ctr} previousValue={previousData.ctr} show={showCtr} setShow={setShowCtr} />
@@ -52,8 +49,7 @@ const GoogleResultPage = ({ chartData, currentData, comparedData, previousData, 
                 <div className="flex gap-3">
                     <p>Filter</p>
                     <p>Add Filter</p>
-                    <p className="ml-auto">Range Selection</p>
-                    <DateRangeButton setStartDate={setStartDate} setEndDate={setEndDate} />
+                    <DateRangeButton className="ml-auto" setStartDate={setStartDate} setEndDate={setEndDate} />
                 </div>
                 <div className='pt-16 h-[470px] w-full'>
                     <AreaChartTest
@@ -89,7 +85,7 @@ const AreaChartTest = ({ chartData, showClicks, showCtr, showImpressions, showPo
                     dataKey="date"
                     type="category"
                     axisLine={false}
-                    interval={1}
+                    interval={10}
                     tickFormatter={(tickItem) => {
                         const date = parse(tickItem, 'yyyy-MM-dd', new Date());
                         return format(date, 'MM/dd');
@@ -97,8 +93,8 @@ const AreaChartTest = ({ chartData, showClicks, showCtr, showImpressions, showPo
                     tick={{ fontSize: 12, fill: '#9CA3AF' }}
                 />
                 <CartesianGrid stroke="#E5E7EB" horizontal={true} vertical={false} />
-                <Tooltip content={<CustomTooltip />} />
-                <Brush dataKey="date" height={40} fill="#F8F8FF"  stroke="none"/>
+                <Tooltip content={<CustomTooltip showClicks={showClicks} showCtr={showCtr} showImpressions={showImpressions} showPosition={showPosition} />} />
+                <Brush dataKey="date" height={40} fill="#F8F8FF"  />
                 {showClicks && <Area isAnimationActive={false} yAxisId="clicks" type="linear" dataKey='clicks' stroke='#3B82F6' strokeWidth={3} fill='transparent' />}
                 {showCtr && <Area isAnimationActive={false} yAxisId="ctr" type="linear" dataKey='ctr' stroke='#059669' strokeWidth={3} fill='transparent' />}
                 {showPosition && <Area isAnimationActive={false} yAxisId="position" type="linear" dataKey='position' stroke='#F59E0B' strokeWidth={3} fill='transparent' />}
@@ -108,17 +104,24 @@ const AreaChartTest = ({ chartData, showClicks, showCtr, showImpressions, showPo
     )
 }
 
-const CustomTooltip = ({ active, payload }: TooltipProps<string, string>) => {
+type CustomTooltipProps = TooltipProps<string, string> & {
+    showClicks: boolean;
+    showCtr: boolean;
+    showImpressions: boolean;
+    showPosition: boolean;
+};
+
+const CustomTooltip = ({ active, payload, showClicks, showCtr, showImpressions, showPosition }: CustomTooltipProps) => {
     const data = payload?.[0]?.payload as Data;
 
     if (active && payload && payload.length) {
         return (
             <div className={`${constants.glassFill} p-4 shadow-custom-lg`} >
                 <p className="">{`${data.date}`}</p>
-                <p className="">{`Clicks : ${data.clicks}`}</p>
-                <p className="">{`CTR : ${data.ctr.toFixed(2)} %`}</p>
-                <p className="">{`Impressions : ${data.impressions}`}</p>
-                <p className="">{`Position : ${data.position.toFixed(2)}`}</p>
+                {showClicks && <p className="">{`Clicks : ${data.clicks}`}</p>}
+                {showCtr && <p className="">{`CTR : ${data.ctr.toFixed(2)} %`}</p>}
+                {showImpressions && <p className="">{`Impressions : ${data.impressions}`}</p>}
+                {showPosition && <p className="">{`Position : ${data.position.toFixed(2)}`}</p>}
             </div>
         );
     }

@@ -12,19 +12,18 @@ import KeywordDetailsRow from "./keyword-details-row/keywords-details-row";
 import { DataTableTopBar } from "./topbar";
 import { DataTablePagination } from "./pagination";
 import KeywordTableHead from "./keyword-table-head";
+import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
 
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  refresh_token?: string;
 }
 
 
 function DataTable<TData, TValue>({
   columns,
   data,
-  refresh_token,
 }: DataTableProps<TData, TValue>) {
   // sorting state
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -36,6 +35,7 @@ function DataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = React.useState({})
   // console.log('rowSelection', rowSelection)
  
+  
   
   const table = useReactTable({
     data,
@@ -64,7 +64,7 @@ function DataTable<TData, TValue>({
   });
   
   
-
+  const refresh_token = useGoogleRefreshToken('search-console')
   const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(null);
   const [keywordData, setKeywordData] = React.useState<GoogleSearchResult | null>(null);
 
