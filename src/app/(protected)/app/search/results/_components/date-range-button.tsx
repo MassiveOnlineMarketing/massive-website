@@ -1,8 +1,9 @@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { getQuarter, getYear } from 'date-fns';
 import { useState } from "react";
 
-const DateRangeButton = ({ setStartDate, setEndDate }: { setStartDate: (date: string) => void, setEndDate: (date: string) => void }) => {
+const DateRangeButton = ({ setStartDate, setEndDate, className }: { setStartDate: (date: string) => void, setEndDate: (date: string) => void, className?: string }) => {
     const [isOpen, setIsOpen] = useState(false);
     const currentQuarter = getQuarter(new Date());
     const currentYear = getYear(new Date());
@@ -31,7 +32,10 @@ const DateRangeButton = ({ setStartDate, setEndDate }: { setStartDate: (date: st
         <>
             <Popover open={isOpen} onOpenChange={setIsOpen}>
                 <PopoverTrigger asChild>
-                    <button className="bg-primary-50 p-2 rounded-lg">Date Range</button>
+                    <button className={cn(
+                        'bg-primary-50 p-2 rounded-lg',
+                        className
+                    )}>Date Range</button>
                 </PopoverTrigger>
                 <PopoverContent className="flex flex-col w-50 h-60 bg-white overflow-y-scroll px-0">
                     {dateOptions.map(option => (

@@ -17,6 +17,8 @@ export const AuthenticateGoogleSearchConsoleButton = () => {
         prompt: "consent", scope: "openid email profile https://www.googleapis.com/auth/webmasters.readonly", access_type: "offline"
       }
     );
+
+    console.log('res', res)
   }
 
   return (

@@ -20,6 +20,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import DataTable from '../_components/table/keyword-table';
 import { columns } from '../_components/table/columns';
 import { useCurrentUserRefreshToken } from '@/auth/hooks/use-current-user';
+import useGoogleRefreshToken from '@/auth/hooks/use-google-refresh-token';
 
 
 type Props = {
@@ -45,7 +46,7 @@ function Page({ params }: Props) {
     const filteredResults = useFilteredKeywordResults()
 
 
-    const refresh_token = useCurrentUserRefreshToken()
+    // const refresh_token = useGoogleRefreshToken('search-console')
     
 
     useEffect(() => {
@@ -115,7 +116,6 @@ function Page({ params }: Props) {
             <DataTable
                 columns={columns(handleKeywordsDelete)}
                 data={filteredResults}
-                refresh_token={refresh_token}
             />
 
 

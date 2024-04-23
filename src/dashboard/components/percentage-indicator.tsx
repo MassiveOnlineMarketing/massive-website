@@ -18,7 +18,7 @@ const PercentageIndicator = ({ value, previousValue }: { value: number, previous
                     percentage > 0 ? 'text-green-600' : 'text-red-600'
                 )}>{Math.abs(percentage).toFixed(2)}%</span>
             </div>
-            <span className="ml-2 text-sm font-normal text-gray-500">{diff.toFixed(2)} from last month</span>
+            {/* <span className="ml-2 text-sm font-normal text-gray-500">{diff.toFixed(2)} from last month</span> */}
 
         </div>
     );

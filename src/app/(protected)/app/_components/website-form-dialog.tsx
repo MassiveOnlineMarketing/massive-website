@@ -24,6 +24,8 @@ import { InputFieldApp } from "@/components/ui/input/fields";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/input/select";
 import { createWebsite, updateWebsite } from "@/dashboard/data/website";
 import { useToast } from "@/website/features/toast/use-toast";
+import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
+import { fetchConnectedSites } from "@/dashboard/google-search/connected-sites";
 
 
 interface WebsiteFormDialogProps {
@@ -37,6 +39,7 @@ type Schema = z.infer<typeof WebsiteDetailsSchema>
 const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({ open, setOpen, website }) => {
     const isGscAuthenticated = useIsGscAuthenticated()
     const user = useSession()
+    const refresh_token = useGoogleRefreshToken('search-console')
 
     const [sites, setSites] = useState<PythonApiSite[]>()
     const { toast } = useToast();
@@ -68,20 +71,18 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({ open, setOpen, we
                     setValue('gscUrl', '')
                 }
             }
-
-            if (user.data?.refreshToken && isGscAuthenticated) {
-                fetchConnectedSites(user.data.refreshToken);
-            } else {
-                console.error('No Token')
-            }
+            fetchSites();
         }
     }, [open])
 
-    const fetchConnectedSites = async (refreshToken: string) => {
-        const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/get_sites?refresh_token=${refreshToken}`
-        const res = await axios(url)
-        setSites(res.data.siteEntry)
-    }
+    const fetchSites = async () => {
+        if (refresh_token) {
+            const connectedSites = await fetchConnectedSites(refresh_token)
+            setSites(connectedSites)
+        } else {
+            console.error('No Token')
+        }
+    };
 
     const onSubmit: SubmitHandler<Schema> = async data => {
 
