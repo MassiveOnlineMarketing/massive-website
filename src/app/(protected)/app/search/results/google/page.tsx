@@ -2,10 +2,12 @@
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import GoogleResultPage from "../_components/google-results-page";
+
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
-import { useCurrentUserRefreshToken } from "@/auth/hooks/use-current-user";
+import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
+
 import BreadCrumbsSearchKeywords from "../../google-search/_components/bread-crumbs";
+import GoogleResultPage from "../_components/google-results-page";
 
 interface ResultSearchApiResponse {
     config: any;
@@ -36,7 +38,7 @@ const Page = () => {
     console.log("Page")
 
     const currentWebsite = useWebsiteDetailsStore(state => state.WebsiteDetails);
-    const refresh_token = useCurrentUserRefreshToken()
+    const refresh_token = useGoogleRefreshToken('search-console');
     const site_url = currentWebsite?.gscUrl;
 
     const [data, setData] = React.useState<Data[]>();
