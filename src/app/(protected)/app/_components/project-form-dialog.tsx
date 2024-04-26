@@ -80,7 +80,15 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
     const onSubmit: SubmitHandler<Schema> = async data => {
 
         if (!user.data?.user.id) return
-        if (!currentWebsite) return
+        if (!currentWebsite) {
+            toast({
+                description: "Please add a website first",
+                variant: "destructive",
+                duration: 5000,
+            })
+            setOpen(false)
+            return
+        }
 
         console.log('data', data)
         console.log('currentWebsite', currentWebsite)
@@ -93,13 +101,9 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
                 res = await createGoogleSearchProject(user.data.user.id, currentWebsite.id, currentWebsite.domainUrl, data)
                 // Set the project details in the store
                 console.log('res', res)
-
-                // router.push(`/app/search/keywords/${res.id}`)
-
             }
 
             if (res) {
-                // TODO: Refresh the project details store
                 // TODO: Keywords need to be added to the project
                 setProjectDetails(res)
                 setOpen(false)
@@ -109,6 +113,7 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
                     variant: "success",
                     duration: 5000,
                 })
+                router.push(`/app/search/google-search/${res.id}`)
             }
         } catch (error) {
             console.error('Error creating website:', error);

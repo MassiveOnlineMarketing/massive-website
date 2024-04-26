@@ -33,3 +33,22 @@ export const RegisterSchema = z.object({
     message: "Name is required",
   }),
 });
+
+export const GeneralUserSettingsSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  currentPassword: z.string().min(6, {
+    message: "Password is required",
+  }).optional(),
+  password: z.string().min(6, {
+    message: "Password is required",
+  }).optional(),
+  passwordConfirmation: z.string().min(6, {
+    message: "Password is required",
+  }).optional(),
+
+});

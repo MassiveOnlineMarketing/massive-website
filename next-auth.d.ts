@@ -7,6 +7,7 @@ export type ExtendedUser = DefaultSession["user"] & {
   isOAuth: boolean;
   customField?: string;
   isGoogleSearchConsoleAuthenticated: boolean;
+  loginProvider?: string;
 
   credits: number;
   refreshToken?: string;

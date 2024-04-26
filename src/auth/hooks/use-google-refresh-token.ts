@@ -1,8 +1,6 @@
 'use client';
 
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { getAccountByUserId } from "../data/account";
+import { useUserDetailsStore } from "@/lib/zustand/user-details-store";
 
 type ScopeOption = 'search-console' | 'ads';
 
@@ -28,31 +26,13 @@ const SCOPE_URLS: Record<ScopeOption, string> = {
  * const refreshToken = useGoogleRefreshToken('search-console');
  */
 const useGoogleRefreshToken = (option: ScopeOption): string | null => {
-    const [account, setAccount] = useState<{ refresh_token: string | null, scope: string | null } | null>(null);
-    const session = useSession();
-
-    useEffect(() => {
-        const fetchAccount = async () => {
-            const fetchedAccount = await getAccountByUserId(session.data?.user.id as string);
-            console.log('fetchedAccount', fetchedAccount?.id)
-
-            if (!fetchedAccount) return;
-
-            const refresh_token = fetchedAccount?.refresh_token;
-            const scope = fetchedAccount?.scope;
-            setAccount({ refresh_token, scope });
-        };
-
-        fetchAccount();
-    }, [session]);
-
-    if (account && account.scope && account.refresh_token) {
-        const requiredScope = SCOPE_URLS[option];
-        if (account.scope.includes(requiredScope)) {
-            return account.refresh_token;
-        }
+    const account = useUserDetailsStore(state => state.accountDetails)
+    const requiredScope = SCOPE_URLS[option];
+  
+    if (account && account.scope && account.scope.includes(requiredScope)) {
+      return account.refresh_token;
     }
-
+  
     return null;
 };
 

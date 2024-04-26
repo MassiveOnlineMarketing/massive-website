@@ -25,6 +25,7 @@ model User {
   accounts                           Account[]
   isTwoFactorEnabled                 Boolean                @default(false)
   twoFactorConfirmation              TwoFactorConfirmation?
+  loginProvider                      String?                
   refreshToken                       String?                @db.Text
   credits                            Int                    @default(10)
   isGoogleSearchConsoleAuthenticated Boolean                @default(false)

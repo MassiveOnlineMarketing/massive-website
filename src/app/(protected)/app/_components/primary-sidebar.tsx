@@ -6,9 +6,6 @@ import { NavigationProps } from './dashboard-layout';
 // Components
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
-// Assets
-import { Cog6ToothIcon } from '@heroicons/react/24/outline'
-
 type PrimarySidebarProps = {
     navigation: NavigationProps[],
     pathname: string,
@@ -42,17 +39,6 @@ const PrimarySidebar = ({ navigation, pathname, isActive, setSecondarySidebarOpe
                         </Tooltip>
                     </li>
                 ))}
-
-                <li className='mt-auto'>
-                    <Link href='/app/settings'
-                        className={cn(
-                            'px-6 py-[16px] flex items-center justify-center relative',
-                            isActive('/app/settings', pathname) ? "before:content-[''] before:w-[2px] before:h-full before:bg-purple-500 before:absolute before:left-0" : "",
-                        )}
-                    >
-                        <Cog6ToothIcon className='h-8 w-8 text-gray-600' aria-hidden='true' />
-                    </Link>
-                </li>
             </ul>
         </nav>
     )

@@ -1,13 +1,16 @@
 import React from 'react'
 import DashboardLayout from './_components/dashboard-layout'
+import TestProvider from './_components/test-provider'
 
 const layout = ({ children }: { children: React.ReactNode }) => {
 
 
   return (
-    <DashboardLayout>
-      {children}
-    </DashboardLayout>
+    <TestProvider>
+      <DashboardLayout>
+        {children}
+      </DashboardLayout>
+    </TestProvider>
   )
 }
 
