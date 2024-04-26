@@ -4,25 +4,22 @@ import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
+
 import { NavigationProps } from './dashboard-layout';
 import { GoogleSearchProject } from '@prisma/client';
+import { useWebsiteDetailsStore } from '@/lib/zustand/website-details-store';
 
 // Components
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import WebsiteSelectionButton from './website-selection-button';
 import WebsiteFormDialog from './website-form-dialog';
-import { useWebsiteDetailsStore } from '@/lib/zustand/website-details-store';
+import GoogleSearchProjectFormDialog from './project-form-dialog';
 
 // Assets
-import {
-    HomeIcon,
-    MagnifyingGlassIcon,
-    UsersIcon,
-} from '@heroicons/react/24/outline'
 import { Cog6ToothIcon, DocumentMagnifyingGlassIcon, PresentationChartLineIcon, QuestionMarkCircleIcon, LockClosedIcon } from '@heroicons/react/20/solid';
 import { getGoogleSearchProjectByWebsiteId } from '@/dashboard/data/google-search-project';
-import { usePathname } from 'next/navigation';
-import GoogleSearchProjectFormDialog from './project-form-dialog';
+import useGoogleRefreshToken from '@/auth/hooks/use-google-refresh-token';
 
 type SecondarySidebarProps = {
     navigation?: NavigationProps[],
@@ -34,6 +31,7 @@ type TestProps = {
     name: string,
     href: string,
     disabled?: boolean
+    tooltipLabel?: string
 }
 
 const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: SecondarySidebarProps) => {
@@ -44,6 +42,8 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
     const currentWebsite = useWebsiteDetailsStore(state => state.WebsiteDetails);
     const [campaignsChildren, setCampaignsChildren] = useState<TestProps[]>([])
 
+    const googleResultAccess = (useGoogleRefreshToken('search-console') && currentWebsite?.gscUrl) ? false : true
+
     const navigation = [
         // { name: 'Dashboard', href: '/app/search/', icon: HomeIcon },
         {
@@ -51,8 +51,8 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
             href: '/app/search/results',
             icon: DocumentMagnifyingGlassIcon,
             children: [
-                { name: 'Google', href: '/app/search/results/google', disabled: currentWebsite?.gscUrl ? false : true },
-                { name: 'Bing', href: '/app/search/results/bing', disabled: true },
+                { name: 'Google', href: '/app/search/results/google', disabled: googleResultAccess, tooltipLabel: 'Connect Google Search Console'},
+                { name: 'Bing', href: '/app/search/results/bing', disabled: true, tooltipLabel: 'Comming Soon'},
             ]
         },
         {
@@ -129,7 +129,16 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
                                     'text-base leading-6 font-medium',
                                     isActive(child.href, pathname) ? 'text-primary-500' : 'text-gray-800'
                                 )}>{child.name}</span>
-                                {child.disabled && <LockClosedIcon className='h-5 w-5 ml-auto text-gray-400' />}
+                                {child.disabled && (
+                                    <Tooltip>
+                                        <TooltipTrigger className='ml-auto'>
+                                            <LockClosedIcon className='h-5 w-5 text-gray-400' />
+                                        </TooltipTrigger>
+                                        <TooltipContent side='right'>
+                                            <p>{child.tooltipLabel}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                )}
                             </Link>
                         ))}
                         {item.name === 'Campaigns' && (
@@ -139,7 +148,7 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
                             >
                                 Create New Google Search
                             </button>
-                        )}                        
+                        )}
                     </div>
                 ))}
                 <div className='mt-auto'>

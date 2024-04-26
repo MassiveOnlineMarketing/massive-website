@@ -1,9 +1,11 @@
-import { auth, signOut } from '@/auth/auth'
-import { Button } from '@/components/ui/button'
-import { AuthenticateGoogleSearchConsoleButton } from '@/auth/components/authenticate-google-search-console-access-button'
 import React from 'react'
-import { AuthenticateGoogleAds } from '@/auth/components/authenticate-google-ads'
-import ConnectedAccount from './_components/connected-account'
+import { auth, signOut } from '@/auth/auth'
+
+
+import { Button } from '@/components/ui/button'
+
+import ConnectedGoogleAccount from './_components/connected-google-account'
+import User from './_components/user'
 
 
 const page = async () => {
@@ -16,11 +18,24 @@ const page = async () => {
   return (
     <div>
       <div className='p-6'>
-        <ConnectedAccount />
+        <div className='flex flex-col gap-y-2'>
+
+        </div>
+        <div className='border border-blue-500'>
+          <p>Connected google account</p>
+          <ConnectedGoogleAccount />
+        </div>
+        <div className='border border-red-500'>
+          <User />
+        </div>
+
+        <div className='border border-green-500'>
+          <p>Session</p>
+          <pre>
+            {JSON.stringify(session, null, 2)}
+          </pre>
+        </div>
       </div>
-      <pre>
-        {JSON.stringify(session, null, 2)}
-      </pre>
 
       <form action={async () => {
         'use server'
@@ -30,12 +45,6 @@ const page = async () => {
       >
         <Button type='submit'>Logout</Button>
       </form>
-
-
-      <div className='flex flex-col'>
-        <AuthenticateGoogleSearchConsoleButton />
-        <AuthenticateGoogleAds />
-      </div>
 
     </div>
   )

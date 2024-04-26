@@ -198,3 +198,17 @@
 -moz-box-shadow: inset 10px 10px 5px 0px rgba(0,0,0,0.75);
 box-shadow: inset 10px 10px 5px 0px rgba(0,0,0,0.75);
 }
+
+
+/* app */
+/* Settings page banner */
+.glass-settings-banner:before {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 100),
+    rgba(255, 255, 255, 0)
+  );
+  padding: 6px;
+  border-radius: inherit;
+  inset: 0;
+}
