@@ -88,7 +88,7 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
                         {topTenResults.slice(0, showAll ? topTenResults.length : 3).map((result, index) => (
                             <SerpCard key={result.id} result={result} />
                         ))}
-                        <button className='mx-auto w-fit flex' onClick={() => setShowAll(!showAll)}>{!showAll ? 'Read More' : 'Read Less'}</button>
+                        <button className='mx-auto w-fit flex' onClick={() => setShowAll(!showAll)}>{!showAll ? 'Show More' : 'Show Less'}</button>
                     </div>
 
                     <div>

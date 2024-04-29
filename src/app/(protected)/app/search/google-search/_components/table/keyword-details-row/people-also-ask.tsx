@@ -14,7 +14,7 @@ const PeopleAlsoAsk = ({ keywordData }: { keywordData: KeywordResultWithTagProp 
                 </>
             ) :
                 (
-                    <p className="text-base leading-6 font-normal text-gray-800">peopleAlsoAsk</p>
+                    <p className="text-base leading-6 font-normal text-gray-800">No people also ask</p>
                 )
             }
         </div>

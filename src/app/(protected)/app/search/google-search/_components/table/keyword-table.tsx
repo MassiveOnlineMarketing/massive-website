@@ -113,7 +113,7 @@ function DataTable<TData, TValue>({
         <Table>
           <TableHeader className="rouded-md overflow-hidden bg-primary-50">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className=" rounded-md shadow-sm">
+              <TableRow key={headerGroup.id} className=" rounded-lg shadow-sm">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
@@ -152,14 +152,6 @@ function DataTable<TData, TValue>({
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
-                        className={
-                          // add rounded corners to first and last cell
-                          cell.column.getIndex() === 0
-                            ? "rounded-l-2xl overflow-hidden "
-                            : cell.column.getIndex() === numberOfVisibleColumns - 1
-                              ? "rounded-r-2xl "
-                              : ""
-                        }
                         key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
