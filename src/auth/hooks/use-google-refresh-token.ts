@@ -28,6 +28,7 @@ const SCOPE_URLS: Record<ScopeOption, string> = {
 const useGoogleRefreshToken = (option: ScopeOption): string | null => {
     const account = useUserDetailsStore(state => state.accountDetails)
     const requiredScope = SCOPE_URLS[option];
+    // console.log(account?.scope)
   
     if (account && account.scope && account.scope.includes(requiredScope)) {
       return account.refresh_token;

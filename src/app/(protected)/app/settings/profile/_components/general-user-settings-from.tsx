@@ -107,7 +107,7 @@ const GeneralUserSettingsForm = () => {
 
 
         {provider && provider !== 'google' && (
-          <div className="mb-10 space-y-[16px]">
+          <div className="space-y-[16px]">
             <p className='text-base leading-6 font-semibold text-gray-800'>Change Password</p>
             <FormField
               control={form.control}
@@ -166,13 +166,13 @@ const GeneralUserSettingsForm = () => {
           </div>
         )}
 
-        <FormError message={error} />
-        <FormSuccess message={success} />
+        <FormError message={error} className='mt-[16px]' />
+        <FormSuccess message={success} className='mt-[16px]' />
 
         <Button
           disabled={isPending}
           type="submit"
-          className="w-fit px-6 py-3 bg-primary-500 text-sm leading-5 font-semibold text-white"
+          className="mt-10  w-fit px-6 py-3 bg-primary-500 text-sm leading-5 font-semibold text-white"
         >
           Save Changes
         </Button>

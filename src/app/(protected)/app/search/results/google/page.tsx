@@ -71,31 +71,35 @@ const Page = () => {
     const fetchData = async () => {
         // fetch data
         if (!site_url || !refresh_token) return;
-        const res: ResultSearchApiResponse = await axios(
-            `http://127.0.0.1:5000/api/results?site_url=${site_url}&refresh_token=${refresh_token}&start_date=${formatDate(oneYearAgo)}&end_date=${formatDate(currentDate)}`
-        );
-        console.log("res", res);
+        try {
+            const res: ResultSearchApiResponse = await axios(
+                `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/results?site_url=${site_url}&refresh_token=${refresh_token}&start_date=${formatDate(oneYearAgo)}&end_date=${formatDate(currentDate)}`
+            );
 
-        const formattedData = res.data.data.rows.map((row) => ({
-            clicks: row.clicks,
-            ctr: row.ctr * 100,
-            impressions: row.impressions,
-            position: row.position,
-            date: row.keys[0], // Assuming each 'keys' array contains only one element (date)
-        }));
+            const formattedData = res.data.data.rows.map((row) => ({
+                clicks: row.clicks,
+                ctr: row.ctr * 100,
+                impressions: row.impressions,
+                position: row.position,
+                date: row.keys[0], // Assuming each 'keys' array contains only one element (date)
+            }));
+    
+            setData(formattedData);
+            setCurrentData(res.data.currentData)
+            setComparedData(res.data.comparedData)
+            setPreviousData(res.data.previousData)
+    
+        } catch (error) {
+            console.error(error);
+        }
 
-        setData(formattedData);
-        setCurrentData(res.data.currentData)
-        setComparedData(res.data.comparedData)
-        setPreviousData(res.data.previousData)
-
-        console.log("data", formattedData);
     };
 
     useEffect(() => {
         console.log('date changed')
     }, [start_date, end_date]);
 
+    // TODO: Add loading state
     if (!data) return <div>Loading...</div>;
 
     return (

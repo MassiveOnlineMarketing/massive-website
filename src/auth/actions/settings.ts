@@ -11,7 +11,7 @@ import bcrypt from "bcryptjs";
 
 
 export const updateUserDetails = async (values: z.infer<typeof GeneralUserSettingsSchema>) => {
-    // console.log('values', values)
+    console.log('values', values)
     const user = await currentUser();
 
     let data = {
@@ -38,7 +38,8 @@ export const updateUserDetails = async (values: z.infer<typeof GeneralUserSettin
             return { error: "Email is already in use" };
         }
 
-        const verificationToken = await generateVerificationToken(values.email);
+        // TODO: Create new email template for updating email adress
+        const verificationToken = await generateVerificationToken(values.email, user.id);
         await sendVerificationEmail(values.email, verificationToken.token);
 
         return { success: "Verification email sent!" }
