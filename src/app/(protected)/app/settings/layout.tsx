@@ -33,7 +33,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                             <p className='text-gray-600'>{user?.name}</p>
                         </div>
                         <div>
-                            <Button size='sm' className='text-primary-500 bg-white '>kk dikke button</Button>
+                            <Button size='sm' className='text-primary-500 bg-white '>button</Button>
                         </div>
                     </div>
 

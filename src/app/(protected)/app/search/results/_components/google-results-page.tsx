@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Data } from "../page";
 import MetricsLabelGoogleChart from "./metrics-label";
 import DateRangeButton from "./date-range-button";
-
+import { Data } from "../google/page";
 
 import {
     Area,
@@ -17,7 +16,6 @@ import {
 import { format, parse } from 'date-fns';
 
 import { constants } from "@/styles/styles";
-
 
 type GoogleResultPageProps = {
     chartData: Data[];

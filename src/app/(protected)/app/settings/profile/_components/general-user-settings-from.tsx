@@ -106,7 +106,7 @@ const GeneralUserSettingsForm = () => {
         </div>
 
 
-        {provider && provider !== 'google' && (
+        {provider === 'credentials' && (
           <div className="space-y-[16px]">
             <p className='text-base leading-6 font-semibold text-gray-800'>Change Password</p>
             <FormField

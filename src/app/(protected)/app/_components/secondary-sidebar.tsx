@@ -80,6 +80,11 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
         setCampaignsChildren(newCampaignsChildren); // Set the state here
     }
 
+    const handleAddProjectToSidebar = (project: GoogleSearchProject) => {
+        const newCampaignsChildren = [...campaignsChildren, { name: project.projectName, href: `/app/search/google-search/${project.id}` }]
+        setCampaignsChildren(newCampaignsChildren)
+    }
+
     const isActive = (href: string, pathname: string) => {
         return (href === '/app' && pathname === href) || (pathname.includes(href) && href !== '/app');
     };
@@ -180,7 +185,12 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
                 </Tooltip>
             </div>
 
-            <GoogleSearchProjectFormDialog open={openGoogleSearchProjectDialog} setOpen={setOpenGoogleSearchProjectDialog} googleSearchProject={null} />
+            <GoogleSearchProjectFormDialog 
+                open={openGoogleSearchProjectDialog} 
+                setOpen={setOpenGoogleSearchProjectDialog} 
+                googleSearchProject={null} 
+                handleAddProjectToSidebar={handleAddProjectToSidebar}
+            />
             <WebsiteFormDialog open={openWebsiteDialog} setOpen={setOpenWebsiteDialog} website={currentWebsite} />
         </div>
     )

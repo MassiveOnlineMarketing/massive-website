@@ -7,7 +7,6 @@ import { ExtendedUser } from "../../next-auth";
 import { db } from "../lib/db";
 import { getUserById } from "./data/user";
 
-import { updateGoogleRefreshToken, updateGoogleSearchConsoleAuthenticated } from "../lib/tokens";
 import { updateGoogleAccount } from "./data/account";
 
 export const {
@@ -55,7 +54,6 @@ export const {
 
         // Store the refresh token
         if (account?.provider === "google" && account.refresh_token && account.scope) {
-          (user as ExtendedUser).refreshToken = account.refresh_token;
           console.log('google account')
           const updatedAccount = await updateGoogleAccount(user.id as string, account.refresh_token, account.scope);
         }
@@ -102,21 +100,12 @@ export const {
       // Add role, credits, and refreshToken to the token
       token.role = existingUser.role;
       token.credits = existingUser.credits;
-      token.refreshToken = existingUser.refreshToken;
       token.email = existingUser.email;
       token.loginProvider = existingUser.loginProvider;
 
       // Add custom fields to the token
       token.customField = "test";
 
-      // If there's an account and it has a refresh token, add the access and refresh tokens to the JWT
-      if (account && account.refresh_token) {
-        token.accesToken = account.access_token;
-        token.refreshToken = account.refresh_token;
-
-        // Update the Google refresh token in the database
-        await updateGoogleRefreshToken(token.sub, account.refresh_token);
-      }
 
       // If the trigger is "update", update the name in the token coming from the useSession() update() function
       if (trigger === "update") {
@@ -145,7 +134,6 @@ export const {
 
       // Add extra data to the session
       session.accessToken = token.accessToken || session.accessToken;
-      session.refreshToken = token.refreshToken || session.refreshToken;
       session.credits = token.credits || session.credits;
       session.email = token.email || session.email;
 

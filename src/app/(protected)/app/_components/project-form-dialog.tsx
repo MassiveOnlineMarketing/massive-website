@@ -1,8 +1,7 @@
 'use client';
 
 // External libraries
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { SetStateAction, useEffect } from "react";
 import { z } from "zod"
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -12,11 +11,12 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import { GoogleSearchProjectSchema } from "@/dashboard/schema";
 
 // Internal types
-import { PythonApiSite } from "@/dashboard/types";
 import { GoogleSearchProject } from "@prisma/client";
 
 // Internal functions
 import { createGoogleSearchProject, updateGoogleSearchProject } from "@/dashboard/data/google-search-project";
+import { splitAndTrimKeywords } from "@/serp/lib/utils";
+import { useProcessNewKeywords } from "@/serp/hooks/useProcessNewKeywords";
 
 // Store
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
@@ -34,27 +34,20 @@ interface GoogleSearchProjectFormDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
     googleSearchProject?: GoogleSearchProject | null;
+    handleAddProjectToSidebar?: (project: GoogleSearchProject) => void;
 }
 
 type Schema = z.infer<typeof GoogleSearchProjectSchema>
 
-const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps> = ({ open, setOpen, googleSearchProject }) => {
+const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps> = ({ open, setOpen, googleSearchProject, handleAddProjectToSidebar }) => {
     const user = useSession()
-
-    const { toast } = useToast();
-    // TODO: Route to the project page after creating the project
     const router = useRouter()
 
+    const { processNewKeywords } = useProcessNewKeywords()
     const setProjectDetails = useGoogleSearchProjectDetailsStore(state => state.setProjectDetails)
     const currentWebsite = useWebsiteDetailsStore(state => state.WebsiteDetails)
-    // console.log('currentWebsite', currentWebsite)
-    // const currentGoogleSearchProject = useGoogleSearchProjectDetailsStore(state => state.ProjectDetails)
 
-    // TODO: Change this to use the project details store
-    let currentWebsiteDetails: GoogleSearchProject | null = null
-    if (googleSearchProject) {
-        currentWebsiteDetails = googleSearchProject
-    }
+    const { toast } = useToast();
 
     const {
         register,
@@ -66,13 +59,10 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
     } = useForm<Schema>({})
 
     useEffect(() => {
-        if (open) {
-            // TODO: Set the values of the form fields if the website is already created --> change to search project
-            if (currentWebsiteDetails) {
-                setValue('projectName', currentWebsiteDetails.projectName)
-                setValue('language', currentWebsiteDetails.language)
-                setValue('country', currentWebsiteDetails.country)
-            }
+        if (open && googleSearchProject) {
+            setValue('projectName', googleSearchProject.projectName)
+            setValue('language', googleSearchProject.language)
+            setValue('country', googleSearchProject.country)
         }
     }, [open])
 
@@ -90,35 +80,39 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
             return
         }
 
-        console.log('data', data)
-        console.log('currentWebsite', currentWebsite)
-
         try {
-            let res;
+            let res: GoogleSearchProject | null = null;
             if (googleSearchProject) {
                 res = await updateGoogleSearchProject(googleSearchProject.id, data)
             } else {
                 res = await createGoogleSearchProject(user.data.user.id, currentWebsite.id, currentWebsite.domainUrl, data)
-                // Set the project details in the store
-                console.log('res', res)
-            }
 
+                setProjectDetails(res)
+                if (handleAddProjectToSidebar) {
+                    handleAddProjectToSidebar(res)
+                }
+            }
+            
             if (res) {
-                // TODO: Keywords need to be added to the project
+                if (data.keywords) {
+                    const keywordsArray = splitAndTrimKeywords(data.keywords)
+                    processNewKeywords(keywordsArray, res)
+                }
+
                 setProjectDetails(res)
                 setOpen(false)
                 reset()
                 toast({
-                    description: "Google Search Campaign created successfully",
+                    description: `Google Search Campaign ${googleSearchProject ? 'updated ' : 'created '}successfully`,
                     variant: "success",
                     duration: 5000,
                 })
                 router.push(`/app/search/google-search/${res.id}`)
             }
         } catch (error) {
-            console.error('Error creating website:', error);
+            console.error(`Error ${googleSearchProject ? 'updating ' : 'creating '}website:`, error);
             toast({
-                description: "An error occurred while creating the Google Search Campaign. Please try again.",
+                description: `An error occurred while ${googleSearchProject ? 'updating ' : 'creating '}the Google Search Campaign. Please try again.`,
                 variant: "destructive",
                 duration: 5000,
             })
@@ -162,7 +156,7 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
             <DialogContent>
                 <DialogHeader>
                     <h2 className="font-medium text-2xl text-gray-800">
-                        {currentWebsiteDetails ? `Update ${currentWebsiteDetails.projectName}` : 'Setup Google Search Campaign'}
+                        {googleSearchProject ? `Update ${googleSearchProject.projectName}` : 'Setup Google Search Campaign'}
                     </h2>
                     <p className="font-medium text-base text-gray-500 pt-[4px]">
                         Please enter the details of your Campaign
@@ -225,7 +219,7 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
                     {errors.country && <ErrorField error={'* Location is Required'} />}
 
                     {
-                        !currentWebsiteDetails && (
+                        !googleSearchProject && (
                             <>
                                 <p className="mt-7">Keywords</p>
                                 <TextareaApp
@@ -242,7 +236,7 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
                         type="submit"
                         className="mt-8 px-6 py-2 w-fit flex mx-auto rounded-lg text-lg font-semibold"
                     >
-                        {currentWebsiteDetails ? 'Update' : 'Create'}
+                        {googleSearchProject ? 'Update' : 'Create'}
                     </button>
 
                 </form>

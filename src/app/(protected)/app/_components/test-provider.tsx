@@ -7,7 +7,7 @@ import { useCurrentUser } from '@/auth/hooks/use-current-user';
 
 // Used to test the use of zustand store in a provider
 const TestProvider = ({ children }: { children: React.ReactNode }) => {
-    console.log('test provider render')
+    // console.log('test provider render')
 
     const currentUser = useCurrentUser();
     const setAccount = useUserDetailsStore(state => state.setAccountDetails);
@@ -17,7 +17,7 @@ const TestProvider = ({ children }: { children: React.ReactNode }) => {
 
         const fetchAccount = async () => {
             const fetchedAccount = await getAccountByUserId(currentUser.id as string);
-            console.log('fetchedAccount test provider', fetchedAccount?.id)
+            // console.log('fetchedAccount test provider', fetchedAccount?.id)
 
             if (!fetchedAccount) return;
 

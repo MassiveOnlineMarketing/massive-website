@@ -73,8 +73,6 @@ export const getKeywordsByProjectId = async (projectId: string) => {
     },
   });
 
-  // console.log('🟢 keywords', keywords);
-
   return keywords;
 }
 
@@ -124,9 +122,6 @@ export const addTagToKeywords = async (tagName: string, keywordIds: string[] | s
  */
 export const deleteTagFromKeywords = async (keywordIds: string[] | string, tagName: string ) => {
   const keywordIdsArray = Array.isArray(keywordIds) ? keywordIds : [keywordIds];
-
-  console.log('🟢 keywordIdsArray', keywordIdsArray);
-  console.log('🟢 tagName', tagName);
 
   // Fetch the tag
   const tag = await db.googleSearchKeywordTag.findUnique({

@@ -9,7 +9,6 @@ export type ExtendedUser = DefaultSession["user"] & {
   loginProvider?: string;
 
   credits: number;
-  refreshToken?: string;
 };
 
 declare module "next-auth" {
@@ -18,6 +17,5 @@ declare module "next-auth" {
     email?: string;
 
     accessToken?: string;
-    refreshToken?: string;
   }
 }
