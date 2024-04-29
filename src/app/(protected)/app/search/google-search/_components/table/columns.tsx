@@ -179,14 +179,14 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     },
   },
   // * Date Retrieved
-  {
-    accessorKey: "createdAt",
-    header: "Date Retrieved",
-    cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt'));
-      return format(date, 'MM/dd/yyyy'); // or any other format you prefer
-    },
-  },
+  // {
+  //   accessorKey: "createdAt",
+  //   header: "Date Retrieved",
+  //   cell: ({ row }) => {
+  //     const date = new Date(row.getValue('createdAt'));
+  //     return format(date, 'MM/dd/yyyy'); // or any other format you prefer
+  //   },
+  // },
   // * Actions
   {
     id: "actions",

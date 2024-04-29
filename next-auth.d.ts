@@ -6,20 +6,16 @@ export type ExtendedUser = DefaultSession["user"] & {
   isTwoFactorEnabled: boolean;
   isOAuth: boolean;
   customField?: string;
-  isGoogleSearchConsoleAuthenticated: boolean;
   loginProvider?: string;
 
   credits: number;
-  refreshToken?: string;
 };
 
 declare module "next-auth" {
   interface Session {
     user: ExtendedUser;
     email?: string;
-    isGoogleSearchConsoleAuthenticated: boolean;
 
     accessToken?: string;
-    refreshToken?: string;
   }
 }

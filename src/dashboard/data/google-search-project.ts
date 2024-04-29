@@ -52,15 +52,14 @@ export const updateGoogleSearchProject = async (projectId: string, data: Project
     return project;
 }
 
+
 export const getGoogleSearchProjectByUserId = async (userId: string) => {
-    console.log('userId', userId)
     const project = await db.googleSearchProject.findMany({
         where: { userId },
     });
 
     return project;
 }
-
 
 export const getGoogleSearchProjectByWebsiteId = async (websiteId: string) => {
     const project = await db.googleSearchProject.findMany({

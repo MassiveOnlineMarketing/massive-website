@@ -16,13 +16,14 @@ export const insertSERPResults = async (
   result: serpProps[]
 ) => {
 
+
   const resultData = result.map((keyword) => {
     return {
       keywordId: keyword.keywordId,
       position: keyword.position,
       url: keyword.url,
       metaTitle: keyword.metaTitle,
-      metaDescription: keyword.metaDescription
+      metaDescription: keyword.metaDescription || ''
     }
   })
 
@@ -51,8 +52,7 @@ export const getLatestSerpResultsWithTags = async (keywordIds: string[]) => {
       take: 10,
     });
   }
-  console.log('🟢 result');
-
+  
   return results;
 }
 

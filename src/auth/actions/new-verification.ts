@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getUserByEmail } from "@/auth/data/user";
+import { getUserByEmail, getUserById } from "@/auth/data/user";
 import { getVerificationTokenByToken } from "@/auth/data/verification-token";
 
 export const newVerification = async (token: string) => {
@@ -17,6 +17,32 @@ export const newVerification = async (token: string) => {
     return { error: "Token has expired!" };
   }
 
+  console.log('existingToken', existingToken);
+
+  // If the token has a user ID, we can use it to verify the email
+  // Used for cases where the user has already signed up/ changed their email
+  if (existingToken.userId !== null) {
+    const existingUser = await getUserById(existingToken.userId);
+
+    if (!existingUser) {
+      return { error: "Email does not exist!" };
+    }
+    await db.user.update({
+      where: { id: existingUser.id },
+      data: {
+        emailVerified: new Date(),
+        email: existingToken.email,
+      }
+    });
+
+    await db.verificationToken.delete({
+      where: { id: existingToken.id }
+    });
+
+    return { success: "Email updated" };
+  }
+
+  // If the token does not have a user ID, we can use the email to verify the email
   const existingUser = await getUserByEmail(existingToken.email);
 
   if (!existingUser) {
@@ -25,7 +51,7 @@ export const newVerification = async (token: string) => {
 
   await db.user.update({
     where: { id: existingUser.id },
-    data: { 
+    data: {
       emailVerified: new Date(),
       email: existingToken.email,
     }

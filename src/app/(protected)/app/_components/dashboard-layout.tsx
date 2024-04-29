@@ -33,7 +33,7 @@ export type NavigationProps = {
 const navigation = [
     { name: 'Dashboard', href: '/app', icon: HomeIcon },
     { name: 'Search', href: '/app/search', icon: MagnifyingGlassIcon },
-    { name: 'Website', href: '/app/website', icon: ComputerDesktopIcon },
+    // { name: 'Website', href: '/app/website', icon: ComputerDesktopIcon },
     { name: 'Billing', href: '/app/billing', icon: CreditCardIcon },
 ]
 

@@ -28,8 +28,7 @@ type Props = {
 
 
 const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
-
-
+    
     const gscUrl = useWebsiteDetailsStore(state => state.WebsiteDetails?.gscUrl)
 
     const [showAll, setShowAll] = useState(false);
@@ -51,11 +50,14 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
             return;
         }
         const encodedKeyword = encodeURIComponent(keyword);
-        const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/keyword_data?keyword=${encodedKeyword}&site_url=${gscUrl}&refresh_token=${refresh_token}`;
-        const res = await axios(url);
-        console.log('res', res.data)
-
-        setSearchConsoleData(res.data);
+        try {
+            const url = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/keyword_data?keyword=${encodedKeyword}&site_url=${gscUrl}&refresh_token=${refresh_token}`;
+            const res = await axios(url);
+    
+            setSearchConsoleData(res.data);
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const fetchTopTenResults = async (keywordId: string) => {

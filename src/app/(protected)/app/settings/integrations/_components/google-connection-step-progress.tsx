@@ -60,10 +60,26 @@ const GrayDot = ({ className }: { className?: string }) => {
     return (
         <svg
             className={className}
-            viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="1.09211" y="0.592105" width="18.8158" height="18.8158" rx="9.4079" fill="white" />
-            <rect x="1.09211" y="0.592105" width="18.8158" height="18.8158" rx="9.4079" stroke="#D1D5DB" stroke-width="1.18421" stroke-linecap="round" />
-            <circle cx="10.5" cy="9.99997" r="5.26316" fill="#D1D5DB" />
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 20">
+            <rect
+                width="18.816"
+                height="18.816"
+                x="1.092"
+                y="0.592"
+                fill="#fff"
+                rx="9.408"
+            ></rect>
+            <rect
+                width="18.816"
+                height="18.816"
+                x="1.092"
+                y="0.592"
+                stroke="#D1D5DB"
+                strokeLinecap="round"
+                strokeWidth="1.184"
+                rx="9.408"
+            ></rect>
+            <circle cx="10.5" cy="10" r="5.263" fill="#D1D5DB"></circle>
         </svg>
     )
 }

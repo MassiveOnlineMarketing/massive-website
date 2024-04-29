@@ -1,43 +1,46 @@
 'use server'
 
+import { UserResult } from "@/app/api/serp/route";
 import { db } from "@/lib/db";
 
-type userResultProps = {
-  keywordId: string;
-  keywordName: string;
-  position: number;
-  url: string;
-  metaTitle: string;
-  metaDescription: string;
-  firstPosition: number;
-  bestPosition: number;
-}
 
+/**
+ * Inserts user search results into the database.
+ * 
+ * @param result - An array of UserResult objects containing the search result data.
+ * @returns An object indicating the success or failure of the insertion, along with the number of inserted records.
+ */
 export const insertUserResults = async (
-  result: userResultProps[]
-
+  result: UserResult[]
 ) => {
-  // console.log('result', result);
 
   const resultData = result.map((keyword) => {
     return {
       keywordId: keyword.keywordId,
-      keywordName: keyword.keywordName,
-      position: keyword.position,
-      url: keyword.url,
-      metaTitle: keyword.metaTitle,
-      metaDescription: keyword.metaDescription,
-      firstPosition: keyword.firstPosition,
-      bestPosition: keyword.bestPosition,
+      keywordName: keyword.resultName,
+      position: keyword.resultPosition,
+      url: keyword.resultURL,
+      metaTitle: keyword.resultTitle,
+      metaDescription: keyword.resultDescription,
+      firstPosition: keyword.resultPosition,
+      bestPosition: keyword.resultPosition,
+      relatedSearches: keyword.relatedSearches,
+      peopleAlsoAsk: keyword.peopleAlsoAsk,
     }
   })
 
-  const resultInsert = await db.googleSearchResult.createMany({
+  const res = await db.googleSearchResult.createMany({
     data: resultData
   });
 
-  return { success: "User Results inserted!", resultInsert };
+  const insertedRecordsCount = res.count;
+
+  if (insertedRecordsCount === 0) {
+    return { error: "User Results not inserted!" };
+  }
+  return { success: "User Results inserted!", insertedRecordsCount};
 }
+
 
 export const getKeywordResultById = async (keywordId: string[]) => {
   const keywordResult = await db.googleSearchResult.findMany({
@@ -64,8 +67,8 @@ export const getLatestKeywordResultWithTagByKeywordId = async (keywordIds: strin
         in: keywordIds,
       },
     },
-    orderBy: { 
-      createdAt: 'desc' 
+    orderBy: {
+      createdAt: 'desc'
     },
     include: {
       keyword: {
@@ -84,8 +87,6 @@ export const getLatestKeywordResultWithTagByKeywordId = async (keywordIds: strin
       keyword: undefined,
     };
   });
-
-  // console.log('latestResults');
 
   return latestResults;
 }

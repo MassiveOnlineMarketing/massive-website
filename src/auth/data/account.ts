@@ -19,7 +19,6 @@ export const updateGoogleAccount = async (userId: string, refresh_token: string,
         const account = await prisma.account.findFirst({
             where: { userId: userId },
         });
-        console.log('account', account)
 
         if (!account) {
             return null;

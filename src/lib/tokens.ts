@@ -27,7 +27,7 @@ export const generatePasswordResetToken = async (email: string) => {
   return passwordResetToken;
 }
 
-export const generateVerificationToken = async (email: string) => {
+export const generateVerificationToken = async (email: string, userId?: string) => {
   const token = uuidv4();
   const expires = new Date(new Date().getTime() + 3600 * 1000);
 
@@ -46,6 +46,7 @@ export const generateVerificationToken = async (email: string) => {
       email,
       token,
       expires,
+      userId
     },
   });
 
@@ -62,15 +63,3 @@ export const updateGoogleRefreshToken = async (id: string, refreshToken: string)
     },
   });
 };
-
-export const updateGoogleSearchConsoleAuthenticated = async (id: string, isGoogleSearchConsoleAuthenticated: boolean) => {
-  console.log('id', id)
-  await db.user.update({
-    where: {
-      id,
-    },
-    data: {
-      isGoogleSearchConsoleAuthenticated: isGoogleSearchConsoleAuthenticated,
-    },
-  });
-}

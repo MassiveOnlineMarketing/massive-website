@@ -12,7 +12,6 @@ export function useProcessNewKeywords() {
   const [error, setError] = useState<string | null>(null);
 
   const user = useCurrentUser();
-  const { toast } = useToast();
 
   /**
    * ? Processes an array of keywords in batches and sends them to the server for processing.
@@ -51,8 +50,6 @@ export function useProcessNewKeywords() {
     try {
       for (let i = 0; i < keywordsArray.length; i += BATCH_SIZE) {
         const batch = keywordsArray.slice(i, i + BATCH_SIZE);
-        // console.log('batch', batch)
-        console.log('project', project)
 
         const payload = {
           projectId: project.id,
@@ -73,8 +70,8 @@ export function useProcessNewKeywords() {
 
         const resultResponse = await response.json();
 
-        if (resultResponse) {
-          const updatedResults = resultResponse.map((res: RenderResultResponse[]) => ({
+        if (resultResponse.results && resultResponse.success) {
+          const updatedResults = resultResponse.results.map((res: RenderResultResponse[]) => ({
             ...res,
             createdAt: new Date().toISOString(),
             tags: [],
@@ -84,6 +81,8 @@ export function useProcessNewKeywords() {
           await decrementDisplayCredits(updatedResults.length);
 
           addResults(updatedResults)
+        } else {
+          setError(resultResponse.error)
         }
       }
     } catch (error) {

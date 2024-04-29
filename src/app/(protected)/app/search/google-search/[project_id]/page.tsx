@@ -30,8 +30,6 @@ type Props = {
 function Page({ params }: Props) {
     const router = useRouter()
 
-    // Check if project belongs to user
-
     const currentWebsite = useWebsiteDetailsStore(state => state.WebsiteDetails);
 
     const setGoogleSearchProjectDetails = useGoogleSearchProjectDetailsStore(state => state.setProjectDetails)
@@ -44,16 +42,19 @@ function Page({ params }: Props) {
     const filteredResults = useFilteredKeywordResults()
 
 
-    // const refresh_token = useGoogleRefreshToken('search-console')
-    
+    // Clean up old results 
+    useEffect(() => {
+        resetKweywordResults()
+    }, [])
 
+    // Fetch project details + keyword results
     useEffect(() => {
         fetchProjectDetails()
     }, [currentWebsite])
 
     const fetchProjectDetails = async () => {
         const res = await getGoogleSearchProjectById(params.project_id)
-        console.log('res', res)
+        // console.log('res', res)
         if (!res) return
 
         if (res.websiteId === currentWebsite?.id) {
