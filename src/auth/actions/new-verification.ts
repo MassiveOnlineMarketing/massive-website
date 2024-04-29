@@ -23,7 +23,6 @@ export const newVerification = async (token: string) => {
   // Used for cases where the user has already signed up/ changed their email
   if (existingToken.userId !== null) {
     const existingUser = await getUserById(existingToken.userId);
-    console.log('existingUser with id', existingUser);
 
     if (!existingUser) {
       return { error: "Email does not exist!" };
@@ -45,7 +44,6 @@ export const newVerification = async (token: string) => {
 
   // If the token does not have a user ID, we can use the email to verify the email
   const existingUser = await getUserByEmail(existingToken.email);
-  console.log('existingUser with email', existingUser);
 
   if (!existingUser) {
     return { error: "Email does not exist!" };

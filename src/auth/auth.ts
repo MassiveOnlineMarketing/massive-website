@@ -34,8 +34,6 @@ export const {
 
         // * If Google Search Console connection is granted update the user
         if (account.scope && account.scope.includes('https://www.googleapis.com/auth/webmasters.readonly')) {
-          updateGoogleSearchConsoleAuthenticated(user.id as string, true);
-          (user as ExtendedUser).isGoogleSearchConsoleAuthenticated = true;
           console.log("Google Search Console connection")
         }
 
@@ -110,13 +108,11 @@ export const {
 
       // Add custom fields to the token
       token.customField = "test";
-      token.isGoogleSearchConsoleAuthenticated = existingUser.isGoogleSearchConsoleAuthenticated;
 
       // If there's an account and it has a refresh token, add the access and refresh tokens to the JWT
       if (account && account.refresh_token) {
         token.accesToken = account.access_token;
         token.refreshToken = account.refresh_token;
-        token.isGoogleSearchConsoleAuthenticated = account.isGoogleSearchConsoleAuthenticated;
 
         // Update the Google refresh token in the database
         await updateGoogleRefreshToken(token.sub, account.refresh_token);
@@ -150,7 +146,6 @@ export const {
       // Add extra data to the session
       session.accessToken = token.accessToken || session.accessToken;
       session.refreshToken = token.refreshToken || session.refreshToken;
-      session.isGoogleSearchConsoleAuthenticated = token.isGoogleSearchConsoleAuthenticated || session.isGoogleSearchConsoleAuthenticated;
       session.credits = token.credits || session.credits;
       session.email = token.email || session.email;
 

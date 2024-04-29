@@ -63,15 +63,3 @@ export const updateGoogleRefreshToken = async (id: string, refreshToken: string)
     },
   });
 };
-
-export const updateGoogleSearchConsoleAuthenticated = async (id: string, isGoogleSearchConsoleAuthenticated: boolean) => {
-  console.log('id', id)
-  await db.user.update({
-    where: {
-      id,
-    },
-    data: {
-      isGoogleSearchConsoleAuthenticated: isGoogleSearchConsoleAuthenticated,
-    },
-  });
-}
