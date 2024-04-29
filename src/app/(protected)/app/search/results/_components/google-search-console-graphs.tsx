@@ -7,6 +7,7 @@ import { PythonApiKeywordDetailSearchConsoleData } from '@/dashboard/types';
 
 // Components 
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, TooltipProps, Area, AreaChart, Brush } from 'recharts';
+import SearchConsoleLoadingChartSvg from './search-console-loading-svg';
 
 type Props = {
     searchConsoleData: PythonApiKeywordDetailSearchConsoleData | null,
@@ -21,11 +22,19 @@ const GoogleSearchConsoleGraphs = ({ searchConsoleData, refresh_token }: Props) 
                     {searchConsoleData ? (
                         <SearchConsoleChart searchConsoleData={searchConsoleData} />
                     ) : (
-                        <div className='h-[128px] w-full bg-red-50'>gsc Not Connected</div>
+                        // TODO: gsc data loading
+                        <div className="flex gap-4 w-full h-[152px]">
+                            <SearchConsoleLoadingChart title="Clicks" />
+                            <SearchConsoleLoadingChart title="CTR" />
+                            <SearchConsoleLoadingChart title="Position" />
+                            <SearchConsoleLoadingChart title="Impressions" />
+                        </div>
+
 
                     )}
                 </>
             ) : (
+                // TODO: gsc not connected
                 <div className='flex w-full gap-2 h-fit'>
                     <div className='h-[128px] w-full bg-red-50'>gsc Not Connected</div>
                     <div className='h-[128px] w-full bg-red-50'>gsc Not Connected</div>
@@ -39,6 +48,18 @@ const GoogleSearchConsoleGraphs = ({ searchConsoleData, refresh_token }: Props) 
 
 export default GoogleSearchConsoleGraphs
 
+
+const SearchConsoleLoadingChart = ({ title }: { title: string }) => {
+
+    return (
+        <div className='w-full border border-blue-100 rounded-2xl p-[6px]'>
+            <div className='w-full border border-blue-100 rounded-xl bg-gradient-to-b from-white to-[#Eff6FF]'>
+                <h2 className="ml-4 mt-4 text-base leading-6 font-medium text-gray-800">{title}</h2>
+                <SearchConsoleLoadingChartSvg />
+            </div>
+        </div>
+    )
+}
 const SearchConsoleChart = ({ searchConsoleData }: { searchConsoleData: PythonApiKeywordDetailSearchConsoleData }) => {
     // Convert data into an array of objects also round the numbers
     const data = Object.entries(searchConsoleData).map(([date, data]) => ({
@@ -49,24 +70,26 @@ const SearchConsoleChart = ({ searchConsoleData }: { searchConsoleData: PythonAp
         position: Number(data.position.toFixed(1))
     }));
 
+    console.log(data)
+
     return (
-        <div className="flex gap-4 w-full h-fit">
-            <div className='w-full border border-blue-50 rounded-2xl p-[6px]'>
+        <div className="flex gap-4 w-full h-[152px]">
+            <div className='w-full border border-blue-100 rounded-2xl p-[6px]'>
                 <div className='w-full border border-blue-100 rounded-xl bg-gradient-to-b from-white to-[#Eff6FF]'>
                     <Chart title="Clicks" data={data} color="#3B82F6" dataKey="clicks" />
                 </div>
             </div>
-            <div className='w-full border border-green-50 rounded-2xl p-[6px]'>
+            <div className='w-full border border-green-100 rounded-2xl p-[6px]'>
                 <div className='w-full border border-green-100 rounded-xl bg-gradient-to-b from-white to-[#ECFDF5]'>
                     <Chart title="CTR" data={data} color="#059669" dataKey="ctr" />
                 </div>
             </div>
-            <div className='w-full border border-yellow-50 rounded-2xl p-[6px]'>
+            <div className='w-full border border-yellow-100 rounded-2xl p-[6px]'>
                 <div className='w-full border border-yellow-100 rounded-xl bg-gradient-to-b from-white to-[#FFFBEB]'>
                     <Chart title="Position" data={data} color="#F59E0B" dataKey="position" />
                 </div>
             </div>
-            <div className='w-full border border-primary-50 rounded-2xl p-[6px]'>
+            <div className='w-full border border-primary-100 rounded-2xl p-[6px]'>
                 <div className='w-full border border-primary-100 rounded-xl bg-gradient-to-b from-white to-[#F8F8FF]'>
                     <Chart title="Impressions" data={data} color="#7857FE" dataKey="impressions" />
                 </div>
@@ -78,7 +101,7 @@ const SearchConsoleChart = ({ searchConsoleData }: { searchConsoleData: PythonAp
 const Chart = ({ title, data, color, dataKey }: { title: string, data: any[], color: string, dataKey: string }) => (
     <>
         <h2 className="ml-4 mt-4 text-base leading-6 font-medium text-gray-800">{title}</h2>
-        <div style={{ width: '100%', height: 85 }}>
+        <div style={{ width: '100%', height: 96 }}>
             <ResponsiveContainer >
                 <AreaChart data={data} style={{ paddingBottom: 0 }}>
                     <defs>

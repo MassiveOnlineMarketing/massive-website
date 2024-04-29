@@ -50,8 +50,8 @@ const TagSelection = () => {
           size='smD'
           buttonClassName="w-[250px]  text-sm text-left"
         >
-          <span className='text-gray-800 '>Tags:</span>
-          {tagSting ? <span className='text-gray-400'>{tagSting}</span> : <span className='text-gray-400'>Select tag...</span>}
+          <span className='text-gray-400 '>Tags:</span>
+          {tagSting ? <span className='text-gray-800'>{tagSting}</span> : <span className='text-gray-800'>All</span>}
           <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </OutlinedButton>
       </PopoverTrigger>
@@ -61,6 +61,12 @@ const TagSelection = () => {
           {
             uniqueTags.length > 0 && (
               <CommandGroup>
+                <CommandItem
+                  value=""
+                  onSelect={() => clearTags()}
+                >
+                  all
+                </CommandItem>
                 {uniqueTags.map((tag) => (
                   <CommandItem
                     key={tag.name}

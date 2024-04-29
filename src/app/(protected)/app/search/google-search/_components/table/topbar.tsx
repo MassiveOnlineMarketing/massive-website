@@ -111,11 +111,11 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
                 {/* Add keyword */}
                 <Tooltip>
                     <TooltipTrigger>
-                        <div className=" ml-2 relative w-fit h-fit m-1">
+                        <div className=" ml-2 relative w-fit h-fit m-1 group">
                             <AddKeywordsFrom buttonClassName=" h-[32px] px-2 rounded-lg  inline-flex items-center justify-center whitespace-nowrap shadow-base bg-white z-40 rounded-lg relative">
-                                <PlusIcon className="w-5 h-5 text-green-500" />
+                                <PlusIcon className="w-5 h-5 text-gray-500 group-hover:text-green-500" />
                             </AddKeywordsFrom>
-                            <div className="absolute top-0 left-0 w-full h-full rounded-[8px] outline outline-4 outline-green-50 bg-green-50 z-30"></div>
+                            <div className="absolute top-0 left-0 w-full h-full rounded-[8px] outline outline-4 outline-primary-50 bg-primary-50 group-hover:outline-green-50 group-hover:bg-green-50 z-30"></div>
                         </div>
                     </TooltipTrigger>
                     <TooltipContent>

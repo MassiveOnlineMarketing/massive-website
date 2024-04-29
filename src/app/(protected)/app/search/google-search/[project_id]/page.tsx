@@ -42,10 +42,10 @@ function Page({ params }: Props) {
     const filteredResults = useFilteredKeywordResults()
 
 
-    // Clean up old results 
-    useEffect(() => {
-        resetKweywordResults()
-    }, [])
+    // // Clean up old results 
+    // useEffect(() => {
+    //     resetKweywordResults()
+    // }, [])
 
     // Fetch project details + keyword results
     useEffect(() => {
@@ -54,7 +54,7 @@ function Page({ params }: Props) {
 
     const fetchProjectDetails = async () => {
         const res = await getGoogleSearchProjectById(params.project_id)
-        // console.log('res', res)
+        console.log('res', res)
         if (!res) return
 
         if (res.websiteId === currentWebsite?.id) {
@@ -70,6 +70,7 @@ function Page({ params }: Props) {
         resetSelectedTags()
 
         const result = await getLatestKeywordResultWithTags(projectId);
+        console.log('result', result)
 
         if (result && result.length > 0) {
 
@@ -77,7 +78,7 @@ function Page({ params }: Props) {
             const filteredKeywords = flattenedKeywords.filter(result => result !== undefined) as KeywordResultWithTagProp[];
 
             // check if the result is empty, happens after routing to project page when keywords are processed yet
-            if (filteredKeywords[0].id === undefined) {
+            if (filteredKeywords.length === 0) {
                 console.log('no result')
             } else {
                 setKeywordResults(filteredKeywords)
@@ -105,7 +106,7 @@ function Page({ params }: Props) {
     }
 
     return (
-        <div className='px-6 w-full'>
+        <div className='px-6 pb-6 w-full'>
             <BreadCrumbsSearchKeywords />
             {keywordResults ? (
                 <ProjectStats />

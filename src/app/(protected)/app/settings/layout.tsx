@@ -68,7 +68,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                         lastPath === 'notifications' ? 'text-primary-500' : 'text-gray-500'
                     )} href='/app/settings/notifications'><BellAlertIcon className='w-5 h-5' /> Notifications</Link> */}
                 </div>
-                <div className='px-8 py-12 w-full bg-white shadow-base rounded-b-2xl rounded-tr-2xl relative z-10'>
+                <div className='px-8 py-12 mb-3 w-full bg-white shadow-base rounded-b-2xl rounded-tr-2xl relative z-10'>
                     {children}
                 </div>
             </div>

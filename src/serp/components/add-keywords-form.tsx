@@ -42,7 +42,7 @@ const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactN
 
   const onSubmit = async (data: Schema) => {
     setOpen(false)
-    console.log('data', data)
+    // console.log('data', data)
 
     if (!projectDetails) {
       return

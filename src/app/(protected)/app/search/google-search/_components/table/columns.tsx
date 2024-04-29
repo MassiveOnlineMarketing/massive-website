@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
+import { ArrowTrendingDownIcon, ArrowTrendingUpIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
 import { GoogleSearchResult } from "@prisma/client"
 
 import { format } from 'date-fns';
@@ -66,7 +66,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     cell: ({ row }) => {
       return (
         <div className="flex mx-auto h-full">
-          <p className=" mx-auto">{row.getValue('position')}</p>
+          <p className="mx-auto text-sm leading-5 font-medium text-gray-800">{row.getValue('position')}</p>
         </div>
       )
     },
@@ -94,11 +94,11 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
       const url = row.getValue('url')
       if (url === null || url === undefined || url === "") {
         return (
-          <p>Not Found</p>
+          <p className="max-auto text-sm leading-5 font-medium text-gray-800">Not Found</p>
         )
       } else {
         return (
-          <p className="mx-auto">
+          <p className="mx-auto text-sm leading-5 font-medium text-gray-800">
             {(row.getValue('url') as string).length > 52
               ? (row.getValue('url') as string).substring(0, 52) + '...'
               : row.getValue('url')}
@@ -119,9 +119,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     },
     cell: ({ row }) => {
       return (
-        <div className="flex mx-auto">
-          <p className=" mx-auto">{row.getValue('firstPosition')}</p>
-        </div>
+        <p className="text-sm leading-5 font-medium text-gray-800">{row.getValue('firstPosition')}</p>
       )
     },
   },
@@ -130,16 +128,14 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "bestPosition",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <p className="flex font-medium text-gray-500" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Best Position
         </p>
       )
     },
     cell: ({ row }) => {
       return (
-        <div className="flex mx-auto">
-          <p className=" mx-auto">{row.getValue('bestPosition')}</p>
-        </div>
+        <p className="text-sm leading-5 font-medium text-gray-800">{row.getValue('bestPosition')}</p>
       )
     },
   },
@@ -148,35 +144,32 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "latestChange",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <p className="flex font-medium text-gray-500" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Latest Change
         </p>
       )
     },
     cell: ({ row }) => {
+      let colorClass = "text-sm leading-5 font-medium text-gray-800";
+      let icon = null;
+
       if (row.original && row.original.latestChange) {
         if (row.original.latestChange > 0) {
-          return (
-            <div className="flex mx-auto">
-              <span className="text-green-500 mx-auto">{row.getValue('latestChange')}</span>
-            </div>
-          )
+          colorClass = "";
+          icon = <ArrowTrendingUpIcon className="w-4 h-4 text-green-500" />;
         } else if (row.original.latestChange < 0) {
-          return (
-            <div className="flex mx-auto">
-              <span className="text-red-500 mx-auto">{row.getValue('latestChange')}</span>
-            </div>
-          )
-
+          colorClass = "";
+          icon = <ArrowTrendingDownIcon className="w-4 h-4 text-red-500" />;
         }
-      } else {
-        return (
-          <div className="flex mx-auto">
-            <span className="text-gray-500 mx-auto">{row.getValue('latestChange')}</span>
-          </div>
-        )
       }
-    },
+
+      return (
+        <div className="flex gap-[2px] items-center">
+          <span className={colorClass} >{row.getValue('latestChange')}</span>
+          {icon}
+        </div>
+      );
+    }
   },
   // * Date Retrieved
   // {
@@ -203,7 +196,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               onClick={() => {
                 if (keyword.url) {
                   navigator.clipboard.writeText(keyword.url)
@@ -212,7 +205,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
             >
               Copy Url
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator /> */}
             <DropdownMenuItem
               onClick={() => {
                 // deleteKeywordsById(keyword.keywordId);
