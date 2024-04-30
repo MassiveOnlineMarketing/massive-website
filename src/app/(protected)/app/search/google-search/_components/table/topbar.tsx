@@ -127,7 +127,7 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
                 <Tooltip>
                     <TooltipTrigger>
                         <OutlinedTextButton className="ml-2" size='smD' buttonClassName="px-2" onClick={() => downloadToExcel(data)} >
-                            <ArrowDownTrayIcon className="w-5 h-5" />
+                            <ArrowDownTrayIcon className="w-5 h-5 text-gray-500" />
                         </OutlinedTextButton>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -140,7 +140,7 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
                     <TooltipTrigger>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <OutlinedTextButton size='smD' className="ml-2" buttonClassName="px-2"><ViewColumnsIcon className="w-5 h-5" /></OutlinedTextButton>
+                                <OutlinedTextButton size='smD' className="ml-2" buttonClassName="px-2"><ViewColumnsIcon className="w-5 h-5 text-gray-500" /></OutlinedTextButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 {table
