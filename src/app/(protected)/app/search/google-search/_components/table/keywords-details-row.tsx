@@ -46,7 +46,7 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
         fetchTopTenResults(keywordData.keywordId)
     }, [keywordData]);
 
-    
+
     const fetchSearchConsoleData = async (keyword: string) => {
         if (!refresh_token) {
             return;
@@ -80,13 +80,15 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
                 hasGscUrl={hasGscUrl}
             />
 
-            <Card className='mt-6'>
-                <CardTitle heading='Keyword Insight' icon={GoogleIconSvg} />
-                <p className='mb-3 pt-2 text-lg leading-7 font-medium text-gray-800'>Details Overview</p>
-                <div className='max-w-[530px] flex flex-col'>
-                    <UserResultDetails keywordData={keywordData} />
-                </div>
-            </Card>
+            {keywordData.position && (
+                <Card className='mt-6'>
+                    <CardTitle heading='Keyword Insight' icon={GoogleIconSvg} />
+                    <p className='mb-3 pt-2 text-lg leading-7 font-medium text-gray-800'>Details Overview</p>
+                    <div className='max-w-[530px] flex flex-col'>
+                        <UserResultDetails keywordData={keywordData} />
+                    </div>
+                </Card>
+            )}
 
             <Card className='my-6 '>
                 <CardTitle heading='Google Data' icon={GoogleIconSvg} />

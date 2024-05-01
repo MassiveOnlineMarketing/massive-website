@@ -43,7 +43,7 @@ const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactN
 
   const onSubmit = async (data: Schema) => {
     setOpen(false)
-    // console.log('data', data)
+    console.log('data', data)
 
     if (!projectDetails) {
       return
@@ -53,15 +53,12 @@ const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactN
 
     try {
       const res = await processNewKeywords(keywordsArray, projectDetails)
-
-      if (res) {
-        toast({
-          description: 'Keywords added',
-          variant: 'success',
-          icon: 'success',
-          duration: 3000
-        })
-      }
+      console.log('res', res)
+      toast({
+        description: "Keywords added",
+        icon: "success",
+        variant: "success",
+      });
     } catch (error) {
       toast({
         description: "Failed to add keywords",
