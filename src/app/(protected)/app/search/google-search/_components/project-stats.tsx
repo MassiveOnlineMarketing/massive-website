@@ -2,7 +2,7 @@
 import React from 'react'
 
 // state
-import { useFilteredKeywordResults } from '@/serp/hooks/useFilteredResults'
+import { useFilteredKeywordResults } from '@/dashboard/google-search/hooks/useFilteredResults'
 
 // charts
 import { Cell, Pie, PieChart } from 'recharts'

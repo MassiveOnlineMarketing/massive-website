@@ -15,8 +15,8 @@ import { GoogleSearchProject } from "@prisma/client";
 
 // Internal functions
 import { createGoogleSearchProject, updateGoogleSearchProject } from "@/dashboard/data/google-search-project";
-import { splitAndTrimKeywords } from "@/serp/lib/utils";
-import { useProcessNewKeywords } from "@/serp/hooks/useProcessNewKeywords";
+import { splitAndTrimKeywords } from "@/dashboard/google-search/lib/utils";
+import { useProcessNewKeywords } from "@/dashboard/google-search/hooks/useProcessNewKeywords";
 
 // Store
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
@@ -73,7 +73,8 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
         if (!currentWebsite) {
             toast({
                 description: "Please add a website first",
-                variant: "destructive",
+                variant: "warning",
+                icon: "warning",
                 duration: 5000,
             })
             setOpen(false)
@@ -103,17 +104,19 @@ const GoogleSearchProjectFormDialog: React.FC<GoogleSearchProjectFormDialogProps
                 setOpen(false)
                 reset()
                 toast({
-                    description: `Google Search Campaign ${googleSearchProject ? 'updated ' : 'created '}successfully`,
+                    description: `Google Search Campaign ${googleSearchProject ? 'updated ' : 'created '}`,
                     variant: "success",
+                    icon: "success",
                     duration: 5000,
                 })
                 router.push(`/app/search/google-search/${res.id}`)
             }
         } catch (error) {
-            console.error(`Error ${googleSearchProject ? 'updating ' : 'creating '}website:`, error);
+            console.error(`Error ${googleSearchProject ? 'updating' : 'creating'} website:`, error);
             toast({
-                description: `An error occurred while ${googleSearchProject ? 'updating ' : 'creating '}the Google Search Campaign. Please try again.`,
+                description: `${googleSearchProject ? 'Updating' : 'Creating'} the Google Search Campaign. Please try again.`,
                 variant: "destructive",
+                icon: "destructive",
                 duration: 5000,
             })
         }

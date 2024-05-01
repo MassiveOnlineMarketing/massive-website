@@ -3,7 +3,7 @@
 import React from 'react'
 
 import { DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuPortal, DropdownMenuSubContent } from '@/components/ui/dropdown-menu'
-import { useTags } from '../hooks/useTags'
+import { useTags } from '@/dashboard/google-search/hooks/useTags'
 
 
 export const DeleteTagFromKeyword = ({ selectedRows, onActionFinished }: { selectedRows: any, onActionFinished: () => void }) => {

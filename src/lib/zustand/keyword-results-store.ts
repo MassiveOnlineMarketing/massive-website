@@ -1,4 +1,4 @@
-import { KeywordResultWithTagProp } from "@/serp/serp-types";
+import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
 import { create } from "zustand"
 
 

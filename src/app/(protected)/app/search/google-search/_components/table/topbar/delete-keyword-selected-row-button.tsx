@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dialog, DialogContent, DialogTriggerNoButton } from '@/website/features/dialog/dialog'
-import { useKeywords } from '../hooks/useKeywords';
+import { useKeywords } from '@/dashboard/google-search/hooks/useKeywords';
 
 
 export const DeleteKeywordSelectedRowButton = ({selectedRows, children }: { selectedRows: any, children: React.ReactNode }) => {
@@ -25,7 +25,5 @@ export const DeleteKeywordSelectedRowButton = ({selectedRows, children }: { sele
                 </DialogContent>
             </Dialog>
         </>
-
     )
-
 }

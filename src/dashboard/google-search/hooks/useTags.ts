@@ -64,8 +64,9 @@ export const useTags = () => {
           : `Tag ${tag.name} added to keywords`;
 
         toast({
-          title: toastTitle,
+          description: toastTitle,
           variant: 'success',
+          icon: 'success',
           duration: 5000,
         });
 
@@ -74,8 +75,9 @@ export const useTags = () => {
       }
     } catch (error) {
       toast({
-        title: `Failed to add tag to keywords`,
+        description: `Failed to add tag to keywords`,
         variant: 'destructive',
+        icon: 'destructive',
         duration: 5000,
       })
       console.error('Failed to add tag to keywords:', error);
@@ -148,8 +150,9 @@ export const useTags = () => {
           : `Tag ${tagName} deleted from keywords`;
 
         toast({
-          title: toastTitle,
+          description: toastTitle,
           variant: 'success',
+          icon: 'success',
           duration: 5000,
         });
 
@@ -159,8 +162,9 @@ export const useTags = () => {
 
     } catch (error) {
       toast({
-        title: `Failed to delete tag from keywords`,
+        description: `Failed to delete tag from keywords`,
         variant: 'destructive',
+        icon: 'destructive',
         duration: 5000,
       })
       console.error('Failed to delete tag from keywords:', error);

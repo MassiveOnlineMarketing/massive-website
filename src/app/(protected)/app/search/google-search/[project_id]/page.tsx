@@ -7,11 +7,11 @@ import { useWebsiteDetailsStore } from '@/lib/zustand/website-details-store'
 import { useGoogleSearchProjectDetailsStore } from '@/lib/zustand/google-search-details-store';
 import { useKeywordResultsStore } from '@/lib/zustand/keyword-results-store';
 
-import { KeywordResultWithTagProp } from '@/serp/serp-types';
-import { getLatestKeywordResultWithTags } from '@/serp/utils/utils';
+import { KeywordResultWithTagProp } from '@/dashboard/google-search/serp-types';
+import { getLatestKeywordResultWithTags } from '@/dashboard/google-search/actions/get-latest-keywords-with-tags';
 import { getGoogleSearchProjectById } from '@/dashboard/data/google-search-project'
-import { useKeywords } from '@/serp/hooks/useKeywords';
-import { useFilteredKeywordResults } from '@/serp/hooks/useFilteredResults';
+import { useKeywords } from '@/dashboard/google-search/hooks/useKeywords';
+import { useFilteredKeywordResults } from '@/dashboard/google-search/hooks/useFilteredResults';
 
 // Components
 import ProjectStats from '../_components/project-stats';
@@ -54,7 +54,6 @@ function Page({ params }: Props) {
 
     const fetchProjectDetails = async () => {
         const res = await getGoogleSearchProjectById(params.project_id)
-        console.log('res', res)
         if (!res) return
 
         if (res.websiteId === currentWebsite?.id) {
@@ -70,7 +69,6 @@ function Page({ params }: Props) {
         resetSelectedTags()
 
         const result = await getLatestKeywordResultWithTags(projectId);
-        console.log('result', result)
 
         if (result && result.length > 0) {
 

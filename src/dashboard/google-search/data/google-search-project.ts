@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { z } from "zod";
-import { UpdateProjectSchema } from "../../../serp/schema";
+import { UpdateProjectSchema } from "../schema";
 
 
 /**

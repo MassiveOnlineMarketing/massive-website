@@ -13,8 +13,8 @@ import { useWebsiteDetailsStore } from '@/lib/zustand/website-details-store';
 // Components
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import WebsiteSelectionButton from './website-selection-button';
-import WebsiteFormDialog from './website-form-dialog';
-import GoogleSearchProjectFormDialog from './project-form-dialog';
+import WebsiteFormDialog from '../website-form-dialog';
+import GoogleSearchProjectFormDialog from '../project-form-dialog';
 
 // Assets
 import { Cog6ToothIcon, DocumentMagnifyingGlassIcon, PresentationChartLineIcon, QuestionMarkCircleIcon, LockClosedIcon } from '@heroicons/react/20/solid';

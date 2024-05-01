@@ -1,6 +1,6 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef, Row, SortingFn } from "@tanstack/react-table"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,14 +16,39 @@ import { GoogleSearchResult } from "@prisma/client"
 
 import { format } from 'date-fns';
 
+const urlSortingFn: SortingFn<GoogleSearchResult> = (rowA: Row<GoogleSearchResult>, rowB: Row<GoogleSearchResult>, columnId) => {
+  const valueA = rowA.getValue(columnId) as string || "";
+  const valueB = rowB.getValue(columnId) as string || "";
+
+  if (valueA && !valueB) return -1;
+  if (!valueA && valueB) return 1;
+  return valueA.localeCompare(valueB);
+}
+
+const positionSortingFn: SortingFn<GoogleSearchResult> = (rowA: Row<GoogleSearchResult>, rowB: Row<GoogleSearchResult>, columnId) => {
+  const valueA = rowA.getValue(columnId) as number || null;
+  const valueB = rowB.getValue(columnId) as number || null;
+
+  if (valueA === null && valueB !== null) return 1;
+  if (valueB === null && valueA !== null) return -1;
+  if (valueA === null && valueB === null) return 0;
+  
+  // Add a null check for valueA and valueB before subtraction
+  if (valueA !== null && valueB !== null) {
+    return valueA - valueB;
+  } else {
+    // Decide what to return when either valueA or valueB is null
+    return 0;
+  }
+}
 
 
-export const columns = (handleKeywordsDelete: (keywordsId: string) => void): ColumnDef<GoogleSearchResult>[] => [
+export const columns = (
+  handleKeywordsDelete: (keywordsId: string) => void): ColumnDef<GoogleSearchResult>[] => [
   // * Select column
   {
     id: "select",
     header: ({ table }) => (
-
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
@@ -58,7 +83,7 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
     accessorKey: "position",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
+        <p className="flex font-medium text-gray-600 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
           Position
         </p>
       )
@@ -70,23 +95,29 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
         </div>
       )
     },
+    sortingFn: positionSortingFn,
   },
   // * Name
   {
     accessorKey: "keywordName",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
+        <p className="flex font-medium text-gray-600" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
           Keyword
         </p>
       )
     },
+    cell: ({ row }) => {
+      return (
+        <p className="text-sm leading-5 font-medium text-gray-800">{row.getValue('keywordName')}</p>
+      )
+    } 
   },
   // * Url
   {
     accessorKey: "url",
     header: ({ column }) => (
-      <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
+      <p className="flex font-medium text-gray-600 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
         Url
       </p>
     ),
@@ -94,11 +125,11 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
       const url = row.getValue('url')
       if (url === null || url === undefined || url === "") {
         return (
-          <p className="max-auto text-sm leading-5 font-medium text-gray-800">Not Found</p>
+          <p className="max-auto text-sm leading-5 font-medium text-gray-500">Not Found</p>
         )
       } else {
         return (
-          <p className="mx-auto text-sm leading-5 font-medium text-gray-800">
+          <p className="mx-auto text-sm leading-5 font-medium text-gray-500">
             {(row.getValue('url') as string).length > 52
               ? (row.getValue('url') as string).substring(0, 52) + '...'
               : row.getValue('url')}
@@ -106,13 +137,14 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
         )
       }
     },
+    sortingFn: urlSortingFn, 
   },
   // * First Position
   {
     accessorKey: "firstPosition",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <p className="flex font-medium text-gray-600 mx-auto" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           First Position
         </p>
       )
@@ -122,13 +154,14 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
         <p className="text-sm leading-5 font-medium text-gray-800">{row.getValue('firstPosition')}</p>
       )
     },
+    sortingFn: positionSortingFn,
   },
   // * Best Position
   {
     accessorKey: "bestPosition",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <p className="flex font-medium text-gray-600" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Best Position
         </p>
       )
@@ -138,13 +171,14 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
         <p className="text-sm leading-5 font-medium text-gray-800">{row.getValue('bestPosition')}</p>
       )
     },
+    sortingFn: positionSortingFn,
   },
   // * Latest Change
   {
     accessorKey: "latestChange",
     header: ({ column }) => {
       return (
-        <p className="flex font-medium text-gray-500" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <p className="flex font-medium text-gray-600" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Latest Change
         </p>
       )
@@ -169,17 +203,18 @@ export const columns = (handleKeywordsDelete: (keywordsId: string) => void): Col
           {icon}
         </div>
       );
-    }
+    },
+    sortingFn: positionSortingFn,
   },
   // * Date Retrieved
-  // {
-  //   accessorKey: "createdAt",
-  //   header: "Date Retrieved",
-  //   cell: ({ row }) => {
-  //     const date = new Date(row.getValue('createdAt'));
-  //     return format(date, 'MM/dd/yyyy'); // or any other format you prefer
-  //   },
-  // },
+  {
+    accessorKey: "createdAt",
+    header: "Date Retrieved",
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('createdAt'));
+      return <p className="flex font-medium text-gray-600">{format(date, 'MM/dd/yyyy')}</p>; // or any other format you prefer
+    },
+  },
   // * Actions
   {
     id: "actions",

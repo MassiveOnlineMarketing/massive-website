@@ -8,7 +8,7 @@ import { GoogleSearchResult } from "@prisma/client";
 // Components
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import KeywordDetailsRow from "./keyword-details-row/keywords-details-row";
+import KeywordDetailsRow from "./keywords-details-row";
 import { DataTableTopBar } from "./topbar";
 import { DataTablePagination } from "./pagination";
 import KeywordTableHead from "./keyword-table-head";

@@ -49,7 +49,7 @@ const buttonVariants = cva(
         md: "px-[24px] py-[12px] text-base font-semibold leading-6 gap-[8px]",
         lg: "px-[32px] py-[14px] text-base font-semibold leading-6 gap-[12px]",
 
-        smD: 'px-[16px] h-[32px] text-sm font-medium leading-5 gap-[6px]'
+        smD: 'px-[16px] h-[36px] text-sm font-medium leading-5 gap-[6px]'
       },
       option: {
         icon: "items-center p-4",

@@ -2,12 +2,12 @@
 
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useProcessNewKeywords } from '../hooks/useProcessNewKeywords'
+import { useProcessNewKeywords } from '@/dashboard/google-search/hooks/useProcessNewKeywords'
 
 // utils
-import { KeywordsSchema } from '../schema'
+import { KeywordsSchema } from '@/dashboard/google-search/schema'
 import { z } from 'zod'
-import { splitAndTrimKeywords } from '../lib/utils'
+import { splitAndTrimKeywords } from '@/dashboard/google-search/lib/utils'
 
 // components
 import { Dialog, DialogContent, DialogHeader, DialogTriggerNoButton } from '@/website/features/dialog/dialog'
@@ -16,11 +16,11 @@ import { useGoogleSearchProjectDetailsStore } from '@/lib/zustand/google-search-
 
 type Schema = z.infer<typeof KeywordsSchema>
 
-const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactNode , buttonClassName?: string}) => {
+const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactNode, buttonClassName?: string }) => {
   const [open, setOpen] = React.useState(false)
   const projectDetails = useGoogleSearchProjectDetailsStore(state => state.ProjectDetails)
   const { processNewKeywords, isLoading, error } = useProcessNewKeywords()
-  const {toast} = useToast()
+  const { toast } = useToast()
   const {
     register,
     handleSubmit,
@@ -33,10 +33,11 @@ const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactN
       toast({
         description: error,
         variant: 'destructive',
+        icon: 'destructive',
         duration: 3000
       })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
 
@@ -50,7 +51,24 @@ const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactN
 
     const keywordsArray = splitAndTrimKeywords(data.keywords)
 
-    processNewKeywords(keywordsArray, projectDetails)
+    try {
+      const res = await processNewKeywords(keywordsArray, projectDetails)
+
+      if (res) {
+        toast({
+          description: 'Keywords added',
+          variant: 'success',
+          icon: 'success',
+          duration: 3000
+        })
+      }
+    } catch (error) {
+      toast({
+        description: "Failed to add keywords",
+        variant: "destructive",
+        icon: "destructive",
+      });
+    }
 
     if (!isLoading) {
       reset()
