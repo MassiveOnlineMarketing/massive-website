@@ -25,7 +25,7 @@ import {
 import { OutlinedTextButton } from "@/components/ui/text-button";
 
 // Assets
-import { ArrowDownTrayIcon, MagnifyingGlassIcon, TrashIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
+import { ArrowDownTrayIcon, MagnifyingGlassIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/20/solid";
 
 // Topbar components
@@ -75,16 +75,7 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
             </div>
             <div className="mr-auto">
                 {table.getSelectedRowModel().rows.length > 0 && (
-                    <Tooltip>
-                        <TooltipTrigger>
-                            <DeleteKeywordSelectedRowButton selectedRows={table.getSelectedRowModel()} >
-                                <OutlinedTextButton outlineClassName="outline-red-50 bg-red-50" size='smD' className="ml-1" buttonClassName="px-2"><TrashIcon className="w-5 h-5 text-red-500" /></OutlinedTextButton>
-                            </DeleteKeywordSelectedRowButton>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            {table.getSelectedRowModel().rows.length > 1 ? <p>Delete Keywords</p> : <p>Delete Keyword</p>}
-                        </TooltipContent>
-                    </Tooltip>
+                    <DeleteKeywordSelectedRowButton selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} />
                 )}
             </div>
 

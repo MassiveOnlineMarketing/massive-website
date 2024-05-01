@@ -44,7 +44,7 @@ export const useKeywords = () => {
         });
       } else if (responses.length > 1) {
         toast({
-          description: `The keyword is deleted.`,
+          description: `The keywords are deleted.`,
           icon: 'success',
           variant: 'success',
         })
