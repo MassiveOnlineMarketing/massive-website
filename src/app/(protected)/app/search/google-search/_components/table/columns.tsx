@@ -1,20 +1,12 @@
 "use client"
 
 import { ColumnDef, Row, SortingFn } from "@tanstack/react-table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowTrendingDownIcon, ArrowTrendingUpIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
+import { ArrowTrendingDownIcon, ArrowTrendingUpIcon } from "@heroicons/react/20/solid"
 import { GoogleSearchResult } from "@prisma/client"
 
 import { format } from 'date-fns';
+import KeywordRowActionDropdown from "./column/keyword-row-action-dropdown"
 
 const urlSortingFn: SortingFn<GoogleSearchResult> = (rowA: Row<GoogleSearchResult>, rowB: Row<GoogleSearchResult>, columnId) => {
   const valueA = rowA.getValue(columnId) as string || "";
@@ -32,7 +24,7 @@ const positionSortingFn: SortingFn<GoogleSearchResult> = (rowA: Row<GoogleSearch
   if (valueA === null && valueB !== null) return 1;
   if (valueB === null && valueA !== null) return -1;
   if (valueA === null && valueB === null) return 0;
-  
+
   // Add a null check for valueA and valueB before subtraction
   if (valueA !== null && valueB !== null) {
     return valueA - valueB;
@@ -43,8 +35,7 @@ const positionSortingFn: SortingFn<GoogleSearchResult> = (rowA: Row<GoogleSearch
 }
 
 
-export const columns = (
-  handleKeywordsDelete: (keywordsId: string) => void): ColumnDef<GoogleSearchResult>[] => [
+export const columns = (): ColumnDef < GoogleSearchResult > [] => [
   // * Select column
   {
     id: "select",
@@ -111,7 +102,7 @@ export const columns = (
       return (
         <p className="text-sm leading-5 font-medium text-gray-800">{row.getValue('keywordName')}</p>
       )
-    } 
+    }
   },
   // * Url
   {
@@ -137,7 +128,7 @@ export const columns = (
         )
       }
     },
-    sortingFn: urlSortingFn, 
+    sortingFn: urlSortingFn,
   },
   // * First Position
   {
@@ -209,10 +200,16 @@ export const columns = (
   // * Date Retrieved
   {
     accessorKey: "createdAt",
-    header: "Date Retrieved",
+    header: ({ column }) => {
+      return (
+        <p className="flex font-medium text-gray-600" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Date Retrieved
+        </p>
+      )
+    },
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
-      return <p className="flex font-medium text-gray-600">{format(date, 'MM/dd/yyyy')}</p>; // or any other format you prefer
+      return <p className=" text-sm leading-5 font-medium text-gray-500">{format(date, 'MM/dd/yyyy')}</p>; // or any other format you prefer
     },
   },
   // * Actions
@@ -222,39 +219,7 @@ export const columns = (
       const keyword = row.original
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='dashboard' >
-              <span className="sr-only">Open menu</span>
-              <EllipsisHorizontalIcon className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem
-              onClick={() => {
-                if (keyword.url) {
-                  navigator.clipboard.writeText(keyword.url)
-                }
-              }}
-            >
-              Copy Url
-            </DropdownMenuItem>
-            <DropdownMenuSeparator /> */}
-            <DropdownMenuItem
-              onClick={() => {
-                // deleteKeywordsById(keyword.keywordId);
-                handleKeywordsDelete(keyword.keywordId)
-              }}
-              className='text-red-500 bg-red-200 rounded-[4px] focus:bg-red-300 focus:text-red-600 cursor-pointer'
-            >
-
-              Delete
-              {/* Delete Keyword */}
-            </DropdownMenuItem>
-            {/* <DropdownMenuItem>View payment details</DropdownMenuItem> */}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <KeywordRowActionDropdown keyword={keyword} />
       )
     },
   },

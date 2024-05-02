@@ -89,10 +89,7 @@ function Page({ params }: Props) {
 
     const { isDialogOpen, setIsDialogOpen, confirmDelete, cancelDelete, deleteKeywords } = useKeywords()
 
-    const handleKeywordsDelete = (keywordId: string) => {
-        console.log('delete', keywordId)
-        deleteKeywords([keywordId])
-    }
+
 
     if (!googleSearchProjectDetails) {
         return (
@@ -112,7 +109,7 @@ function Page({ params }: Props) {
                 <div>Loading...</div>
             )}
             <DataTable
-                columns={columns(handleKeywordsDelete)}
+                columns={columns()}
                 data={filteredResults}
             />
 

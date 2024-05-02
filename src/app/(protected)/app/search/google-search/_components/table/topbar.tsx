@@ -54,7 +54,7 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
             <TagSelection />
 
             {/* Selected rows */}
-            <div >
+            <div className="ml-2">
                 {table.getSelectedRowModel().rows.length > 0 && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -73,7 +73,7 @@ export function DataTableTopBar<TData>({ table, data, deselectAllRows, sorting, 
                     </DropdownMenu>
                 )}
             </div>
-            <div className="mr-auto">
+            <div className="mr-auto ml-2">
                 {table.getSelectedRowModel().rows.length > 0 && (
                     <DeleteKeywordSelectedRowButton selectedRows={table.getSelectedRowModel()} onActionFinished={deselectAllRows} />
                 )}
