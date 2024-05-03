@@ -244,6 +244,7 @@ export const columns = (): ColumnDef<GoogleSearchProjectsWithLatestResult>[] => 
         },
         cell: ({ row }) => {
             const date = new Date(row.getValue('createdAt'));
+            if (date.toString() === 'Invalid Date') return <p className=" text-sm leading-5 font-medium text-gray-500">Not yet Checked</p>;
             return <p className=" text-sm leading-5 font-medium text-gray-500">{format(date, 'MM/dd/yyyy')}</p>; // or any other format you prefer
         },
     },

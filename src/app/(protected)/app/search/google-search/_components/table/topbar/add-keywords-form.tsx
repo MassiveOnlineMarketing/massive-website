@@ -54,12 +54,6 @@ const AddKeywordsFrom = ({ children, buttonClassName }: { children: React.ReactN
 
     try {
       const res = await processNewKeywords(keywordsArray, projectDetails)
-      console.log('res', res)
-      toast({
-        description: "Keywords added",
-        icon: "success",
-        variant: "success",
-      });
     } catch (error) {
       toast({
         description: "Failed to add keywords",

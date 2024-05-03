@@ -5,7 +5,7 @@ const BreadCrumbsSearchKeywords = ({ projectName }: { projectName?: string }) =>
     <p className='p-6 w-full inline-flex gap-2 text-sm leading-5 font-base text-gray-400 border-b border-gray-200'>
       <span>Home</span>
       <span>&gt;</span>
-      <span>Dashboard</span>
+      <span>Search</span>
       <span>&gt;</span>
       <span>Google Search Campaign</span>
       {

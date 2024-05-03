@@ -12,6 +12,7 @@ export function useProcessNewKeywords() {
   const [error, setError] = useState<string | null>(null);
 
   const user = useCurrentUser();
+  const { toast } = useToast();
 
   /**
    * ? Processes an array of keywords in batches and sends them to the server for processing.
@@ -39,8 +40,15 @@ export function useProcessNewKeywords() {
       return;
     }
 
-    if (keywordsArray.length >= user?.credits) {
-      setError('Not enough credits to process all keywords');
+    if (keywordsArray.length > user?.credits) {
+      // setError('Not enough credits to process all keywords');
+      const neededCredits = keywordsArray.length - user?.credits ;
+      toast({
+        description: `You need ${neededCredits} more credits to process all keywords`,
+        variant: 'destructive',
+        icon: 'destructive',
+      })
+
       setIsLoading(false);
       return;
     }
@@ -81,6 +89,11 @@ export function useProcessNewKeywords() {
           await decrementDisplayCredits(updatedResults.length);
 
           addResults(updatedResults)
+          toast({
+            description: 'Keywords processed successfully',
+            variant: 'success',
+            icon: 'success',
+          })
         } else {
           setError(resultResponse.error)
         }

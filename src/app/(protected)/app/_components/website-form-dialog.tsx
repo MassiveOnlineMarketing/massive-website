@@ -174,7 +174,7 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({ open, setOpen, we
                         )}
                     />
                     {
-                        !refresh_token && <p className="mt-4 w-fit mx-auto text-gray-500 font-normal">Authenticate your <Link href={DEFAULT_APP_SETTING_PAGE} className="text-primary-500">Search Console</Link> Account</p>
+                        !refresh_token && <p className="mt-4 w-fit mx-auto text-gray-500 font-normal">Authenticate your <Link href='/app/settings/itegrations' className="text-primary-500">Search Console</Link> Account</p>
                     }
 
                     <button
