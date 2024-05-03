@@ -9,14 +9,28 @@ import Credits from '@/dashboard/components/credits';
 import { Button } from '@/components/ui/button';
 
 import { MassiveLogoColor } from '@/assets/branding'
+import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 
 
 
 
+/**
+ * Renders the home screen banner component.
+ * 
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The breadcrumb to be rendered inside the component.
+ * @param {string} props.className - The CSS class name for the component.
+ * @returns {JSX.Element} The rendered home screen banner component.
+ */
 const HomeScreenBanner = ({ children, className }: { children?: React.ReactNode, className?: string }) => {
 
     const user = useCurrentUser()
 
+    /**
+     * Gets the appropriate greeting based on the current hour.
+     * 
+     * @returns {string} The greeting message.
+     */
     const getGreeting = () => {
         const currentHour = new Date().getHours();
         if (currentHour < 12) {
@@ -44,7 +58,7 @@ const HomeScreenBanner = ({ children, className }: { children?: React.ReactNode,
                         <p className='text-gray-600'>{user?.name}</p>
                     </div>
                     <div>
-                        <Button size='sm' className='text-primary-500 bg-white'>button</Button>
+                        <Button size='sm' className='text-primary-500 bg-white'><ShieldCheckIcon className='w-5 h-5 mr-2' />Closed Beta</Button>
                     </div>
                 </div>
             </div>

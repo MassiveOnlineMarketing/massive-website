@@ -51,14 +51,14 @@ export const apiAuthPrefix = "/api/auth";
  * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/app";
+export const DEFAULT_LOGIN_REDIRECT = "/app/search";
 
 /**
  * The default route for multi-step form
  * @type {string}
  */
 export const DEFAULT_MULTISTEP_FORM_ROUTE = "/vragenlijst";
-export const DEFAULT_APP_SETTING_PAGE = "/app/settings";
+export const DEFAULT_APP_SETTING_PAGE = "/app/settings/profile";
 
 /**
  * The base URL of the website.

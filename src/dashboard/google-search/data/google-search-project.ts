@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { z } from "zod";
 import { UpdateProjectSchema } from "../schema";
+import { Website } from "@prisma/client";
 
 
 /**
@@ -83,6 +84,66 @@ export const updateProjectDetails = async (projectId: string, data: UpdateProjec
 
     return project;
   }
+}
+
+export type GoogleSearchProjectsWithLatestResult = {
+  id: string;
+  website: Website;
+  projectName: string;
+  domainUrl: string;
+  language: string;
+  country: string;
+  improved: number;
+  worsened: number;
+  total: number;
+  topThree: number;
+  topTen: number;
+  topHundred: number;
+  averagePosition: number;
+  createdAt: Date;
+
+}
+
+export const getUsersGoogleSearchProjectsWithLatestProjectResult = async (userId: string) => {
+
+  if (!userId) {
+    return
+  }
+
+  const projects = await db.googleSearchProject.findMany({
+    where: {
+      userId: userId
+    },
+    include: {
+      website: true,
+      results: {
+        orderBy: {
+          createdAt: 'desc'
+        },
+        take: 1
+      }
+    }
+
+  })
+
+  return projects.map(project => {
+    return {
+      id: project.id,
+      website: project.website,
+      projectName: project.projectName,
+      domainUrl: project.domainUrl,
+      language: project.language,
+      country: project.country,
+      improved: project.results[0]?.improved,
+      worsened: project.results[0]?.worsened,
+      total: project.results[0]?.total,
+      topThree: project.results[0]?.topThree,
+      topTen: project.results[0]?.topTen,
+      topHundred: project.results[0]?.topHundred,
+      averagePosition: project.results[0]?.averagePosition,
+      createdAt: project.results[0]?.createdAt
+    };
+  });
 }
 
 /**

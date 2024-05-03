@@ -18,7 +18,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             <HomeScreenBanner className='m-3'>
-                <Link href='/app'>Home</Link>
+                <Link href='/app/search'>Home</Link>
                 <ChevronRightIcon className='h-4 w-4' />
                 <span>Settings</span>
                 <ChevronRightIcon className='h-4 w-4' />

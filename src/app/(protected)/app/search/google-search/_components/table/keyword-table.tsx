@@ -144,9 +144,7 @@ function DataTable<TData, TValue>({
                 <React.Fragment key={row.id}>
                   <TableRow
                     data-state={row.getIsSelected() && "selected"}
-                    className={cn(
-                      { "border-t border-gray-200": index !== 0 },
-                    )}
+                    className='border-b border-gray-200 hover:bg-neutral-100/50'
                     // handle click row, open keyword detail
                     onClick={handleClickRow(row.id)}
                   >

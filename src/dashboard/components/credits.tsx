@@ -48,7 +48,7 @@ const Credits = ({ user }: { user: ExtendedUser | undefined }): JSX.Element => {
 
     return (
         <div className='absolute top-[22px] right-[22px]'>
-            <Tooltip>
+            <Tooltip delayDuration={0}>
                 <TooltipTrigger className='bg-white shadow-base pr-4 pl-3 py-2 rounded-lg flex gap-1 text-sm'>
                     <CreditCardIcon className='w-5 h-5 text-gray-500' /> <span>{user?.credits || 0}</span> <span className='text-gray-400'>Credits</span>
                 </TooltipTrigger>

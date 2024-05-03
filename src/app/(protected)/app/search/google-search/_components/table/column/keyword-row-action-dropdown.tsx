@@ -142,7 +142,7 @@ const KeywordRowActionDropdown = ({ keyword }: Props) => {
                         event.preventDefault();
                         handleKeywordsDelete(keyword.keywordId)
                     }}
-                    className='text-red-500 bg-red-200 rounded-[4px] focus:bg-red-300 focus:text-red-600 cursor-pointer'
+                    className='text-red-500 border border-red-500 rounded-md focus:bg-red-50 focus:text-red-600 cursor-pointer'
                 >
 
                     Delete
