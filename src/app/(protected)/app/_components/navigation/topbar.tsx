@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image'
 
-import { ExtendedUser } from '../../../../../next-auth';
+import { ExtendedUser } from '../../../../../../next-auth';
 import { logout } from '@/auth/actions/logout'
 import { useCurrentUser } from '@/auth/hooks/use-current-user'
 import Credits from '@/dashboard/components/credits';
@@ -42,7 +42,6 @@ const TopBar = ({
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
 
                 <div className="flex items-center gap-x-4 lg:gap-x-6 ml-auto">
-                    {user && <Credits user={user} />}
 
                     {/* Separator */}
                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />

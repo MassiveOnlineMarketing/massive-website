@@ -51,7 +51,7 @@ export function SortingRows({ sorting, setSorting }: SortingRowsProps) {
         },
         {
             id: 'createdAt',
-            label: 'Created At'
+            label: 'Date Retrieved'
         }
     ]
 
@@ -69,6 +69,11 @@ export function SortingRows({ sorting, setSorting }: SortingRowsProps) {
         return item ? item.label : undefined;
     };
 
+    const resetSort = () => {
+        setSortState({});
+        setSorting([]);
+    }
+
     return (
         <Popover open={tagPopoverOpen} onOpenChange={setTagPopoverOpen}>
             <PopoverTrigger asChild>
@@ -79,7 +84,7 @@ export function SortingRows({ sorting, setSorting }: SortingRowsProps) {
                     buttonClassName="w-[220px] font-medium text-sm text-left justify-start"
                 >
                     <span className='text-gray-400 '>Sort by:</span>
-                    {sorting.length < 1 ? <span className='text-gray-800'>Select sorting...</span> : <span className='text-gray-800'>{getLabelById(sorting[0]?.id)}</span>}
+                    {sorting.length < 1 ? <span className='text-gray-800'>Not Sorted...</span> : <span className='text-gray-800'>{getLabelById(sorting[0]?.id)}</span>}
 
                     {/* {tagSting ? <span>{tagSting}</span> : <span>Select tag...</span>} */}
                     {sorting.length > 0 && (sorting[0]?.desc ? <ChevronDownIcon className="ml-auto w-4 h-4 text-gray-400" /> : <ChevronUpIcon className="ml-auto w-4 h-4 text-gray-400" />)}
@@ -98,6 +103,11 @@ export function SortingRows({ sorting, setSorting }: SortingRowsProps) {
                                 {sorting[0]?.id === element.id && (sorting[0]?.desc ? <ChevronDownIcon className="ml-auto w-4 h-4 text-gray-500" /> : <ChevronUpIcon className="ml-auto w-4 h-4 text-gray-500" />)}
                             </CommandItem>
                         ))}
+                        <CommandItem
+                            onSelect={resetSort}
+                        >
+                            No Sorting
+                        </CommandItem>
                     </CommandGroup>
                 </Command>
             </PopoverContent>

@@ -17,7 +17,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
                 )}
                 {...props}
             >
-                <div className='w-full p-6 bg-white rounded-xl'>
+                <div className='w-full p-6 bg-white rounded-xl shadow-base'>
                     {children}
                 </div>
             </div >

@@ -15,8 +15,13 @@ type Data = {
     domainUrl: string;
     gscUrl: string;
 }
-export const createWebsite = async (userId: string, data: Data) => {
-    console.log('createWebsite', userId, data)
+type CreateWebsiteProps = {
+    userId: string;
+    data: Data;
+}
+
+export const createWebsite = async ({ userId, data }: CreateWebsiteProps) => {
+    // console.log('createWebsite', userId, data)
     const websiteData: any = {
         userId,
         websiteName: data.websiteName,
@@ -34,8 +39,14 @@ export const createWebsite = async (userId: string, data: Data) => {
     return website;
 };
 
-export const updateWebsite = async (userId: string, data: Data, websiteId: string) => {
-    console.log('updateWebsite', userId, data, websiteId)
+type UpdateWebsiteProps = {
+    userId: string;
+    data: Data;
+    websiteId: string;
+}
+
+export const updateWebsite = async ({ userId, data, websiteId }: UpdateWebsiteProps) => {
+    // console.log('updateWebsite', userId, data, websiteId)
     const websiteData: any = {
         userId,
         websiteName: data.websiteName,
@@ -49,8 +60,6 @@ export const updateWebsite = async (userId: string, data: Data, websiteId: strin
     if (data.gscUrl === 'noWebsite') {
         websiteData.gscUrl = null;
     }
-
-    console.log('websiteData', websiteData)
 
     const website = await db.website.update({
         where: { id: websiteId },

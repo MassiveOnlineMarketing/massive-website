@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react'
 
-import { KeywordResultWithTagProp } from '@/serp/serp-types'
+import { KeywordResultWithTagProp } from '@/dashboard/google-search/serp-types'
 
 // Hooks and Store
 import { useGoogleSearchProjectDetailsStore } from '@/lib/zustand/google-search-details-store'
-import { useProcessNewKeywords } from '@/serp/hooks/useProcessNewKeywords';
+import { useProcessNewKeywords } from '@/dashboard/google-search/hooks/useProcessNewKeywords';
 import { useToast } from '@/website/features/toast/use-toast';
 
 // Components
@@ -42,15 +42,15 @@ const RelatedSearchesComponent = ({ keywordData }: { keywordData: KeywordResultW
         try {
             await processNewKeywords(selectedSearches, currentProject);
             toast({
-                title: "Success",
-                description: "Keywords added successfully",
+                description: "Keywords added",
+                icon: "success",
                 variant: "success",
             });
         } catch (error) {
             toast({
-                title: "Error",
                 description: "Failed to add keywords",
                 variant: "destructive",
+                icon: "destructive",
             });
         }
         setSelectedSearches([]);

@@ -8,7 +8,7 @@ import { GoogleSearchResult } from "@prisma/client";
 // Components
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import KeywordDetailsRow from "./keyword-details-row/keywords-details-row";
+import KeywordDetailsRow from "./keywords-details-row";
 import { DataTableTopBar } from "./topbar";
 import { DataTablePagination } from "./pagination";
 import KeywordTableHead from "./keyword-table-head";
@@ -144,9 +144,7 @@ function DataTable<TData, TValue>({
                 <React.Fragment key={row.id}>
                   <TableRow
                     data-state={row.getIsSelected() && "selected"}
-                    className={cn(
-                      { "border-t border-gray-200": index !== 0 },
-                    )}
+                    className='border-b border-gray-200 hover:bg-neutral-100/50'
                     // handle click row, open keyword detail
                     onClick={handleClickRow(row.id)}
                   >

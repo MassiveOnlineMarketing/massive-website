@@ -37,15 +37,15 @@ export const useKeywords = () => {
       // if response is only one array show tost else console.log
       if (responses.length === 1) {
         toast({
-          title: `Keyword deleted`,
           description: `The keyword ${responses[0].keyword} is deleted.`,
           variant: 'success',
+          icon: 'success',
           duration: 5000,
         });
       } else if (responses.length > 1) {
         toast({
-          title: 'Keywords deleted',
-          description: `The keyword are deleted.`,
+          description: `The keywords are deleted.`,
+          icon: 'success',
           variant: 'success',
         })
       } else {
@@ -60,7 +60,6 @@ export const useKeywords = () => {
 
   const cancelDelete = () => {
     setIsDialogOpen(false);
-    console.log('cancelDelete');
   }
 
 

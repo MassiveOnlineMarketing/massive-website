@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { KeywordResultWithTagProp } from '@/serp/serp-types'
+import { KeywordResultWithTagProp } from '@/dashboard/google-search/serp-types'
 
 const PeopleAlsoAsk = ({ keywordData }: { keywordData: KeywordResultWithTagProp }) => {
     return (

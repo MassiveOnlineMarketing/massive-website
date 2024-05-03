@@ -36,8 +36,9 @@ export default function BuyOneTimeProductButton({
             } catch (err) {
                 console.error((err as Error).message);
                 toast({
-                    description: "Somehting went wrong, please try again later.",
+                    description: "Please try again later.",
                     variant: "destructive",
+                    icon: "destructive",
                     duration: 3000,
                 })
             }

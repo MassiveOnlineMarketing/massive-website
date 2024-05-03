@@ -1,5 +1,8 @@
 import React from 'react';
-import { useTags } from '@/serp/hooks/useTags';
+import { useTags } from '@/dashboard/google-search/hooks/useTags';
+
+import { useKeywordResultsStore } from '@/lib/zustand/keyword-results-store';
+import { cn } from "@/lib/utils"
 
 import {
   Command,
@@ -12,10 +15,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
-import { cn } from "@/lib/utils"
 import { OutlinedButton } from '@/components/ui/button';
-import { useKeywordResultsStore } from '@/lib/zustand/keyword-results-store';
+
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 
 const TagSelection = () => {
   const { uniqueTags } = useTags();

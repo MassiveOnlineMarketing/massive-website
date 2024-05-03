@@ -86,9 +86,16 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({ open, setOpen, we
         try {
             let res;
             if (website) {
-                res = await updateWebsite(user.data.user.id, data, website.id)
+                res = await updateWebsite({ 
+                    userId: user.data.user.id, 
+                    data: data, 
+                    websiteId: website.id 
+                })
             } else {
-                res = await createWebsite(user.data.user.id, data)
+                res = await createWebsite({ 
+                    userId: user.data.user.id, 
+                    data: data 
+                })
             }
 
             if (res) {
@@ -96,16 +103,18 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({ open, setOpen, we
                 setOpen(false)
                 reset()
                 toast({
-                    description: "Website created successfully",
+                    description: `Website ${currentWebsiteDetails ? 'updated' : 'created'}`,
                     variant: "success",
+                    icon: "success",
                     duration: 5000,
                 })
             }
         } catch (error) {
             console.error('Error creating website:', error);
             toast({
-                description: "An error occurred while creating the website. Please try again.",
+                description: `${currentWebsiteDetails ? 'Updating' : 'Creating'} the website. Please try again.`,
                 variant: "destructive",
+                icon: "destructive",
                 duration: 5000,
             })
         }

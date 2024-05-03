@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardLayout from './_components/dashboard-layout'
+import DashboardLayout from './_components/navigation/dashboard-layout'
 import TestProvider from './_components/test-provider'
 
 const layout = ({ children }: { children: React.ReactNode }) => {

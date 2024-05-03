@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from "@/lib/db";
-import { processArrayInBatches } from "../../../serp/lib/utils";
+import { processArrayInBatches } from "../lib/utils";
 import { ensureArray } from "@/lib/utils";
 
 /**

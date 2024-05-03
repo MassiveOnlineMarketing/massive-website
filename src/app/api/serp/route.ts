@@ -8,6 +8,7 @@ import axios from "axios";
 
 const BATCH_SIZE = 100;
 export const maxDuration = 9;
+// export const maxDuration = 300;
 
 interface Data {
   projectId: string;

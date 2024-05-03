@@ -4,7 +4,7 @@ import React from 'react'
 
 import { DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuPortal, DropdownMenuSubContent } from '@/components/ui/dropdown-menu'
 import { GoogleSearchKeywordTag } from '@prisma/client'
-import { useTags } from '../hooks/useTags'
+import { useTags } from '@/dashboard/google-search/hooks/useTags'
 
 
 export const AddTagToKeywords = ({ selectedRows, onActionFinished }: { selectedRows: any, onActionFinished: () => void }) => {
