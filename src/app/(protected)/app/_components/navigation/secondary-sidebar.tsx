@@ -12,7 +12,7 @@ import { useWebsiteDetailsStore } from '@/lib/zustand/website-details-store';
 
 // Components
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import WebsiteSelectionButton from './website-selection-button';
+// import WebsiteSelectionButton from './website-selection-button';
 import WebsiteFormDialog from '../website-form-dialog';
 import GoogleSearchProjectFormDialog from '../project-form-dialog';
 
@@ -102,7 +102,7 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
                     'w-[375px] px-3 py-6 h-full flex flex-col bg-primary-50'
                 )}
             >
-                <WebsiteSelectionButton />
+                {/* <WebsiteSelectionButton /> */}
                 {navigation.map((item) => (
                     <div key={item.name}>
                         <Link href={item.href}

@@ -19,6 +19,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { MassiveTextLogo } from '@/assets/branding';
+import WebsiteSelectionButton from './website-selection-button';
 
 
 const TopBar = ({
@@ -35,6 +36,7 @@ const TopBar = ({
                 <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
             <MassiveTextLogo className="w-auto my-auto" />
+            <WebsiteSelectionButton />
 
             {/* Separator */}
             <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />
