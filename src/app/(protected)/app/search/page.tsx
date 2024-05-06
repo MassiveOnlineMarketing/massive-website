@@ -1,32 +1,40 @@
 'use client';
 
 import React, { useEffect } from 'react'
-import HomeScreenBanner from '../_components/home-screen-banner'
-import { TabContainer, TabContent, TabIndicatorLineAnimated, TabTitle } from '@/components/ui/tabs';
-import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
-import { getUsersGoogleSearchProjectsWithLatestProjectResult, GoogleSearchProjectsWithLatestResult } from '@/dashboard/google-search/data/google-search-project';
+
+import HomeScreenBanner from '../_components/home-screen-banner'
+
+import { TabContainer, TabContent, TabIndicatorLineAnimated, TabTitle } from '@/components/ui/tabs';
 import { useCurrentUser } from '@/auth/hooks/use-current-user';
+
+// Table
+import { getUsersGoogleSearchProjectsWithLatestProjectResult, GoogleSearchProjectsWithLatestResult } from '@/dashboard/google-search/data/google-search-project';
 import DataTable from './_components/search-project-table';
 import { columns } from './_components/search-project-table-columns';
+import { LoadingSpinner } from '@/components/loading-spinner';
 
+import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 
 const Page = () => {
   const user = useCurrentUser()
-  const [ projectWithLatestResult, setProjectWithLatestResult ] = React.useState<GoogleSearchProjectsWithLatestResult[] | undefined>(undefined)
+  const [projectWithLatestResult, setProjectWithLatestResult] = React.useState<GoogleSearchProjectsWithLatestResult[] | undefined>(undefined)
 
   useEffect(() => {
     const getTotalKeywordCount = async () => {
-        if (user?.id) {
-            const userId = user.id
-            const res = await getUsersGoogleSearchProjectsWithLatestProjectResult(userId)
-
-            setProjectWithLatestResult(res)
+      if (user?.id) {
+        const userId = user.id
+        try {
+          const res = await getUsersGoogleSearchProjectsWithLatestProjectResult(userId)
+          setProjectWithLatestResult(res)
+        } catch (error) {
+          console.error(error)
         }
+      }
     }
 
     getTotalKeywordCount()
-}, [user])
+  }, [user])
 
 
   return (
@@ -44,17 +52,26 @@ const Page = () => {
             <TabIndicatorLineAnimated gapSize={16} />
           </div>
 
-          <MessageFromTeam 
+          <MessageFromTeam
             className='max-w-[770px] mb-6'
             heading='Message from Team'
             message='Keyword Tracker is a product in development, we are constantly updating and improving the user experience. Your feedback is valuable to us. For any questions regarding assistance and feedback, please feel free to <a class="text-primary-500" href="https://yourwebsite.com/contact">contact us</a>.'
           />
 
           <div className="bg-white shadow-base rounded-2xl p-8">
-            <TabContent id={1}> 
-            {
-              projectWithLatestResult && <DataTable data={projectWithLatestResult} columns={columns()}/>
-            }
+            <TabContent id={1}>
+              {
+                projectWithLatestResult ? (<DataTable data={projectWithLatestResult} columns={columns()} />) : (
+                  <>
+                    <div className="pb-8 pt-2 flex items-center">
+                      <p className="text-2xl leading-8 font-medium text-gray-800">All Search Projects</p>
+                    </div>
+                    <div className='h-40 w-full flex items-center justify-center'>
+                      <LoadingSpinner />
+                    </div>
+                  </>
+                )
+              }
             </TabContent>
             <TabContent id={2}> <h1>Tab 2</h1> </TabContent>
             <TabContent id={3}> <h1>Tab 3</h1> </TabContent>
