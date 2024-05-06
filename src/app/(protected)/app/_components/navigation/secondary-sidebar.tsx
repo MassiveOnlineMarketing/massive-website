@@ -106,23 +106,23 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
                 <WebsiteSelectionButton />
                 {navigation.map((item) => (
                     <div key={item.name}>
-                        <Link href={item.href}
+                        <div
                             className={cn('pl-2 py-2 pr-3 flex items-center relative')}
                         >
                             <item.icon className={cn(
                                 'h-6 w-6 pr-2 ',
                                 isActive(item.href, pathname) ? 'text-primary-500' : 'text-gray-500'
                             )} />
-                            <span className={cn(
+                            <p className={cn(
                                 'text-base leading-6 font-medium',
                                 isActive(item.href, pathname) ? 'text-primary-500' : 'text-gray-800'
-                            )}>{item.name}</span>
+                            )}>{item.name}</p>
                             <div className={cn(
                                 'absolute -left-3 h-6 top-1/2 -translate-y-1/2 w-1 bg-primary-500 rounded-r-sm',
                                 isActive(item.href, pathname) ? '' : 'hidden'
                             )}>
                             </div>
-                        </Link>
+                        </div>
                         {item.children && item.children.map((child) => (
                             <Link key={child.name}
                                 href={child.disabled ? '#' : child.href}

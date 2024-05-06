@@ -17,7 +17,7 @@ const TestProvider = ({ children }: { children: React.ReactNode }) => {
 
         const fetchAccount = async () => {
             const fetchedAccount = await getAccountByUserId(currentUser.id as string);
-            console.log('fetchedAccount test provider', fetchedAccount?.id)
+            // console.log('fetchedAccount test provider', fetchedAccount?.id)
 
             if (!fetchedAccount) return;
 

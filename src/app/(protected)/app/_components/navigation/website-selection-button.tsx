@@ -24,7 +24,6 @@ const WebsiteSelectionButton = () => {
     const currentWebsite = useWebsiteDetailsStore(state => state.WebsiteDetails);
     const setSelectedWebsite = useWebsiteDetailsStore(state => state.setWebsiteDetails);
     const userId = useCurrentUser()?.id;
-    console.log('website selection button id, currentWebsite', userId, currentWebsite)
 
     const [websites, setWebsites] = useState<Website[] | Website | null>(null)
     const [popoverOpen, setPopoverOpen] = useState(false)
@@ -39,7 +38,6 @@ const WebsiteSelectionButton = () => {
     async function fetchWebsites() {
 
         if (userId) {
-            console.log('fetching websites', userId)
             const res = await getWebsiteByUserId(userId)
             setWebsites(res && res.length > 0 ? res : null)
         }
