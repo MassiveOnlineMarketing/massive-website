@@ -61,8 +61,7 @@ function Page({ params }: Props) {
             
             fetchKeywordResults(res.id)
         } else {
-            router.push('/app')
-            // router.push('/app/search')
+            router.push('/app/search')
         }
     }
 

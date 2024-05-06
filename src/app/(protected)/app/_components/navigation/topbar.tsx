@@ -36,7 +36,7 @@ const TopBar = ({
                 <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
             <MassiveTextLogo className="w-auto my-auto" />
-            <WebsiteSelectionButton />
+            {/* <WebsiteSelectionButton /> */}
 
             {/* Separator */}
             <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />

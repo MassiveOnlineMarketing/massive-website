@@ -20,6 +20,7 @@ import GoogleSearchProjectFormDialog from '../project-form-dialog';
 import { Cog6ToothIcon, DocumentMagnifyingGlassIcon, PresentationChartLineIcon, QuestionMarkCircleIcon, LockClosedIcon } from '@heroicons/react/20/solid';
 import { getGoogleSearchProjectByWebsiteId } from '@/dashboard/data/google-search-project';
 import useGoogleRefreshToken from '@/auth/hooks/use-google-refresh-token';
+import WebsiteSelectionButton from './website-selection-button';
 
 type SecondarySidebarProps = {
     navigation?: NavigationProps[],
@@ -102,7 +103,7 @@ const SecondarySidebar = ({ secondarySidebarOpen, setSecondarySidebarOpen }: Sec
                     'w-[375px] px-3 py-6 h-full flex flex-col bg-primary-50'
                 )}
             >
-                {/* <WebsiteSelectionButton /> */}
+                <WebsiteSelectionButton />
                 {navigation.map((item) => (
                     <div key={item.name}>
                         <Link href={item.href}
