@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { cn } from '@/lib/utils';
-import React from 'react';
+import { cn } from "@/lib/utils";
+import React from "react";
 
 export interface AccordionProps {
   children: React.ReactNode;
@@ -20,23 +20,23 @@ interface AccordionContextProps {
 // Accordion Context
 const AccordionContext = React.createContext<AccordionContextProps>({
   expand: false,
-  toggleExpand: () => { },
+  toggleExpand: () => {},
   padding: 2,
 });
 
-
-export const Accordion: React.FC<AccordionProps> = ({ children, isOpen = false, onToggle = () => {}, padding = 2, className }) => {
+export const Accordion: React.FC<AccordionProps> = ({
+  children,
+  isOpen = false,
+  onToggle = () => {},
+  padding = 2,
+  className,
+}) => {
   const value = { expand: isOpen, toggleExpand: onToggle, padding };
 
   return (
-      <AccordionContext.Provider value={value}  >
-          <div className={cn(
-            " ",
-            className
-            )}>
-              {children}
-          </div>
-      </AccordionContext.Provider>
+    <AccordionContext.Provider value={value}>
+      <div className={cn(" ", className)}>{children}</div>
+    </AccordionContext.Provider>
   );
 };
 
@@ -44,8 +44,8 @@ export const useAccordion = () => {
   const context = React.useContext(AccordionContext);
 
   if (!context) {
-    throw new Error('useAccordion must be used within a AccordionProvider');
+    throw new Error("useAccordion must be used within a AccordionProvider");
   }
 
   return context;
-}
+};

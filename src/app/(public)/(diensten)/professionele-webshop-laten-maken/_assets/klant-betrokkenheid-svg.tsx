@@ -1,8 +1,13 @@
 import React from "react";
 
-function KlantBetrokkenheidSVG({className}: {className?: string}) {
+function KlantBetrokkenheidSVG({ className }: { className?: string }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 260 126" className='shadow-custom-lg rounded'>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 260 126"
+      className="shadow-custom-lg rounded"
+    >
       <rect
         width="259.664"
         height="125.007"

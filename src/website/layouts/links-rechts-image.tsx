@@ -1,8 +1,7 @@
-import React from 'react'
-import Image from 'next/image';
-import { cn } from '@/lib/utils'
-import { imageProps } from '../../../types/website';
-
+import React from "react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { imageProps } from "../../../types/website";
 
 /**
  * Renders a container with an image on either the left or right side.
@@ -18,51 +17,51 @@ import { imageProps } from '../../../types/website';
  * @returns The rendered container component.
  */
 export const LinksRechtsImageContainer = ({
-    image,
-    imageSide,
-    containerStyles,
-    contentContainerStyles,
-    imageContainerStyles,
-    children
+  image,
+  imageSide,
+  containerStyles,
+  contentContainerStyles,
+  imageContainerStyles,
+  children,
 }: {
-    image: imageProps,
-    imageSide: 'left' | 'right',
-    containerStyles?: string,
-    contentContainerStyles?: string,
-    imageContainerStyles?: string,
-    children: React.ReactNode
+  image: imageProps;
+  imageSide: "left" | "right";
+  containerStyles?: string;
+  contentContainerStyles?: string;
+  imageContainerStyles?: string;
+  children: React.ReactNode;
 }) => {
+  const childrenArray = React.Children.toArray(children);
 
-    const childrenArray = React.Children.toArray(children);
-
-    return (
-        <div className={cn(`
+  return (
+    <div
+      className={cn(
+        `
             flex flex-col xl:flex-row gap-5 justify-between `,
-            containerStyles
-        )}>
-            <div className={cn(
-                `flex-1`,
-                contentContainerStyles
-            )}>
-                {childrenArray[0]}
-            </div>
-            <div className={cn(
-                `flex-1 flex flex-col ${imageSide === 'left' ? 'xl:order-first' : ''} `,
-                imageContainerStyles
-            )}>
-                <Image
-                    src={image.src}
-                    alt={image.alt}
-                    width={image.width}
-                    height={image.height}
-                    className={cn(
-                        'object-cover object-left rounded-2xl',
-                        image.className
-                    )}
-                />
-                {childrenArray[1]}
-            </div>
-        </div>
-    )
-}
-
+        containerStyles,
+      )}
+    >
+      <div className={cn(`flex-1`, contentContainerStyles)}>
+        {childrenArray[0]}
+      </div>
+      <div
+        className={cn(
+          `flex-1 flex flex-col ${imageSide === "left" ? "xl:order-first" : ""} `,
+          imageContainerStyles,
+        )}
+      >
+        <Image
+          src={image.src}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
+          className={cn(
+            "object-cover object-left rounded-2xl",
+            image.className,
+          )}
+        />
+        {childrenArray[1]}
+      </div>
+    </div>
+  );
+};

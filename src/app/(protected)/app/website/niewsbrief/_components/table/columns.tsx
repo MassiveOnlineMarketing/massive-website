@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,11 +8,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button, OutlinedButton } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { ArrowsUpDownIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
-import { NieuwsbriefSignup } from "@prisma/client"
+} from "@/components/ui/dropdown-menu";
+import { Button, OutlinedButton } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  ArrowsUpDownIcon,
+  EllipsisHorizontalIcon,
+} from "@heroicons/react/20/solid";
+import { NieuwsbriefSignup } from "@prisma/client";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -23,29 +26,19 @@ import { NieuwsbriefSignup } from "@prisma/client"
 //   email: string
 // }
 
-
-
 export const newsletterColumns = (): ColumnDef<NieuwsbriefSignup>[] => [
   // * Position
   {
     accessorKey: "id",
     header: () => {
-      return (
-        <p className="flex font-medium text-gray-500 mx-auto" >
-          Id
-        </p>
-      )
-    }
+      return <p className="flex font-medium text-gray-500 mx-auto">Id</p>;
+    },
   },
   // * Email
   {
     accessorKey: "email",
     header: () => {
-      return (
-        <p className="flex font-medium text-gray-500" >
-          Email Adress
-        </p>
-      )
+      return <p className="flex font-medium text-gray-500">Email Adress</p>;
     },
   },
   // * Date Retrieved
@@ -53,7 +46,7 @@ export const newsletterColumns = (): ColumnDef<NieuwsbriefSignup>[] => [
     accessorKey: "createdAt",
     header: "Sign up Date",
     cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt'));
+      const date = new Date(row.getValue("createdAt"));
       return date.toLocaleDateString(); // or any other format you prefer
     },
   },
@@ -100,4 +93,4 @@ export const newsletterColumns = (): ColumnDef<NieuwsbriefSignup>[] => [
   //     )
   //   },
   // },
-]
+];

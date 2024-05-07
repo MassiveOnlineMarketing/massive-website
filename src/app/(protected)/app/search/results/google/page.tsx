@@ -1,143 +1,167 @@
 "use client";
 
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { format } from "date-fns";
 
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
 import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
 
 import BreadCrumbsSearchKeywords from "../../google-search/_components/bread-crumbs";
 import GoogleResultPage from "../_components/google-results-page";
+import { DateRangeObject } from "../_components/date-range-button";
+import { getDateDaysAgo } from "../_components/data-utils";
+import { useGoogleFilterStore } from "@/lib/zustand/google-results-filter-store";
+import { GoogleResultFilterWithUrls } from "@/dashboard/types";
 
 interface ResultSearchApiResponse {
-    config: any;
-    data: {
-        comparedData: Data;
-        currentData: Data;
-        previousData: Data;
-        data: {
-            rows: {
-                clicks: number;
-                ctr: number;
-                impressions: number;
-                position: number;
-                keys: string[];
-            }[];
-        }
-    };
+  config: any;
+  data: {
+    comparedData: Data;
+    currentData: Data;
+    previousData: Data;
+    data:
+    {
+      [key: string]: Metrics;
+    },
+  };
 }
 export type Data = {
-    clicks: number;
-    ctr: number;
-    impressions: number;
-    position: number;
-    date: string;
+  clicks: number;
+  ctr: number;
+  impressions: number;
+  position: number;
+  date: string;
 };
 
+type Metrics = {
+  clicks: number;
+  ctr: number;
+  impressions: number;
+  position: number;
+};
+
+
 const Page = () => {
-    console.log("Page")
+  const currentWebsite = useWebsiteDetailsStore(
+    (state) => state.WebsiteDetails,
+  );
+  const refresh_token = useGoogleRefreshToken("search-console");
+  const site_url = currentWebsite?.gscUrl;
 
-    const currentWebsite = useWebsiteDetailsStore(state => state.WebsiteDetails);
-    const refresh_token = useGoogleRefreshToken('search-console');
-    const site_url = currentWebsite?.gscUrl;
+  const [data, setData] = React.useState<Data[]>();
+  const [currentData, setCurrentData] = React.useState<Data>();
+  const [previousData, setPreviousData] = React.useState<Data>();
+  const [comparedData, setComparedData] = React.useState<Data>();
 
-    const [data, setData] = React.useState<Data[]>();
-    const [currentData, setCurrentData] = React.useState<Data>();
-    const [previousData, setPreviousData] = React.useState<Data>();
-    const [comparedData, setComparedData] = React.useState<Data>();
+  const [selectedRange, setSelectedRange] = useState<DateRangeObject>({
+    label: "last 30 days",
+    start: () => getDateDaysAgo(30),
+    end: () => new Date(),
+  });
+  // const [ selectedTags, setSelectedTags ] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const [start_date, setStartDate] = useState("2024-01-01");
-    const [end_date, setEndDate] = useState("2024-01-30");
+  useEffect(() => {
+    setIsLoading(true);
+    fetchData();
+    console.log("date changed");
+  }, [selectedRange, currentWebsite]);
 
-    const formatDate = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed in JavaScript
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
+  const selectedFilter = useGoogleFilterStore((state) => state.selectedResultsFilter);
+  const fetchData = async () => {
+    // fetch data
+    if (!site_url || !refresh_token) return;
 
-    const currentDate = new Date();
-    const oneYearAgo = new Date();
-    oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
+    const start_date = format(selectedRange.start(), "yyyy-MM-dd");
+    const end_date = format(selectedRange.end(), "yyyy-MM-dd");
+    const filterUrls = selectedFilter.map((filter) => filter.urls.map((url) => url.url)).flat().join(",");
+    console.log("filterUrls", filterUrls)
 
-    console.log("oneYearAgo", formatDate(oneYearAgo));
-    console.log("start_date", formatDate(currentDate));
-
-
-    useEffect(() => {
-        fetchData();
-    }, [currentWebsite])
-
-    const fetchData = async () => {
-        // fetch data
-        if (!site_url || !refresh_token) return;
-        try {
-            const res: ResultSearchApiResponse = await axios(
-                `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/results?site_url=${site_url}&refresh_token=${refresh_token}&start_date=${formatDate(oneYearAgo)}&end_date=${formatDate(currentDate)}`
-            );
-
-            const formattedData = res.data.data.rows.map((row) => ({
-                clicks: row.clicks,
-                ctr: row.ctr * 100,
-                impressions: row.impressions,
-                position: row.position,
-                date: row.keys[0], // Assuming each 'keys' array contains only one element (date)
-            }));
+    if (!start_date || !end_date) return;
     
-            setData(formattedData);
-            setCurrentData(res.data.currentData)
-            setComparedData(res.data.comparedData)
-            setPreviousData(res.data.previousData)
-    
-        } catch (error) {
-            console.error(error);
-        }
+    let urls = '';
+    if (selectedFilter.length > 0) {
+      const filterUrls = selectedFilter.map((filter) => filter.urls.map((url) => url.url)).flat().join(",");
+      console.log("filterUrls", filterUrls)
+      if (filterUrls) {
+        urls = `&urls=${filterUrls}`;
+      }
+    }
 
-    };
+    const requestUrl = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/results?site_url=${site_url}&refresh_token=${refresh_token}&start_date=${start_date}&end_date=${end_date}${urls}`;
+     console.log("requestUrl", requestUrl);
+    try {
+      const res: ResultSearchApiResponse = await axios(requestUrl);
+      console.log('res', res)
 
-    useEffect(() => {
-        console.log('date changed')
-    }, [start_date, end_date]);
+      const formattedData = Object.entries(res.data.data).map(([date, metrics]) => ({
+        date: date,
+        ...metrics,
+      }));
+      // console.log('formattedData', formattedData)
 
-    // TODO: Add loading state
-    if (!data) return <div>Loading...</div>;
+      setData(formattedData);
+      setCurrentData(res.data.currentData);
+      setComparedData(res.data.comparedData);
+      setPreviousData(res.data.previousData);
+    } catch (error) {
+      console.error(error);
+    }
 
-    return (
-        <div className="w-full h-full px-6">
-            <BreadCrumbsSearchKeywords />
-            <GoogleResultPage
-                chartData={data}
-                currentData={currentData as Data}
-                comparedData={comparedData as Data}
-                previousData={previousData as Data}
-                setStartDate={setStartDate}
-                setEndDate={setEndDate}
-            />
-        </div>
-    );
+    setIsLoading(false);
+  };
+
+  // TODO: Add no website selected state
+  if (!currentWebsite) {
+    return <div>Please Select a website first</div>;
+  }
+
+  // TODO: Add loading state
+  if (!data) return <div>Loading...</div>;
+
+  return (
+    <div className="w-full h-full px-6">
+      <BreadCrumbsSearchKeywords />
+      <GoogleResultPage
+        chartData={data}
+        currentData={currentData as Data}
+        comparedData={comparedData as Data}
+        previousData={previousData as Data}
+        isLoading={isLoading}
+        selectedRange={selectedRange}
+        setSelectedRange={setSelectedRange}
+      />
+
+    </div>
+  );
 };
 
 export default Page;
 
-
-
-
-
-
-
-
-
-
-
-
-
-const DateRangePicker = ({ startDate, endDate, setStartDate, setEndDate }: { startDate: string, endDate: string, setStartDate: (date: string) => void, setEndDate: (date: string) => void }) => {
-    return (
-        <div className="flex gap-2">
-            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-        </div>
-    );
-}
-
-
+const DateRangePicker = ({
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+}: {
+  startDate: string;
+  endDate: string;
+  setStartDate: (date: string) => void;
+  setEndDate: (date: string) => void;
+}) => {
+  return (
+    <div className="flex gap-2">
+      <input
+        type="date"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+      />
+      <input
+        type="date"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+      />
+    </div>
+  );
+};

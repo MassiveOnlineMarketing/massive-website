@@ -1,5 +1,3 @@
-import BottomBackground from './bottom-background.svg';
+import BottomBackground from "./bottom-background.svg";
 
-export { 
-    BottomBackground
-};
+export { BottomBackground };

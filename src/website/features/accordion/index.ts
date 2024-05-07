@@ -1,13 +1,11 @@
 // context
-export { Accordion }  from './AccordionContext';
+export { Accordion } from "./AccordionContext";
 
 // container
-export { AccordionContainer } from './AccordionContainer';
+export { AccordionContainer } from "./AccordionContainer";
 
 // headers
-export { AccordionHeader } from './Accordion'
+export { AccordionHeader } from "./Accordion";
 
 // content
-export { AccordionContent } from './Accordion'
-
-
+export { AccordionContent } from "./Accordion";

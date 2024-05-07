@@ -1,10 +1,9 @@
-'use server'
+"use server";
 
 import { db } from "../../lib/db";
 import { z } from "zod";
 import { GeneralUserSettingsSchema } from "../schema";
 import { getSession } from "next-auth/react";
-
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -26,7 +25,6 @@ export const getUserById = async (id: string) => {
   }
 };
 
-
 export const addCreditsToUser = async (id: string, credits: number) => {
   // console.log('addCreditsToUser', id, credits)
   try {
@@ -43,7 +41,7 @@ export const addCreditsToUser = async (id: string, credits: number) => {
   } catch {
     return null;
   }
-}
+};
 
 export const decrementUserCredits = async (id: string, credits: number) => {
   // console.log('decrementUserCredits', id, credits)
@@ -62,4 +60,4 @@ export const decrementUserCredits = async (id: string, credits: number) => {
   } catch {
     return null;
   }
-}
+};

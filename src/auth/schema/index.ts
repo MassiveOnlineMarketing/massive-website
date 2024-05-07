@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import * as z from "zod";
 
 export const NewPasswordSchema = z.object({
   password: z.string().min(6, {
@@ -41,14 +41,22 @@ export const GeneralUserSettingsSchema = z.object({
   email: z.string().email({
     message: "Email is required",
   }),
-  currentPassword: z.string().min(6, {
-    message: "Password is required",
-  }).optional(),
-  password: z.string().min(6, {
-    message: "Password is required",
-  }).optional(),
-  passwordConfirmation: z.string().min(6, {
-    message: "Password is required",
-  }).optional(),
-
+  currentPassword: z
+    .string()
+    .min(6, {
+      message: "Password is required",
+    })
+    .optional(),
+  password: z
+    .string()
+    .min(6, {
+      message: "Password is required",
+    })
+    .optional(),
+  passwordConfirmation: z
+    .string()
+    .min(6, {
+      message: "Password is required",
+    })
+    .optional(),
 });

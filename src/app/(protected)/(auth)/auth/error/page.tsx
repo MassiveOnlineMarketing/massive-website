@@ -1,9 +1,7 @@
 import { ErrorCard } from "@/auth/forms/error-card";
 
 const AuthErrorPage = () => {
-  return (
-      <ErrorCard />
-  );
-}
+  return <ErrorCard />;
+};
 
-export default AuthErrorPage
+export default AuthErrorPage;

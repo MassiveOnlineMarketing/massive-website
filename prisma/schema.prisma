@@ -15,19 +15,19 @@ enum UserRole {
 }
 
 model User {
-  id                                 String                 @id @default(cuid())
-  name                               String?
-  email                              String?                @unique
-  emailVerified                      DateTime?
-  image                              String?
-  password                           String?
-  role                               UserRole               @default(USER)
-  accounts                           Account[]
-  isTwoFactorEnabled                 Boolean                @default(false)
-  twoFactorConfirmation              TwoFactorConfirmation?
-  loginProvider                      String?                
-  refreshToken                       String?                @db.Text
-  credits                            Int                    @default(10)
+  id                    String                 @id @default(cuid())
+  name                  String?
+  email                 String?                @unique
+  emailVerified         DateTime?
+  image                 String?
+  password              String?
+  role                  UserRole               @default(USER)
+  accounts              Account[]
+  isTwoFactorEnabled    Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+  loginProvider         String?
+  refreshToken          String?                @db.Text
+  credits               Int                    @default(10)
 
   stripeCustomerId       String?               @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?               @unique @map(name: "stripe_subscription_id")
@@ -94,13 +94,15 @@ model TwoFactorConfirmation {
 }
 
 model Website {
-  id                  String                @id @default(cuid())
-  userId              String
-  websiteName         String
-  domainUrl           String
-  gscUrl              String?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
+  id          String   @id @default(cuid())
+  userId      String
+  websiteName String
+  domainUrl   String
+  gscUrl      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  googleResultFilter  GoogleResultFilter[]
   googleSearchProject GoogleSearchProject[]
   user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -195,4 +197,21 @@ model NieuwsbriefSignup {
   id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
+}
+
+// Google Result Filter
+
+model GoogleResultFilter {
+  id        String                  @id @default(cuid())
+  name      String
+  urls      GoogleResultFilterURL[]
+  Website   Website?                @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String?
+}
+
+model GoogleResultFilterURL {
+  id       String             @id @default(cuid())
+  url      String
+  filter   GoogleResultFilter @relation(fields: [filterId], references: [id], onDelete: Cascade)
+  filterId String
 }

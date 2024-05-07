@@ -1,27 +1,26 @@
-'use state'
+"use state";
 
-import React from "react"
+import React from "react";
 
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
-} from "@radix-ui/react-icons"
-import { Table } from "@tanstack/react-table"
+} from "@radix-ui/react-icons";
+import { Table } from "@tanstack/react-table";
 
-import { OutlinedButton } from "@/components/ui/button"
+import { OutlinedButton } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-
+} from "@/components/ui/select";
 
 interface DataTablePaginationProps<TData> {
-  table: Table<TData>
+  table: Table<TData>;
 }
 
 export function DataTablePagination<TData>({
@@ -56,8 +55,7 @@ export function DataTablePagination<TData>({
 
           {/* Pagination */}
           <div className="flex w-fit px-2 items-center justify-center text-xs font-medium">
-            {table.getState().pagination.pageIndex + 1} /{" "}
-            {table.getPageCount()}
+            {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
           </div>
 
           <OutlinedButton
@@ -86,15 +84,19 @@ export function DataTablePagination<TData>({
             className="shadow-base bg-white rounded-lg z-20 relative"
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
-              table.setPageSize(Number(value))
+              table.setPageSize(Number(value));
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
-            <SelectContent side="top" className="bg-white w-[70px]" >
+            <SelectContent side="top" className="bg-white w-[70px]">
               {[10, 20, 30, 40, 50, 100, 200, 300, 400, 500].map((pageSize) => (
-                <SelectItem key={pageSize} value={`${pageSize}`} className="hover:bg-gray-50">
+                <SelectItem
+                  key={pageSize}
+                  value={`${pageSize}`}
+                  className="hover:bg-gray-50"
+                >
                   {pageSize}
                 </SelectItem>
               ))}
@@ -104,6 +106,5 @@ export function DataTablePagination<TData>({
         </div>
       </div>
     </div>
-  )
+  );
 }
-

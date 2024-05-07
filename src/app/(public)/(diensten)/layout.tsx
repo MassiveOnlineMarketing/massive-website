@@ -1,19 +1,17 @@
-import Footer from '@/website/partials/footer'
-import { NavbarWithTopbar } from '@/website/partials/navbar-with-topbar'
-import React from 'react'
+import Footer from "@/website/partials/footer";
+import { NavbarWithTopbar } from "@/website/partials/navbar-with-topbar";
+import React from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
-    return (
-        <>
-            <NavbarWithTopbar />
+  return (
+    <>
+      <NavbarWithTopbar />
 
-            <main className="relative w-full">
-                {children}
-            </main>
+      <main className="relative w-full">{children}</main>
 
-            <Footer />
-        </>
-    )
-}
+      <Footer />
+    </>
+  );
+};
 
-export default layout
+export default layout;

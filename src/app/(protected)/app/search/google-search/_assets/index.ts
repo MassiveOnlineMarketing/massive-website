@@ -1,5 +1,3 @@
-import GoogleIconSvg from './google-icon-svg.svg';
+import GoogleIconSvg from "./google-icon-svg.svg";
 
-export {
-    GoogleIconSvg
-};
+export { GoogleIconSvg };

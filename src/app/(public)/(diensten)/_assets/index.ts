@@ -1,6 +1,3 @@
-import PaarseGolf from './paarse-golf.svg';
+import PaarseGolf from "./paarse-golf.svg";
 
-
-export {
-    PaarseGolf,
-}
+export { PaarseGolf };

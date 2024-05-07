@@ -1,6 +1,4 @@
-
 import jwt from 'jsonwebtoken';
-
 
     const account = await db.account.findFirst({
         where: {

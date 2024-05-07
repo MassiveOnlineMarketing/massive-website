@@ -9,13 +9,13 @@
 export interface Config {
   collections: {
     users: User;
-    'blog-posts': BlogPost;
+    "blog-posts": BlogPost;
     media: Media;
     categories: Category;
     tags: Tag;
     writers: Writer;
-    'payload-preferences': PayloadPreference;
-    'payload-migrations': PayloadMigration;
+    "payload-preferences": PayloadPreference;
+    "payload-migrations": PayloadMigration;
   };
   globals: {};
 }
@@ -73,7 +73,7 @@ export interface BlogPost {
             heroImage?: string | Media | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'hero';
+            blockType: "hero";
           }
         | {
             content: {
@@ -81,14 +81,14 @@ export interface BlogPost {
             }[];
             id?: string | null;
             blockName?: string | null;
-            blockType: 'RichText';
+            blockType: "RichText";
           }
         | {
             image: string | Media;
             className?: string | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'Image';
+            blockType: "Image";
           }
       )[]
     | null;
@@ -166,7 +166,7 @@ export interface Writer {
 export interface PayloadPreference {
   id: string;
   user: {
-    relationTo: 'users';
+    relationTo: "users";
     value: string | User;
   };
   key?: string | null;
@@ -193,4 +193,3 @@ export interface PayloadMigration {
   updatedAt: string;
   createdAt: string;
 }
-

@@ -10,7 +10,7 @@ import { deleteKeywordsById } from "@/dashboard/google-search/data/google-search
 
 /**
  * Custom hook for managing keywords.
- * 
+ *
  * @returns An object containing functions for adding, deleting, confirming deletion, canceling deletion, adding results, and resetting results.
  */
 export const useKeywords = () => {
@@ -20,8 +20,9 @@ export const useKeywords = () => {
 
   const results = useKeywordResultsStore((state) => state.keywordResults);
   const setResults = useKeywordResultsStore((state) => state.setKeywordResults);
-  const updateKeywordResults = useKeywordResultsStore((state) => state.updateKeywordResults);
-
+  const updateKeywordResults = useKeywordResultsStore(
+    (state) => state.updateKeywordResults,
+  );
 
   /**
    * ? Deletes the selected keywords and updates the results.
@@ -29,7 +30,7 @@ export const useKeywords = () => {
   const deleteKeywords = (keywordId: string[]) => {
     setKeywordsToDelete(keywordId);
     setIsDialogOpen(true);
-  }
+  };
 
   const confirmDelete = async () => {
     if (keywordsToDelete !== null) {
@@ -38,48 +39,49 @@ export const useKeywords = () => {
       if (responses.length === 1) {
         toast({
           description: `The keyword ${responses[0].keyword} is deleted.`,
-          variant: 'success',
-          icon: 'success',
+          variant: "success",
+          icon: "success",
           duration: 5000,
         });
       } else if (responses.length > 1) {
         toast({
           description: `The keywords are deleted.`,
-          icon: 'success',
-          variant: 'success',
-        })
+          icon: "success",
+          variant: "success",
+        });
       } else {
-        console.log('Failed to delete keyword:', responses);
+        console.log("Failed to delete keyword:", responses);
       }
 
-      const newResults = results.filter((result: KeywordResultWithTagProp) => !keywordsToDelete.includes(result.keywordId));
+      const newResults = results.filter(
+        (result: KeywordResultWithTagProp) =>
+          !keywordsToDelete.includes(result.keywordId),
+      );
       setResults(newResults);
       setIsDialogOpen(false);
     }
-  }
+  };
 
   const cancelDelete = () => {
     setIsDialogOpen(false);
-  }
-
+  };
 
   /**
    * ? Adds new keyword results to the existing results.
    * * If the newResults array is empty, it removes all empty arrays from the results.
-   * 
+   *
    * @param newResults - An array of KeywordResultWithTagProp objects representing the new keyword results to be added.
    */
   const addResults = (newResults: KeywordResultWithTagProp[]) => {
     updateKeywordResults(newResults);
   };
 
-
   /**
    * ? Resets the results array.
    */
   const resetResults = () => {
     setResults([]);
-  }
+  };
 
   return {
     deleteKeywords,
@@ -88,6 +90,6 @@ export const useKeywords = () => {
     addResults,
     resetResults,
     isDialogOpen,
-    setIsDialogOpen
-  }
-}
+    setIsDialogOpen,
+  };
+};

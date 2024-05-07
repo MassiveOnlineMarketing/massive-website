@@ -1,4 +1,4 @@
-'use server'
+"use server";
 
 import { db } from "@/lib/db";
 
@@ -10,4 +10,4 @@ export const insertEmailAdress = async (email: string) => {
   });
 
   return result;
-}
+};

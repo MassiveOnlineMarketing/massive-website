@@ -14,16 +14,8 @@ type TitleProps = {
  * @param {string} className - Additional CSS class names to be applied to the title component.
  * @returns {React.ReactElement} The rendered title component.
  */
-const Title: React.FC<TitleProps> = ({ children, className}) => {
-
-  return (
-    <div className={cn(
-      'flex flex-col gap-4',
-      className
-    )}>
-      {children}
-    </div>
-  )
-}
+const Title: React.FC<TitleProps> = ({ children, className }) => {
+  return <div className={cn("flex flex-col gap-4", className)}>{children}</div>;
+};
 
 export default Title;

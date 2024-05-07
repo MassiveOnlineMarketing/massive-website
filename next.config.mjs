@@ -32,18 +32,18 @@ const nextConfig = {
         hostname: "localhost",
         port: "4000",
       },
-          
+
       // Linode server
       {
-        protocol: 'https',
-        hostname: 'api.massiveonlinemarketing.nl',
-        port: '8000',
+        protocol: "https",
+        hostname: "api.massiveonlinemarketing.nl",
+        port: "8000",
       },
       {
-        protocol: 'http',
-        hostname: 'payload.massiveonlinemarketing.nl',
-        port: '4000',
-      }
+        protocol: "http",
+        hostname: "payload.massiveonlinemarketing.nl",
+        port: "4000",
+      },
     ],
   },
 

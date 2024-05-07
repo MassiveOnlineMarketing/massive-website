@@ -1,23 +1,26 @@
-'use client'
+"use client";
 
-import Script from "next/script"
+import Script from "next/script";
 
-import { useCookies } from "react-cookie"
+import { useCookies } from "react-cookie";
 
 function LoadCookies() {
-    const [cookies] = useCookies(['marketing', 'analytics', 'statistics']);
+  const [cookies] = useCookies(["marketing", "analytics", "statistics"]);
 
-    // const CLARITY_TAG = 'jicivy07ui';
+  // const CLARITY_TAG = 'jicivy07ui';
 
-    return (
-        <>
-            {/* * Always load */}
-            <Script src={`/scroll.js`} strategy="afterInteractive" />
+  return (
+    <>
+      {/* * Always load */}
+      <Script src={`/scroll.js`} strategy="afterInteractive" />
 
-            {/* Google tag analytics script */}
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=G-BQ9FGY7RYN`} strategy="lazyOnload" />
-            <Script id="gtag" strategy="lazyOnload">
-                {`
+      {/* Google tag analytics script */}
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=G-BQ9FGY7RYN`}
+        strategy="lazyOnload"
+      />
+      <Script id="gtag" strategy="lazyOnload">
+        {`
                     window.dataLayer = window.dataLayer || [];
                     function gtag(){dataLayer.push(arguments);}
                     gtag('js', new Date());
@@ -26,34 +29,31 @@ function LoadCookies() {
                         page_path: window.location.pathname,
                     });
                 `}
-            </Script>
+      </Script>
 
-            {/* Microsoft Clarity */}
-            <Script id="clarity-tag" strategy="afterInteractive">
-                {`
+      {/* Microsoft Clarity */}
+      <Script id="clarity-tag" strategy="afterInteractive">
+        {`
                     (function(c,l,a,r,i,t,y){
                         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
                         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
                     })(window, document, "clarity", "script", "jicivy07ui");
                 `}
-            </Script>
+      </Script>
 
-            <Script id='google-tag-manager' strategy="afterInteractive">
-                {`
+      <Script id="google-tag-manager" strategy="afterInteractive">
+        {`
                     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
                     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
                     })(window,document,'script','dataLayer','GTM-NBF7DZQ6');
                 `}
-            </Script>
+      </Script>
 
-
-
-
-            {/* * Load scripts based on cookies */}
-            {/* {cookies.marketing && (
+      {/* * Load scripts based on cookies */}
+      {/* {cookies.marketing && (
                 <Script id="marketing" strategy="afterInteractive">
                     {`  
                         // Marketing script
@@ -61,7 +61,7 @@ function LoadCookies() {
                 </Script>
             )} */}
 
-            {/* {cookies.analytics && (
+      {/* {cookies.analytics && (
                 <Script id="analytics" strategy="afterInteractive">
                     {`
                         // Analytics script
@@ -69,16 +69,15 @@ function LoadCookies() {
                 </Script>
             )} */}
 
-            {/* {cookies.statistics && (
+      {/* {cookies.statistics && (
                 <Script id="statistics" strategy="afterInteractive">
                     {`
                         // Statistics script
                     `}
                 </Script>
             )} */}
-
-        </>
-    );
+    </>
+  );
 }
 
 export default LoadCookies;

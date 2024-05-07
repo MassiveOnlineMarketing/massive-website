@@ -1,193 +1,156 @@
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { OutlinedButton } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { getQuarter, getYear } from 'date-fns';
-import { useState } from "react";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { getQuarter, getYear } from "date-fns";
+import { useMemo, useState } from "react";
+import {
+  getDateDaysAgo,
+  getEndOfLastMonth,
+  getEndOfQuarter,
+  getEndOfYearAgo,
+  getStartOfLastMonth,
+  getStartOfMonth,
+  getStartOfMonthsAgo,
+  getStartOfQuarter,
+  getStartOfWeek,
+  getStartOfYear,
+  getStartOfYearAgo,
+} from "./data-utils";
 
-const DateRangeButton = ({ setStartDate, setEndDate, className }: { setStartDate: (date: string) => void, setEndDate: (date: string) => void, className?: string }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const currentQuarter = getQuarter(new Date());
-    const currentYear = getYear(new Date());
-
-    const dateOptions = [
-        { label: 'today', start: () => new Date() },
-        { label: 'last 7 days', start: () => getDateDaysAgo(7), end: () => new Date() },
-        { label: 'last 30 days', start: () => getDateDaysAgo(30), end: () => new Date() },
-        { label: 'last 90 days', start: () => getDateDaysAgo(90), end: () => new Date() },
-        { label: 'last 365 days', start: () => getDateDaysAgo(365), end: () => new Date() },
-        { label: 'last month', start: () => getStartOfLastMonth(), end: () => getEndOfLastMonth() },
-        { label: 'last 12 months', start: () => getStartOfMonthsAgo(12), end: () => new Date() },
-        { label: 'last year', start: () => getStartOfYearAgo(), end: () => getEndOfYearAgo() },
-        { label: 'week to date', start: () => getStartOfWeek() },
-        { label: 'month to date', start: () => getStartOfMonth() },
-        // { label: 'quarter to date', start: () => getStartOfQuarter() },
-        { label: 'year to date', start: () => getStartOfYear() },
-        { label: `Quarter 1 (${currentQuarter <= 1 ? currentYear - 1 : currentYear})`, start: () => getStartOfQuarter(currentQuarter <= 1 ? currentYear - 1 : currentYear, 1), end: () => getEndOfQuarter(currentQuarter <= 1 ? currentYear - 1 : currentYear, 1) },
-        { label: `Quarter 2 (${currentQuarter <= 2 ? currentYear - 1 : currentYear})`, start: () => getStartOfQuarter(currentQuarter <= 2 ? currentYear - 1 : currentYear, 2), end: () => getEndOfQuarter(currentQuarter <= 2 ? currentYear - 1 : currentYear, 2) },
-        { label: `Quarter 3 (${currentQuarter <= 3 ? currentYear - 1 : currentYear})`, start: () => getStartOfQuarter(currentQuarter <= 3 ? currentYear - 1 : currentYear, 3), end: () => getEndOfQuarter(currentQuarter <= 3 ? currentYear - 1 : currentYear, 3) },
-        { label: `Quarter 4 (${currentQuarter <= 4 ? currentYear - 1 : currentYear})`, start: () => getStartOfQuarter(currentQuarter <= 4 ? currentYear - 1 : currentYear, 4), end: () => getEndOfQuarter(currentQuarter <= 4 ? currentYear - 1 : currentYear, 4) },
-    ];
-
-
-    return (
-        <>
-            <Popover open={isOpen} onOpenChange={setIsOpen}>
-                <PopoverTrigger asChild>
-                    <button className={cn(
-                        'bg-primary-50 p-2 rounded-lg',
-                        className
-                    )}>Date Range</button>
-                </PopoverTrigger>
-                <PopoverContent className="flex flex-col w-50 h-60 bg-white overflow-y-scroll px-0">
-                    {dateOptions.map(option => (
-                        <button
-                            key={option.label}
-                            className="text-left mb-1 hover:bg-gray-100 w-full text-sm px-4"
-                            onClick={() => {
-                                setStartDate(option.start().toString());
-                                setEndDate(option.end ? option.end().toString() : new Date().toString());
-                                setIsOpen(false); // close the popover
-                            }}
-                        >
-                            {option.label}
-                        </button>
-                    ))}
-                </PopoverContent>
-            </Popover>
-        </>
-    );
+interface DateRangeButtonProps {
+  isLoading: boolean;
+  selectedRange: DateRangeObject;
+  setSelectedRange: React.Dispatch<React.SetStateAction<DateRangeObject>>;
+  className?: string;
 }
 
+const getQuarterLabelAndDates = (quarter: number) => {
+  const year =
+    getQuarter(new Date()) <= quarter
+      ? getYear(new Date()) - 1
+      : getYear(new Date());
+  return {
+    label: `Quarter ${quarter} (${year})`,
+    start: () => getStartOfQuarter(year, quarter),
+    end: () => getEndOfQuarter(year, quarter),
+  };
+};
+
+export type DateRangeObject = {
+  label: string;
+  start: () => Date;
+  end: () => Date;
+};
+
+const DateRangeButton = ({
+  isLoading,
+  selectedRange,
+  setSelectedRange,
+  className,
+}: DateRangeButtonProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const DATE_OPTIONS: DateRangeObject[] = useMemo(
+    () => [
+      { label: "today", start: () => new Date(), end: () => new Date() },
+      {
+        label: "last 7 days",
+        start: () => getDateDaysAgo(7),
+        end: () => new Date(),
+      },
+      {
+        label: "last 30 days",
+        start: () => getDateDaysAgo(30),
+        end: () => new Date(),
+      },
+      {
+        label: "last 90 days",
+        start: () => getDateDaysAgo(90),
+        end: () => new Date(),
+      },
+      {
+        label: "last 365 days",
+        start: () => getDateDaysAgo(365),
+        end: () => new Date(),
+      },
+      {
+        label: "last month",
+        start: () => getStartOfLastMonth(),
+        end: () => getEndOfLastMonth(),
+      },
+      {
+        label: "last 12 months",
+        start: () => getStartOfMonthsAgo(12),
+        end: () => new Date(),
+      },
+      {
+        label: "last year",
+        start: () => getStartOfYearAgo(),
+        end: () => getEndOfYearAgo(),
+      },
+      {
+        label: "week to date",
+        start: () => getStartOfWeek(),
+        end: () => new Date(),
+      },
+      {
+        label: "month to date",
+        start: () => getStartOfMonth(),
+        end: () => new Date(),
+      },
+      // { label: 'quarter to date', start: () => getStartOfQuarter() },
+      {
+        label: "year to date",
+        start: () => getStartOfYear(),
+        end: () => new Date(),
+      },
+      getQuarterLabelAndDates(1),
+      getQuarterLabelAndDates(2),
+      getQuarterLabelAndDates(3),
+      getQuarterLabelAndDates(4),
+    ],
+    [],
+  );
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <OutlinedButton
+          disabled={isLoading}
+          size="smD"
+          className={cn(className)}
+        >
+          <span className="text-gray-400">Date Range:</span>
+          <span className="text-gray-800">{selectedRange.label}</span>
+          <ChevronDownIcon className="ml-auto h-4 w-4 text-gray-400" />
+        </OutlinedButton>
+      </PopoverTrigger>
+      <PopoverContent className="flex flex-col w-50 h-60 bg-white overflow-y-scroll px-0">
+        {DATE_OPTIONS.map((option) => (
+          <button
+            key={option.label}
+            className="text-left mb-1 hover:bg-gray-100 w-full text-sm px-4"
+            onClick={() => {
+              const optionWithResults = {
+                ...option,
+                start_date: option.start(),
+                end_date: option.end(),
+              };
+              setSelectedRange(optionWithResults);
+              setIsOpen(false); // close the popover
+            }}
+          >
+            {option.label}
+          </button>
+        ))}
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 export default DateRangeButton;
-
-/**
- * ? Returns a date that is a specified number of days ago.
- * @param daysAgo - The number of days ago.
- * @returns The date that is `daysAgo` days ago.
- */
-const getDateDaysAgo = (daysAgo: number) => {
-    const date = new Date();
-    date.setDate(date.getDate() - daysAgo);
-    return date;
-};
-
-/**
- * ? Returns the start date of the last month.
- * @returns {Date} The start date of the last month.
- */
-const getStartOfLastMonth = () => {
-    const date = new Date();
-    date.setMonth(date.getMonth() - 1);
-    date.setDate(1);
-    return date;
-};
-
-/**
- * ? Returns the start date of a specified number of months ago.
- * @param monthsAgo - The number of months ago.
- * @returns The start date of the specified number of months ago.
- */
-const getStartOfMonthsAgo = (monthsAgo: number) => {
-    const date = new Date();
-    date.setMonth(date.getMonth() - monthsAgo);
-    date.setDate(1);
-    return date;
-};
-
-/**
- * ? Returns the start date of the year ago.
- * @returns {Date} The start date of the year ago.
- */
-const getStartOfYearAgo = () => {
-    const date = new Date();
-    date.setFullYear(date.getFullYear() - 1);
-    date.setMonth(0);
-    date.setDate(1);
-    return date;
-};
-
-/**
- * Returns the start of the current week.
- * @returns {Date} The start of the week as a Date object.
- */
-const getStartOfWeek = () => {
-    const date = new Date();
-    const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-    return new Date(date.setDate(diff));
-};
-
-/**
- * Returns the start of the current month.
- * @returns {Date} The start of the month as a Date object.
- */
-const getStartOfMonth = () => {
-    const date = new Date();
-    date.setDate(1);
-    return date;
-};
-
-/**
- * Returns the start of the current year.
- * @returns {Date} The start of the year as a Date object.
- */
-const getStartOfYear = () => {
-    const date = new Date();
-    date.setMonth(0);
-    date.setDate(1);
-    return date;
-};
-
-/**
- * Returns the end date of the previous month.
- * @returns {Date} The end date of the previous month.
- */
-const getEndOfLastMonth = () => {
-    const date = new Date();
-    date.setDate(0); // last day of previous month
-    return date;
-};
-
-/**
- * Returns the start date of a given quarter.
- * @param year - The year.
- * @param quarter - The quarter number (1, 2, 3, 4).
- * @returns The start date of the quarter.
- */
-const getStartOfQuarter = (year: number, quarter: number) => {
-    const date = new Date(year, (quarter - 1) * 3, 1); // quarters start at 0, 3, 6, 9
-    return date;
-};
-
-/**
- * Returns the end date of a given quarter.
- * @param year - The year.
- * @param quarter - The quarter number (1, 2, 3, or 4).
- * @returns The end date of the quarter.
- */
-const getEndOfQuarter = (year: number, quarter: number) => {
-    const date = new Date(year, quarter * 3, 0); // end of the quarter is the last day of the last month of the quarter
-    return date;
-};
-
-/**
- * Returns the last day of the month for a given date.
- * @param date - The date for which to get the last day of the month.
- * @returns The last day of the month as a number.
- */
-const getLastDayOfMonth = (date: Date) => {
-    const month = date.getMonth();
-    date.setMonth(month + 1);
-    date.setDate(0); // last day of previous month
-    return date.getDate();
-};
-
-/**
- * Returns the date representing the end of the previous year.
- * @returns {Date} The date representing the end of the previous year.
- */
-const getEndOfYearAgo = () => {
-    const date = new Date();
-    date.setMonth(0);
-    date.setDate(0); // last day of the previous month
-    return date;
-};

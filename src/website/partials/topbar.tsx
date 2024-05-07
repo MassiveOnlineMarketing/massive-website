@@ -14,7 +14,9 @@ export const Topbar = () => {
         </div>
         <div className="flex gap-12">
           <p>+31 6 37 34 90 05</p>
-          <InternalAnchor href="/klanten-service">Icon Klanten service</InternalAnchor>
+          <InternalAnchor href="/klanten-service">
+            Icon Klanten service
+          </InternalAnchor>
           <p>Taal selectie</p>
         </div>
       </div>

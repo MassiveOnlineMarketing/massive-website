@@ -1,7 +1,7 @@
-import organizationSchema from "../fields/organization"
+import organizationSchema from "../fields/organization";
 
 export default function corporationSchema() {
-    const schema = organizationSchema()
+  const schema = organizationSchema();
 
-    return schema
+  return schema;
 }

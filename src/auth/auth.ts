@@ -1,5 +1,5 @@
-import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "../../auth.config";
 
 import { ExtendedUser } from "../../next-auth";
@@ -25,24 +25,31 @@ export const {
     async linkAccount({ user, account }) {
       await db.user.update({
         where: { id: user.id },
-        data: { emailVerified: new Date() }
-      })
+        data: { emailVerified: new Date() },
+      });
 
       // * Check if the user has Google connection
       if (account?.provider === "google") {
-
         // * If Google Search Console connection is granted update the user
-        if (account.scope && account.scope.includes('https://www.googleapis.com/auth/webmasters.readonly')) {
-          console.log("Google Search Console connection")
+        if (
+          account.scope &&
+          account.scope.includes(
+            "https://www.googleapis.com/auth/webmasters.readonly",
+          )
+        ) {
+          console.log("Google Search Console connection");
         }
 
         // console.log('link account', account)
 
-        if (account.scope && account.scope.includes('https://www.googleapis.com/auth/adwords')) {
-          console.log("Google Ads connection")
+        if (
+          account.scope &&
+          account.scope.includes("https://www.googleapis.com/auth/adwords")
+        ) {
+          console.log("Google Ads connection");
         }
       }
-    }
+    },
   },
   callbacks: {
     // * Triggered when a user signs in or gives permissions using sign in function
@@ -51,11 +58,18 @@ export const {
 
       // * Allow OAuth without email verification
       if (account?.provider !== "credentials") {
-
         // Store the refresh token
-        if (account?.provider === "google" && account.refresh_token && account.scope) {
-          console.log('google account')
-          const updatedAccount = await updateGoogleAccount(user.id as string, account.refresh_token, account.scope);
+        if (
+          account?.provider === "google" &&
+          account.refresh_token &&
+          account.scope
+        ) {
+          console.log("google account");
+          const updatedAccount = await updateGoogleAccount(
+            user.id as string,
+            account.refresh_token,
+            account.scope,
+          );
         }
 
         return true;
@@ -70,7 +84,6 @@ export const {
 
         // Update login provider for showing correct setting in the UI
         await updateLoginProvider(user.id as string, account.provider);
-
 
         // * Two factor authentication
         // if (existingUser.isTwoFactorEnabled) {
@@ -106,11 +119,10 @@ export const {
       // Add custom fields to the token
       token.customField = "test";
 
-
       // If the trigger is "update", update the name in the token coming from the useSession() update() function
       if (trigger === "update") {
         token.name = session.name;
-      } 
+      }
 
       return token;
     },
@@ -125,11 +137,13 @@ export const {
         // Add id, role, customField, and credits to the user
         session.user.id = latestUserData.id || session.user.id;
         session.user.role = latestUserData.role || session.user.role;
-        session.user.customField = token.customField || session.user.customField;
+        session.user.customField =
+          token.customField || session.user.customField;
         session.user.credits = latestUserData.credits || session.user.credits;
-        session.user.name = token.name
-        session.user.email = token.email
-        session.user.loginProvider = latestUserData.loginProvider || session.user.loginProvider;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.loginProvider =
+          latestUserData.loginProvider || session.user.loginProvider;
       }
 
       // Add extra data to the session
@@ -141,18 +155,17 @@ export const {
     },
   },
   ...authConfig,
-
 });
 
 const updateLoginProvider = async (id: string, provider: string) => {
   try {
     const user = await db.user.update({
       where: { id },
-      data: { loginProvider: provider }
+      data: { loginProvider: provider },
     });
 
     return user;
   } catch {
     return null;
   }
-}
+};

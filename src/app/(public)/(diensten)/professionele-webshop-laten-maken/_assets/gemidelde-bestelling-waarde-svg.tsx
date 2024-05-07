@@ -1,8 +1,13 @@
 import React from "react";
 
-function GemiddeldeBestellingWaardeSVG({className}: {className?: string}) {
+function GemiddeldeBestellingWaardeSVG({ className }: { className?: string }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 305 148" className='shadow-custom-lg rounded'>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 305 148"
+      className="shadow-custom-lg rounded"
+    >
       <rect
         width="304.009"
         height="147.143"

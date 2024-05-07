@@ -1,10 +1,9 @@
-'use server'
+"use server";
 
 import { db } from "@/lib/db";
 import { z } from "zod";
 import { UpdateProjectSchema } from "../schema";
 import { Website } from "@prisma/client";
-
 
 /**
  * Retrieves a project by its ID.
@@ -19,7 +18,7 @@ export const getProjectById = async (projectId: string) => {
   // console.log('project');
 
   return project;
-}
+};
 
 /**
  * Deletes a project by its ID.
@@ -34,7 +33,7 @@ export const deleteProjectById = async (projectId: string) => {
   });
 
   return project;
-}
+};
 
 /**
  * Retrieves a project by user ID.
@@ -47,7 +46,7 @@ export const getProjectByUserId = async (userId: string) => {
   });
 
   return project;
-}
+};
 
 type UpdateProjectDetailsSchema = z.infer<typeof UpdateProjectSchema>;
 
@@ -57,7 +56,10 @@ type UpdateProjectDetailsSchema = z.infer<typeof UpdateProjectSchema>;
  * @param data - The updated project details.
  * @returns The updated project.
  */
-export const updateProjectDetails = async (projectId: string, data: UpdateProjectDetailsSchema) => {
+export const updateProjectDetails = async (
+  projectId: string,
+  data: UpdateProjectDetailsSchema,
+) => {
   if (data.gscSite) {
     const project = await db.googleSearchProject.update({
       where: { id: projectId },
@@ -67,7 +69,7 @@ export const updateProjectDetails = async (projectId: string, data: UpdateProjec
         language: data.language,
         country: data.country,
         gscUrl: data.gscSite,
-      }
+      },
     });
 
     return project;
@@ -84,7 +86,7 @@ export const updateProjectDetails = async (projectId: string, data: UpdateProjec
 
     return project;
   }
-}
+};
 
 export type GoogleSearchProjectsWithLatestResult = {
   id: string;
@@ -101,32 +103,31 @@ export type GoogleSearchProjectsWithLatestResult = {
   topHundred: number;
   averagePosition: number;
   createdAt: Date;
+};
 
-}
-
-export const getUsersGoogleSearchProjectsWithLatestProjectResult = async (userId: string) => {
-
+export const getUsersGoogleSearchProjectsWithLatestProjectResult = async (
+  userId: string,
+) => {
   if (!userId) {
-    return
+    return;
   }
 
   const projects = await db.googleSearchProject.findMany({
     where: {
-      userId: userId
+      userId: userId,
     },
     include: {
       website: true,
       results: {
         orderBy: {
-          createdAt: 'desc'
+          createdAt: "desc",
         },
-        take: 1
-      }
-    }
+        take: 1,
+      },
+    },
+  });
 
-  })
-
-  return projects.map(project => {
+  return projects.map((project) => {
     return {
       id: project.id,
       website: project.website,
@@ -141,14 +142,14 @@ export const getUsersGoogleSearchProjectsWithLatestProjectResult = async (userId
       topTen: project.results[0]?.topTen,
       topHundred: project.results[0]?.topHundred,
       averagePosition: project.results[0]?.averagePosition,
-      createdAt: project.results[0]?.createdAt
+      createdAt: project.results[0]?.createdAt,
     };
   });
-}
+};
 
 /**
  * Creates a new project in the database.
- * 
+ *
  * @param userId - The ID of the user creating the project.
  * @param projectName - The name of the project.
  * @param domainUrl - The domain URL of the project.
@@ -170,14 +171,13 @@ export const getUsersGoogleSearchProjectsWithLatestProjectResult = async (userId
 //   return project;
 // }
 
-
 export const fetch7LatestResults = async (projectId: string) => {
   const results = await db.googleSearchProject.findMany({
     where: {
       id: projectId,
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
     take: 7,
   });
@@ -185,4 +185,4 @@ export const fetch7LatestResults = async (projectId: string) => {
   // console.log('results', results)
 
   return results;
-}
+};

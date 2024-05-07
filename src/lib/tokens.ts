@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-import { db } from './db';
-import { getVerificationTokenByEmail } from '../auth/data/verification-token';
+import { db } from "./db";
+import { getVerificationTokenByEmail } from "../auth/data/verification-token";
 import { getPasswordResetTokenByEmail } from "../auth/data/password-reset-token";
 
 export const generatePasswordResetToken = async (email: string) => {
@@ -12,7 +12,7 @@ export const generatePasswordResetToken = async (email: string) => {
 
   if (existingToken) {
     await db.passwordResetToken.delete({
-      where: { id: existingToken.id }
+      where: { id: existingToken.id },
     });
   }
 
@@ -20,14 +20,17 @@ export const generatePasswordResetToken = async (email: string) => {
     data: {
       email,
       token,
-      expires
-    }
+      expires,
+    },
   });
 
   return passwordResetToken;
-}
+};
 
-export const generateVerificationToken = async (email: string, userId?: string) => {
+export const generateVerificationToken = async (
+  email: string,
+  userId?: string,
+) => {
   const token = uuidv4();
   const expires = new Date(new Date().getTime() + 3600 * 1000);
 
@@ -42,18 +45,21 @@ export const generateVerificationToken = async (email: string, userId?: string) 
   }
 
   const verificationToken = await db.verificationToken.create({
-    data:  {
+    data: {
       email,
       token,
       expires,
-      userId
+      userId,
     },
   });
 
   return verificationToken;
 };
 
-export const updateGoogleRefreshToken = async (id: string, refreshToken: string) => {
+export const updateGoogleRefreshToken = async (
+  id: string,
+  refreshToken: string,
+) => {
   await db.user.update({
     where: {
       id,

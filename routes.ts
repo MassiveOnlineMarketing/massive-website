@@ -3,14 +3,10 @@
  * These routes do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = [
-  "/",
-  "/auth/new-verification",  
-  "/404"
-];
+export const publicRoutes = ["/", "/auth/new-verification", "/404"];
 
 /**
- * These are dynamic routes that are accessible to the public 
+ * These are dynamic routes that are accessible to the public
  * These routes do not require authentication
  * @type {string[]}
  */
@@ -22,10 +18,10 @@ export const publicDynamicRoutes = [
   "/zakelijke-website-laten-maken",
   "/professionele-webshop-laten-maken",
   "/search-engine-optimization",
-  '/api/webhooks',
+  "/api/webhooks",
 
-  "/vragenlijst",	
-]
+  "/vragenlijst",
+];
 
 /**
  * An array of routes that are used for authentication

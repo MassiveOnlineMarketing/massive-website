@@ -32,7 +32,6 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -40,15 +39,19 @@ export function DataTable<TData, TValue>({
   // sorting state
   const [sorting, setSorting] = React.useState<SortingState>([]);
   // filtering state
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
   // visibility state
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   // Row selection state
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = React.useState({});
   // console.log('rowSelection', rowSelection)
 
-
-  const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(null);
+  const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(
+    null,
+  );
 
   const table = useReactTable({
     data,
@@ -76,16 +79,13 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-
-
-
-
   const numberOfVisibleColumns = table.getVisibleFlatColumns().length;
 
   return (
     <div className="bg-white rounded-2xl shadow-sm px-8 py-6 mt-8">
-      <Heading level='h2' size='2xl' className="pb-6 border-b border-gray-200">Newsletter Signups</Heading>
-      
+      <Heading level="h2" size="2xl" className="pb-6 border-b border-gray-200">
+        Newsletter Signups
+      </Heading>
 
       {/* Keywords Table */}
       <div className="rounded-md mt-6">
@@ -100,17 +100,19 @@ export function DataTable<TData, TValue>({
                         // add rounded corners to first and last cell
                         header.column.getIndex() === 0
                           ? "rounded-l-2xl overflow-hidden "
-                          : header.column.getIndex() === numberOfVisibleColumns - 1
+                          : header.column.getIndex() ===
+                              numberOfVisibleColumns - 1
                             ? "rounded-r-2xl "
                             : ""
                       }
-                      key={header.id}>
+                      key={header.id}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}
@@ -120,14 +122,10 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row, index) => (
-
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={cn(
-                    "border-",
-                    index % 2 !== 0 ? 'bg-gray-50' : ''
-                  )}
+                  className={cn("border-", index % 2 !== 0 ? "bg-gray-50" : "")}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -135,14 +133,16 @@ export function DataTable<TData, TValue>({
                         // add rounded corners to first and last cell
                         cell.column.getIndex() === 0
                           ? "rounded-l-2xl overflow-hidden "
-                          : cell.column.getIndex() === numberOfVisibleColumns - 1
+                          : cell.column.getIndex() ===
+                              numberOfVisibleColumns - 1
                             ? "rounded-r-2xl "
                             : ""
                       }
-                      key={cell.id}>
+                      key={cell.id}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -161,7 +161,6 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
         {/* <DataTablePagination table={data} /> */}
-
       </div>
       {/* Keyword Detail */}
       {/* <KeywordDetail data={data} /> */}
@@ -169,7 +168,3 @@ export function DataTable<TData, TValue>({
     </div>
   );
 }
-
-
-
-

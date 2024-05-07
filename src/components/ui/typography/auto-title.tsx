@@ -8,22 +8,14 @@ type TitleProps = {
     heading?: string;
     paragraph?: string;
     button?: {
-        text: string;
-        href: string;
-    }
-  }
+      text: string;
+      href: string;
+    };
+  };
 };
 
-const AutoTitle: React.FC<TitleProps> = ({ children, className}) => {
-
-  return (
-    <div className={cn(
-      'flex flex-col gap-4',
-      className
-    )}>
-      {children}
-    </div>
-  )
-}
+const AutoTitle: React.FC<TitleProps> = ({ children, className }) => {
+  return <div className={cn("flex flex-col gap-4", className)}>{children}</div>;
+};
 
 export default AutoTitle;

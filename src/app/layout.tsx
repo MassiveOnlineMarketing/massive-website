@@ -1,29 +1,26 @@
-import { Inter } from 'next/font/google'
-import '@/styles/globals.css'
-import '@/styles/animations.css'
-import '@/styles/gradients.css'
-import Script from 'next/script'
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Inter } from "next/font/google";
+import "@/styles/globals.css";
+import "@/styles/animations.css";
+import "@/styles/gradients.css";
+import Script from "next/script";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
-
-import { Providers } from './providers'
+import { Providers } from "./providers";
 
 // Cookie consent
-import LoadCookies from '@/website/features/cookie-consent/LoadCookies'
-import CookieConsentBanner from '@/website/features/cookie-consent/CookieConsentBanner'
-import generateSchema from '@/website/schema/generate-schema'
+import LoadCookies from "@/website/features/cookie-consent/LoadCookies";
+import CookieConsentBanner from "@/website/features/cookie-consent/CookieConsentBanner";
+import generateSchema from "@/website/schema/generate-schema";
 
-
-
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: {
-    default: 'Massive Online Marketing'
+    default: "Massive Online Marketing",
   },
   description:
-    'Zet uw zakelijke visie samen met Massive Online Marketing om in tastbare sucessen met strategieën die ondernemerschap en resultaatgerichtheid combineren',
-  metadataBase: new URL(process.env.WEBSITE_URL || 'http://localhost:3000/'),
+    "Zet uw zakelijke visie samen met Massive Online Marketing om in tastbare sucessen met strategieën die ondernemerschap en resultaatgerichtheid combineren",
+  metadataBase: new URL(process.env.WEBSITE_URL || "http://localhost:3000/"),
   robots: {
     index: true,
     follow: true,
@@ -32,9 +29,9 @@ export const metadata = {
       index: true,
       follow: true,
       noimageindex: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   // openGraph: {
@@ -71,44 +68,38 @@ export const metadata = {
   //   images: ['https://nextjs.org/og.png'],
   // },
   verification: {
-    google: 'google',
-    yahoo: 'yahoo',
+    google: "google",
+    yahoo: "yahoo",
   },
-}
+};
 
 export const viewport = {
-  themeColor: 'white',
-  width: 'device-width',
+  themeColor: "white",
+  width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-}
+};
 
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-
-  const schema = generateSchema('DefaultSchema')
+  const schema = generateSchema("DefaultSchema");
 
   return (
     <html lang="nl">
       <body className={`${inter.className} overflow-x-hidden h-screen`}>
-
-
-        <Providers>
-          {children}
-        </Providers>
-
+        <Providers>{children}</Providers>
 
         <LoadCookies />
         <CookieConsentBanner />
         <SpeedInsights />
 
-        <Script type="application/ld+json" id='default-schema'>
+        <Script type="application/ld+json" id="default-schema">
           {JSON.stringify(schema)}
         </Script>
       </body>
     </html>
-  )
+  );
 }

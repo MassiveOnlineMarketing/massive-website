@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 export const ProgressBar = () => {
   const [scroll, setScroll] = useState(0);
@@ -23,7 +23,7 @@ export const ProgressBar = () => {
       document.body.offsetHeight,
       document.documentElement.offsetHeight,
       document.body.clientHeight,
-      document.documentElement.clientHeight
+      document.documentElement.clientHeight,
     );
   };
 

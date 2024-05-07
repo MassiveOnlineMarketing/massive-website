@@ -17,7 +17,7 @@ export const newVerification = async (token: string) => {
     return { error: "Token has expired!" };
   }
 
-  console.log('existingToken', existingToken);
+  console.log("existingToken", existingToken);
 
   // If the token has a user ID, we can use it to verify the email
   // Used for cases where the user has already signed up/ changed their email
@@ -32,11 +32,11 @@ export const newVerification = async (token: string) => {
       data: {
         emailVerified: new Date(),
         email: existingToken.email,
-      }
+      },
     });
 
     await db.verificationToken.delete({
-      where: { id: existingToken.id }
+      where: { id: existingToken.id },
     });
 
     return { success: "Email updated" };
@@ -54,11 +54,11 @@ export const newVerification = async (token: string) => {
     data: {
       emailVerified: new Date(),
       email: existingToken.email,
-    }
+    },
   });
 
   await db.verificationToken.delete({
-    where: { id: existingToken.id }
+    where: { id: existingToken.id },
   });
 
   return { success: "Email verified!" };

@@ -1,14 +1,12 @@
-import React from 'react'
-import AuthProvider from '@/auth/authProvider'
+import React from "react";
+import AuthProvider from "@/auth/authProvider";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <AuthProvider>
-        {children}
-      </AuthProvider>
+      <AuthProvider>{children}</AuthProvider>
     </>
-  )
-}
+  );
+};
 
-export default layout
+export default layout;

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const page = () => {
-  return (
-    <div>over ons</div>
-  )
-}
+  return <div>over ons</div>;
+};
 
-export default page
+export default page;

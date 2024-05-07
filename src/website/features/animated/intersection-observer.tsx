@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { InView } from "react-intersection-observer"
+import { InView } from "react-intersection-observer";
 
 export default function AnimateWhenInView({
   children,
   classNameInView,
   classNameNotInView,
 }: {
-  children: React.ReactNode
-  classNameInView: string
-  classNameNotInView: string
+  children: React.ReactNode;
+  classNameInView: string;
+  classNameNotInView: string;
 }) {
   return (
     <InView triggerOnce threshold={1}>
@@ -22,5 +22,5 @@ export default function AnimateWhenInView({
         </div>
       )}
     </InView>
-  )
+  );
 }

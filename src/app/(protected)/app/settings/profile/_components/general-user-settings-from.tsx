@@ -1,25 +1,32 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { useSession } from 'next-auth/react';
+import React from "react";
+import { useSession } from "next-auth/react";
 import { useState, useTransition } from "react";
 
-// Form 
+// Form
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GeneralUserSettingsSchema } from '@/auth/schema';
-import { FormError } from '@/auth/forms/form-error';
-import { FormSuccess } from '@/auth/forms/form-success';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { GeneralUserSettingsSchema } from "@/auth/schema";
+import { FormError } from "@/auth/forms/form-error";
+import { FormSuccess } from "@/auth/forms/form-success";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 // Comp
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 
 // Auth
-import { useCurrentUser } from '@/auth/hooks/use-current-user';
-import { updateUserDetails } from '@/auth/actions/settings';
+import { useCurrentUser } from "@/auth/hooks/use-current-user";
+import { updateUserDetails } from "@/auth/actions/settings";
 
 const GeneralUserSettingsForm = () => {
   const currentUser = useCurrentUser();
@@ -38,7 +45,9 @@ const GeneralUserSettingsForm = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof GeneralUserSettingsSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof GeneralUserSettingsSchema>,
+  ) => {
     setError("");
     setSuccess("");
 
@@ -52,9 +61,9 @@ const GeneralUserSettingsForm = () => {
           form.reset({
             name: data.data.name || undefined,
             email: data.data.email || undefined,
-          })
+          });
           // Update the session --> Auth.ts
-          update({ name: data.data.name, email: data.data.email })
+          update({ name: data.data.name, email: data.data.email });
         }
       }
     });
@@ -62,14 +71,14 @@ const GeneralUserSettingsForm = () => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="mb-10 space-y-[16px]">
-          <p className='text-base leading-6 font-semibold text-gray-800'>Personal</p>
+          <p className="text-base leading-6 font-semibold text-gray-800">
+            Personal
+          </p>
           <FormField
             control={form.control}
-            name='name'
+            name="name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Full Name</FormLabel>
@@ -87,7 +96,7 @@ const GeneralUserSettingsForm = () => {
           />
           <FormField
             control={form.control}
-            name='email'
+            name="email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
@@ -105,13 +114,14 @@ const GeneralUserSettingsForm = () => {
           />
         </div>
 
-
-        {provider === 'credentials' && (
+        {provider === "credentials" && (
           <div className="space-y-[16px]">
-            <p className='text-base leading-6 font-semibold text-gray-800'>Change Password</p>
+            <p className="text-base leading-6 font-semibold text-gray-800">
+              Change Password
+            </p>
             <FormField
               control={form.control}
-              name='currentPassword'
+              name="currentPassword"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Current Password</FormLabel>
@@ -129,7 +139,7 @@ const GeneralUserSettingsForm = () => {
             />
             <FormField
               control={form.control}
-              name='password'
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>New Password</FormLabel>
@@ -147,7 +157,7 @@ const GeneralUserSettingsForm = () => {
             />
             <FormField
               control={form.control}
-              name='passwordConfirmation'
+              name="passwordConfirmation"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
@@ -166,8 +176,8 @@ const GeneralUserSettingsForm = () => {
           </div>
         )}
 
-        <FormError message={error} className='mt-[16px]' />
-        <FormSuccess message={success} className='mt-[16px]' />
+        <FormError message={error} className="mt-[16px]" />
+        <FormSuccess message={success} className="mt-[16px]" />
 
         <Button
           disabled={isPending}
@@ -178,7 +188,7 @@ const GeneralUserSettingsForm = () => {
         </Button>
       </form>
     </Form>
-  )
-}
+  );
+};
 
-export default GeneralUserSettingsForm
+export default GeneralUserSettingsForm;

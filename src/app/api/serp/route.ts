@@ -2,7 +2,10 @@
 
 import { decrementUserCredits } from "@/auth/data/user";
 import { insertKeywords } from "@/dashboard/google-search/data/google-search-keyword";
-import { getLatestKeywordResultWithTagByKeywordId, insertUserResults } from "@/dashboard/google-search/data/google-search-result";
+import {
+  getLatestKeywordResultWithTagByKeywordId,
+  insertUserResults,
+} from "@/dashboard/google-search/data/google-search-result";
 import { insertSERPResults } from "@/dashboard/google-search/data/google-search-serp-result";
 import axios from "axios";
 
@@ -20,18 +23,24 @@ interface Data {
 }
 
 export async function POST(request: Request) {
-
   const data: Data = await request.json();
 
   const { projectId, keyword, language, country, domainUrl, userId } = data;
 
-  console.time('addKeywordToProject'); // Start the timer
+  console.time("addKeywordToProject"); // Start the timer
 
   // add keywords to keywords table in the database
   const keywords = await insertKeywords(projectId, keyword);
 
   // make api call to serperApi to get the serp results
-  const response = await fetchSERPResults(keywords.keywordResponse, language, country, domainUrl, userId, projectId);
+  const response = await fetchSERPResults(
+    keywords.keywordResponse,
+    language,
+    country,
+    domainUrl,
+    userId,
+    projectId,
+  );
 
   // add user result to the result table in the database
   await handleTopTenSerpResults(response);
@@ -39,27 +48,25 @@ export async function POST(request: Request) {
   // add top 10 results to the serpresults table in the database'
   const userResultsArrays = await handleUserResults(response);
 
-  console.timeEnd('addKeywordToProject'); // End the timer
+  console.timeEnd("addKeywordToProject"); // End the timer
   if (userResultsArrays.success && userResultsArrays.results) {
-
     // decrement user credits
     await decrementUserCredits(userId, userResultsArrays.results.length);
 
     // Return the processed data
     return new Response(JSON.stringify(userResultsArrays), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 
-  console.log('🔴 Error inserting user results');
-  return new Response(JSON.stringify({ error: 'Error inserting user results' }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  console.log("🔴 Error inserting user results");
+  return new Response(
+    JSON.stringify({ error: "Error inserting user results" }),
+    {
+      headers: { "Content-Type": "application/json" },
+    },
+  );
 }
-
-
-
-
 
 interface KeywordProps {
   id: string;
@@ -70,8 +77,8 @@ export type SuccessfulSerpApiFetches = {
   organic: SerpApiResult[];
   peopleAlsoAsk?: SerpApiPeopleAsloAsk[];
   relatedSearches?: SerpApiRelatedSearches[];
-}
-// FetchItem and SuccessfulFetches types 
+};
+// FetchItem and SuccessfulFetches types
 export type SerpApiResult = {
   title: string;
   link: string;
@@ -88,17 +95,16 @@ export type SerpApiResult = {
   userId: string;
 };
 
-
 export type SerpApiPeopleAsloAsk = {
   question: string;
   snippet: string;
   title: string;
   link: string;
-}
+};
 
 export type SerpApiRelatedSearches = {
   query: string;
-}
+};
 
 async function fetchSERPResults(
   keywords: KeywordProps[],
@@ -106,32 +112,32 @@ async function fetchSERPResults(
   projectCountry: string,
   projectDomain: string,
   userId: string,
-  projectId: string
+  projectId: string,
 ) {
-  const dataTYL = keywords.map(keyword => ({
-    "q": keyword.keyword,
-    "gl": projectCountry,
-    "hl": projectLanguage,
-    "autocorrect": false,
-    "num": 100
+  const dataTYL = keywords.map((keyword) => ({
+    q: keyword.keyword,
+    gl: projectCountry,
+    hl: projectLanguage,
+    autocorrect: false,
+    num: 100,
   }));
 
   // Error handling
   var successfulFetches = [];
   var failedFetches = [];
 
-  let data = JSON.stringify(dataTYL)
+  let data = JSON.stringify(dataTYL);
 
   let config = {
-    method: 'post',
-    url: 'https://google.serper.dev/search',
+    method: "post",
+    url: "https://google.serper.dev/search",
     headers: {
       // soyojip238@seosnaps.com 196
 
-      'X-API-KEY': process.env.SERPER_API_KEY,
-      'Content-Type': 'application/json'
+      "X-API-KEY": process.env.SERPER_API_KEY,
+      "Content-Type": "application/json",
     },
-    data: data
+    data: data,
   };
 
   try {
@@ -142,8 +148,8 @@ async function fetchSERPResults(
       let foramtedResult: SuccessfulSerpApiFetches = {
         organic: [],
         peopleAlsoAsk: [],
-        relatedSearches: []
-      }
+        relatedSearches: [],
+      };
 
       if (result.organic.length > 0) {
         result.organic.forEach((item: any) => {
@@ -168,11 +174,13 @@ async function fetchSERPResults(
       successfulFetches.push(foramtedResult);
     }
   } catch (error) {
-    console.error('🔴 Error with the API call:', error);
+    console.error("🔴 Error with the API call:", error);
   }
 
   if (failedFetches.length === 0) {
-    console.log(`🟢 Successfully fetched all ${successfulFetches.length} keyword results from SERP API`);
+    console.log(
+      `🟢 Successfully fetched all ${successfulFetches.length} keyword results from SERP API`,
+    );
   } else {
     console.log(`🔴 Failed to fetch ${failedFetches.length} keyword results`);
   }
@@ -190,7 +198,7 @@ async function handleTopTenSerpResults(response: SuccessfulSerpApiFetches[]) {
         position: result.position,
         url: result.link,
         metaTitle: result.title,
-        metaDescription: result.snippet
+        metaDescription: result.snippet,
       });
     }
   }
@@ -199,25 +207,25 @@ async function handleTopTenSerpResults(response: SuccessfulSerpApiFetches[]) {
   try {
     await insertSERPResults(insertData);
 
-    console.log(`🟢 Successfully inserted all ${insertData.length} results in SERPResults Table`);
+    console.log(
+      `🟢 Successfully inserted all ${insertData.length} results in SERPResults Table`,
+    );
   } catch (error) {
     console.error(`🔴 Error inserting results:`, error);
   }
 }
 
-
-
 /**
  * Handles user results by extracting data from the provided SERP results,
  * creating new user results based on the extracted data, and inserting them
  * into the database.
- * 
+ *
  * @param serpResults - An array of SuccessfulSerpApiFetches containing the SERP results.
  * @returns An object containing the results of the operation.
  */
 async function handleUserResults(serpResults: SuccessfulSerpApiFetches[]) {
   const newResults: UserResult[] = [];
-  console.log('🟡 handle user results')
+  console.log("🟡 handle user results");
 
   for (const result of serpResults) {
     const userResult = extractDataFromResults(result);
@@ -227,16 +235,14 @@ async function handleUserResults(serpResults: SuccessfulSerpApiFetches[]) {
 
   const userResults = await insertUserResults(newResults);
 
-
-
   if (userResults.success) {
-    const keywordIds = newResults.map(result => result.keywordId);
+    const keywordIds = newResults.map((result) => result.keywordId);
     const results = await getLatestKeywordResultWithTagByKeywordId(keywordIds);
 
-    return { success: 'Successfully inserted user results', results };
+    return { success: "Successfully inserted user results", results };
   }
 
-  return { error: 'Error inserting user results' };
+  return { error: "Error inserting user results" };
 }
 
 export type UserResult = {
@@ -250,7 +256,7 @@ export type UserResult = {
   peopleAlsoAsk?: SerpApiPeopleAsloAsk[];
   relatedSearches?: SerpApiRelatedSearches[];
   userId: string;
-}
+};
 
 /**
  * Extracts the users data from the results of a successful SERP API fetch.
@@ -258,7 +264,9 @@ export type UserResult = {
  * @returns The extracted user result.
  */
 function extractDataFromResults(result: SuccessfulSerpApiFetches): UserResult {
-  const filteredResults = result.organic.filter(item => item.link.includes(item.domain));
+  const filteredResults = result.organic.filter((item) =>
+    item.link.includes(item.domain),
+  );
   // console.log('filteredResults', filteredResults);
 
   if (filteredResults.length === 0) {
@@ -272,7 +280,7 @@ function extractDataFromResults(result: SuccessfulSerpApiFetches): UserResult {
       resultProjectdId: result.organic[0].projectId,
       peopleAlsoAsk: result.peopleAlsoAsk,
       relatedSearches: result.relatedSearches,
-      userId: result.organic[0].userId
+      userId: result.organic[0].userId,
     };
   }
 
@@ -287,6 +295,6 @@ function extractDataFromResults(result: SuccessfulSerpApiFetches): UserResult {
     resultProjectdId: item.projectId,
     peopleAlsoAsk: result.peopleAlsoAsk,
     relatedSearches: result.relatedSearches,
-    userId: item.userId
+    userId: item.userId,
   };
 }

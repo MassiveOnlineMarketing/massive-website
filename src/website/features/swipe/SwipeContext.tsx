@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState } from "react";
 
 type SwipeContextType = {
   activeIndex: number;
@@ -13,22 +13,24 @@ interface SwipeProviderProps {
   numberOfCards: number;
 }
 
-const SwipeContext = React.createContext<SwipeContextType | undefined>(undefined);
+const SwipeContext = React.createContext<SwipeContextType | undefined>(
+  undefined,
+);
 
-export const SwipeProvider = ({ children, numberOfCards }: SwipeProviderProps) => {
+export const SwipeProvider = ({
+  children,
+  numberOfCards,
+}: SwipeProviderProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const itemsCount = numberOfCards;
   const value = {
     activeIndex,
     itemsCount,
-    setActiveIndex
-  }; 
-
+    setActiveIndex,
+  };
 
   return (
-    <SwipeContext.Provider value={value}>
-      {children}
-    </SwipeContext.Provider>
+    <SwipeContext.Provider value={value}>{children}</SwipeContext.Provider>
   );
 };
 
@@ -36,7 +38,7 @@ export const useSwipe = () => {
   const context = React.useContext(SwipeContext);
 
   if (!context) {
-    throw new Error('useSwipe must be used within a SwipeProvider');
+    throw new Error("useSwipe must be used within a SwipeProvider");
   }
 
   return context;

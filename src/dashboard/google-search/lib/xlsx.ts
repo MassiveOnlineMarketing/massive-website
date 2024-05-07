@@ -1,9 +1,8 @@
 import xlsx, { IJsonSheet } from "json-as-xlsx";
 
 export function downloadToExcel(data: any) {
-
   // @ts-ignore
-  let columns:IJsonSheet = [
+  let columns: IJsonSheet = [
     {
       sheet: "data",
       columns: [
@@ -18,15 +17,15 @@ export function downloadToExcel(data: any) {
         { label: "Created At", value: "createdAt" },
         { label: "Tags", value: "tags" },
       ],
-      content: data
-    }
-  ]
+      content: data,
+    },
+  ];
 
   let settings = {
     fileName: "keywords",
     // extraLength: 5,
     // writeOptions: {}
-  }
+  };
 
   // @ts-ignore
   xlsx(columns, settings);

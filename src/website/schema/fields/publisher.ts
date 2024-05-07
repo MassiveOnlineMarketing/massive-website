@@ -1,7 +1,7 @@
-import organizationSchema from "./organization"
+import organizationSchema from "./organization";
 
 export default function publisherSchema() {
-    const schema = organizationSchema()
+  const schema = organizationSchema();
 
-    return schema
+  return schema;
 }

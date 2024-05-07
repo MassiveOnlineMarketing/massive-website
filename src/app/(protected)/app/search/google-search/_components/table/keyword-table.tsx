@@ -6,20 +6,36 @@ import { cn } from "@/lib/utils";
 import { GoogleSearchResult } from "@prisma/client";
 
 // Components
-import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import KeywordDetailsRow from "./keywords-details-row";
 import { DataTableTopBar } from "./topbar";
 import { DataTablePagination } from "./pagination";
 import KeywordTableHead from "./keyword-table-head";
 import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
 
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
-
 
 function DataTable<TData, TValue>({
   columns,
@@ -28,15 +44,16 @@ function DataTable<TData, TValue>({
   // sorting state
   const [sorting, setSorting] = React.useState<SortingState>([]);
   // filtering state
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
   // visibility state
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   // Row selection state
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = React.useState({});
   // console.log('rowSelection', rowSelection)
- 
-  
-  
+
   const table = useReactTable({
     data,
     columns,
@@ -62,35 +79,37 @@ function DataTable<TData, TValue>({
     },
     getPaginationRowModel: getPaginationRowModel(),
   });
-  
-  
-  const refresh_token = useGoogleRefreshToken('search-console')
-  const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(null);
-  const [keywordData, setKeywordData] = React.useState<GoogleSearchResult | null>(null);
 
-  const handleClickRow = (id: string) => (event: React.MouseEvent<HTMLTableRowElement>) => {
-    let index = parseInt(id, 10);
+  const refresh_token = useGoogleRefreshToken("search-console");
+  const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(
+    null,
+  );
+  const [keywordData, setKeywordData] =
+    React.useState<GoogleSearchResult | null>(null);
 
-    if (selectedRowIndex === id) {
-      setSelectedRowIndex(null);
-      return;
-    }
+  const handleClickRow =
+    (id: string) => (event: React.MouseEvent<HTMLTableRowElement>) => {
+      let index = parseInt(id, 10);
 
-    setSelectedRowIndex(prevId => prevId === id ? null : id);
+      if (selectedRowIndex === id) {
+        setSelectedRowIndex(null);
+        return;
+      }
 
-    if (!isNaN(index) && index >= 0 && index < data.length) {
-      let item = data[index];
-      // console.log(item); // Check what the object looks like
-      setKeywordData(item as GoogleSearchResult);
-    } else {
-      console.log("Invalid index");
-    }
-  }
+      setSelectedRowIndex((prevId) => (prevId === id ? null : id));
+
+      if (!isNaN(index) && index >= 0 && index < data.length) {
+        let item = data[index];
+        // console.log(item); // Check what the object looks like
+        setKeywordData(item as GoogleSearchResult);
+      } else {
+        console.log("Invalid index");
+      }
+    };
 
   const deselectAllRows = () => {
     setRowSelection({});
-  }
-
+  };
 
   const numberOfVisibleColumns = table.getVisibleFlatColumns().length;
 
@@ -107,7 +126,6 @@ function DataTable<TData, TValue>({
         setSorting={setSorting}
       />
 
-
       {/* Keywords Table */}
       <div className="rounded-md mt-3">
         <Table>
@@ -121,17 +139,19 @@ function DataTable<TData, TValue>({
                         // add rounded corners to first and last cell
                         header.column.getIndex() === 0
                           ? "rounded-l-md overflow-hidden "
-                          : header.column.getIndex() === numberOfVisibleColumns - 1
+                          : header.column.getIndex() ===
+                              numberOfVisibleColumns - 1
                             ? "rounded-r-md "
                             : ""
                       }
-                      key={header.id}>
+                      key={header.id}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}
@@ -144,23 +164,22 @@ function DataTable<TData, TValue>({
                 <React.Fragment key={row.id}>
                   <TableRow
                     data-state={row.getIsSelected() && "selected"}
-                    className='border-b border-gray-200 hover:bg-neutral-100/50'
+                    className="border-b border-gray-200 hover:bg-neutral-100/50"
                     // handle click row, open keyword detail
                     onClick={handleClickRow(row.id)}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}>
+                      <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}
                   </TableRow>
 
                   {row.id === selectedRowIndex && (
-                    <tr >
+                    <tr>
                       {keywordData ? (
                         <td className="pt-6" colSpan={numberOfVisibleColumns}>
                           <KeywordDetailsRow
@@ -169,9 +188,7 @@ function DataTable<TData, TValue>({
                           />
                         </td>
                       ) : (
-                        <td colSpan={numberOfVisibleColumns}>
-                          Loading...
-                        </td>
+                        <td colSpan={numberOfVisibleColumns}>Loading...</td>
                       )}
                     </tr>
                   )}
@@ -199,9 +216,3 @@ function DataTable<TData, TValue>({
 }
 
 export default DataTable;
-
-
-
-
-
-

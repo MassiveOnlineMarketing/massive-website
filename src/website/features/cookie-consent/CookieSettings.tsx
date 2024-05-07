@@ -1,7 +1,7 @@
 // CookieSettings.jsx
 
-import { ToggleWithIcon } from '@/components/ui/input/switch';
-import { ConsentKeys, CookieKeys } from './CookieConsentBanner';
+import { ToggleWithIcon } from "@/components/ui/input/switch";
+import { ConsentKeys, CookieKeys } from "./CookieConsentBanner";
 // import Modal from '../modal/SimpleModal';
 
 import {
@@ -12,9 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/website/features/dialog/dialog"
-import { Button } from '@/components/ui/button';
-
+} from "@/website/features/dialog/dialog";
+import { Button } from "@/components/ui/button";
 
 interface CookieSettingsProps {
   consent: Record<ConsentKeys, boolean>;
@@ -24,14 +23,18 @@ interface CookieSettingsProps {
   children: React.ReactNode;
 }
 
-const CookieSettings: React.FC<CookieSettingsProps> = ({ consent, onSave, onReset, onConsentChange, children }) => {
+const CookieSettings: React.FC<CookieSettingsProps> = ({
+  consent,
+  onSave,
+  onReset,
+  onConsentChange,
+  children,
+}) => {
   return (
     <>
       <Dialog>
-        <DialogTrigger className='w-full'>
-          { children }
-        </DialogTrigger>
-        <DialogContent >
+        <DialogTrigger className="w-full">{children}</DialogTrigger>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Bewerk Cookie voorkeur</DialogTitle>
             <DialogDescription>
@@ -39,15 +42,20 @@ const CookieSettings: React.FC<CookieSettingsProps> = ({ consent, onSave, onRese
             </DialogDescription>
           </DialogHeader>
           <div>
-            {(["marketing", "analytics", "statistics"] as ConsentKeys[]).map(type => (
-              <div key={type} className='flex flex-row gap-2 items-center mb-2'>
-                <ToggleWithIcon
-                  checked={consent[type]}
-                  onChange={(value) => onConsentChange(type, value)}
-                />
-                <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
-              </div>
-            ))}
+            {(["marketing", "analytics", "statistics"] as ConsentKeys[]).map(
+              (type) => (
+                <div
+                  key={type}
+                  className="flex flex-row gap-2 items-center mb-2"
+                >
+                  <ToggleWithIcon
+                    checked={consent[type]}
+                    onChange={(value) => onConsentChange(type, value)}
+                  />
+                  <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
+                </div>
+              ),
+            )}
           </div>
           <DialogFooter>
             {/* <Button type="submit">Save changes</Button> */}

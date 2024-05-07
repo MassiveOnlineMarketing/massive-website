@@ -1,9 +1,8 @@
-import React from 'react'
-import PageContainer from './page-container'
-import AnimateWhenInView from '@/website/features/animated/intersection-observer'
-import { Heading, Paragraph } from '@/components/ui/typography/typography'
-import { Button } from '@/components/ui/button'
-
+import React from "react";
+import PageContainer from "./page-container";
+import AnimateWhenInView from "@/website/features/animated/intersection-observer";
+import { Heading, Paragraph } from "@/components/ui/typography/typography";
+import { Button } from "@/components/ui/button";
 
 const page = () => {
   return (
@@ -49,8 +48,7 @@ const page = () => {
         </section>
       </AnimateWhenInView> */}
     </>
-  )
-}
+  );
+};
 
-export default page
-
+export default page;

@@ -1,18 +1,15 @@
-import React from 'react'
-import serialize from './sterialize';
+import React from "react";
+import serialize from "./sterialize";
 
-
-
-const RichText: React.FC<{ className?: string; content: any }> = ({ className, content }) => {
+const RichText: React.FC<{ className?: string; content: any }> = ({
+  className,
+  content,
+}) => {
   if (!content) {
-    return null
+    return null;
   }
 
-  return (
-    <div className={className}>
-      {serialize(content)}
-    </div>
-  )
-}
+  return <div className={className}>{serialize(content)}</div>;
+};
 
-export default RichText
+export default RichText;

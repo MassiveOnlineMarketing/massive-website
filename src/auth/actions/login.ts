@@ -7,16 +7,16 @@
 // import { LoginSchema } from "@/schemas";
 // import { getUserByEmail } from "@/data/user";
 // import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
-// import { 
+// import {
 //   sendVerificationEmail,
 //   sendTwoFactorTokenEmail,
 // } from "@/lib/mail";
 // import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-// import { 
+// import {
 //   generateVerificationToken,
 //   generateTwoFactorToken
 // } from "@/lib/tokens";
-// import { 
+// import {
 //   getTwoFactorConfirmationByUserId
 // } from "@/data/two-factor-confirmation";
 
@@ -121,8 +121,6 @@
 //   }
 // };
 
-
-
 "use server";
 
 import * as z from "zod";
@@ -135,7 +133,6 @@ import { getUserByEmail } from "@/auth/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { db } from "@/lib/db";
 import { sendVerificationEmail } from "@/lib/mail";
-
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,
@@ -152,7 +149,7 @@ export const login = async (
   const existingUser = await getUserByEmail(email);
 
   if (!existingUser || !existingUser.email || !existingUser.password) {
-    return { error: "Email does not exist!" }
+    return { error: "Email does not exist!" };
   }
 
   if (!existingUser.emailVerified) {
@@ -223,14 +220,14 @@ export const login = async (
       email,
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-    })
+    });
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" }
+          return { error: "Invalid credentials!" };
         default:
-          return { error: "Something went wrong!" }
+          return { error: "Something went wrong!" };
       }
     }
 
