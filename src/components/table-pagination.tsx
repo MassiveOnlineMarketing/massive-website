@@ -23,7 +23,7 @@ interface DataTablePaginationProps<TData> {
   table: Table<TData>;
 }
 
-export function DataTablePagination<TData>({
+function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
   return (
@@ -108,3 +108,5 @@ export function DataTablePagination<TData>({
     </div>
   );
 }
+
+export default DataTablePagination;

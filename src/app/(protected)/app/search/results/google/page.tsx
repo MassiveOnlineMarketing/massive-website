@@ -12,12 +12,11 @@ import GoogleResultPage from "../_components/google-results-page";
 import { DateRangeObject } from "../_components/date-range-button";
 import { getDateDaysAgo } from "../_components/data-utils";
 import { useGoogleFilterStore } from "@/lib/zustand/google-results-filter-store";
-import { GoogleResultFilterWithUrls } from "@/dashboard/types";
+import QueryTableContainer from "./_components/query-table-container";
 
 interface ResultSearchApiResponse {
   config: any;
   data: {
-    comparedData: Data;
     currentData: Data;
     previousData: Data;
     data:
@@ -41,6 +40,18 @@ type Metrics = {
   position: number;
 };
 
+interface QuerySearchApiResponse {
+  config: any;
+  data: QueryObject[];
+}
+
+export type QueryObject = {
+  clicks: number;
+  ctr: number;
+  impressions: number;
+  position: number;
+  querry: string;
+};
 
 const Page = () => {
   const currentWebsite = useWebsiteDetailsStore(
@@ -52,7 +63,8 @@ const Page = () => {
   const [data, setData] = React.useState<Data[]>();
   const [currentData, setCurrentData] = React.useState<Data>();
   const [previousData, setPreviousData] = React.useState<Data>();
-  const [comparedData, setComparedData] = React.useState<Data>();
+
+  const [queryData, setQueryData] = React.useState<QueryObject[]>();
 
   const [selectedRange, setSelectedRange] = useState<DateRangeObject>({
     label: "last 30 days",
@@ -64,22 +76,21 @@ const Page = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchData();
+    fetchGraphData();
+    fetchQueryData();
     console.log("date changed");
   }, [selectedRange, currentWebsite]);
 
   const selectedFilter = useGoogleFilterStore((state) => state.selectedResultsFilter);
-  const fetchData = async () => {
-    // fetch data
-    if (!site_url || !refresh_token) return;
+
+  const createRequestUrl = (endpoint: string) => {
+    if (!site_url || !refresh_token) return null;
 
     const start_date = format(selectedRange.start(), "yyyy-MM-dd");
     const end_date = format(selectedRange.end(), "yyyy-MM-dd");
-    const filterUrls = selectedFilter.map((filter) => filter.urls.map((url) => url.url)).flat().join(",");
-    console.log("filterUrls", filterUrls)
 
-    if (!start_date || !end_date) return;
-    
+    if (!start_date || !end_date) return null;
+
     let urls = '';
     if (selectedFilter.length > 0) {
       const filterUrls = selectedFilter.map((filter) => filter.urls.map((url) => url.url)).flat().join(",");
@@ -89,11 +100,16 @@ const Page = () => {
       }
     }
 
-    const requestUrl = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/results?site_url=${site_url}&refresh_token=${refresh_token}&start_date=${start_date}&end_date=${end_date}${urls}`;
-     console.log("requestUrl", requestUrl);
+    return `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/api/${endpoint}?site_url=${site_url}&refresh_token=${refresh_token}&start_date=${start_date}&end_date=${end_date}${urls}`;
+  }
+
+  const fetchGraphData = async () => {
+    const requestUrl = createRequestUrl("results");
+    console.log("requestUrl", requestUrl);
+    if (!requestUrl) return;
     try {
       const res: ResultSearchApiResponse = await axios(requestUrl);
-      console.log('res', res)
+      console.log('fetchGraphData res', res)
 
       const formattedData = Object.entries(res.data.data).map(([date, metrics]) => ({
         date: date,
@@ -103,7 +119,6 @@ const Page = () => {
 
       setData(formattedData);
       setCurrentData(res.data.currentData);
-      setComparedData(res.data.comparedData);
       setPreviousData(res.data.previousData);
     } catch (error) {
       console.error(error);
@@ -111,6 +126,22 @@ const Page = () => {
 
     setIsLoading(false);
   };
+
+  const fetchQueryData = async () => {
+    const requestUrl = createRequestUrl("query_data");
+    console.log("requestUrl", requestUrl);
+    if (!requestUrl) return;
+
+    try {
+      const res: QuerySearchApiResponse = await axios(requestUrl);
+      console.log('fetchQueryData res', res);
+
+      setQueryData(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
   // TODO: Add no website selected state
   if (!currentWebsite) {
@@ -120,19 +151,20 @@ const Page = () => {
   // TODO: Add loading state
   if (!data) return <div>Loading...</div>;
 
+
   return (
     <div className="w-full h-full px-6">
       <BreadCrumbsSearchKeywords />
       <GoogleResultPage
         chartData={data}
         currentData={currentData as Data}
-        comparedData={comparedData as Data}
         previousData={previousData as Data}
         isLoading={isLoading}
         selectedRange={selectedRange}
         setSelectedRange={setSelectedRange}
       />
 
+      <QueryTableContainer queryData={queryData} />
     </div>
   );
 };

@@ -155,7 +155,7 @@ export interface Writer {
   lastName: string;
   fullName: string;
   bioGraphy: string;
-  profilePicture?: string | Media | null;
+  profilePicture?: Media | null;
   updatedAt: string;
   createdAt: string;
 }

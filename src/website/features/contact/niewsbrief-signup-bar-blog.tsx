@@ -33,8 +33,8 @@ const NiewsbriefSignupBarBlog = ({
 
     if (result?.error) {
       toast({
-        // @ts-ignore
         description:
+        // @ts-ignore
           result?.error?.email?._errors[0] || "Er is een fout opgetreden",
         variant: "destructive",
         duration: 5000,

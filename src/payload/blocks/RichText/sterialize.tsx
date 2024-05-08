@@ -125,14 +125,16 @@ const serialize = (children?: Children): React.ReactNode[] =>
       case "li":
         return <li key={i}>{serialize(node.children)}</li>;
       case "upload":
-        // @ts-ignore
         return (
           <Image
             className="mt-[72px]"
             key={i}
             src={`${PAYLOAD_BACKEND_URL}${node.value?.url}`}
+            // @ts-ignore
             alt={node.value?.alt}
+            // @ts-ignore
             width={node.value?.width}
+            // @ts-ignore
             height={node.value?.height}
           />
         );

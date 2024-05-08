@@ -28,7 +28,8 @@ import {
 } from "@/components/ui/table";
 import KeywordDetailsRow from "./keywords-details-row";
 import { DataTableTopBar } from "./topbar";
-import { DataTablePagination } from "./pagination";
+import DataTablePagination from "@/components/table-pagination";
+
 import KeywordTableHead from "./keyword-table-head";
 import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
 

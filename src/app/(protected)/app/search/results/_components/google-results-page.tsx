@@ -22,7 +22,6 @@ import FilterSelection from "./google-filter-selection";
 type GoogleResultPageProps = {
   chartData: Data[];
   currentData: Data;
-  comparedData: Data;
   previousData: Data;
   isLoading: boolean;
   selectedRange: DateRangeObject;
@@ -32,7 +31,6 @@ type GoogleResultPageProps = {
 const GoogleResultPage = ({
   chartData,
   currentData,
-  comparedData,
   previousData,
   isLoading,
   selectedRange,
@@ -45,8 +43,8 @@ const GoogleResultPage = ({
 
   const metrics = [
     { title: "Clicks", value: currentData.clicks, previousValue: previousData.clicks, show: showClicks, setShow: setShowClicks },
-    { title: "CTR", value: currentData.ctr, previousValue: previousData.ctr, show: showCtr, setShow: setShowCtr },
     { title: "Impressions", value: currentData.impressions, previousValue: previousData.impressions, show: showImpressions, setShow: setShowImpressions },
+    { title: "CTR", value: currentData.ctr, previousValue: previousData.ctr, show: showCtr, setShow: setShowCtr },
     { title: "Position", value: currentData.position, previousValue: previousData.position, show: showPosition, setShow: setShowPosition },
   ];
 
@@ -75,7 +73,7 @@ const GoogleResultPage = ({
             setSelectedRange={setSelectedRange}
           />
         </div>
-        <div className="pt-16 h-[470px] w-full">
+        <div className="pt-16 h-[280px] w-full">
           <AreaChartTest
             chartData={chartData}
             showClicks={showClicks}
