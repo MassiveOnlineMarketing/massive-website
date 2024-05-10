@@ -104,7 +104,8 @@ const Page = () => {
   }
 
   const fetchGraphData = async () => {
-    const requestUrl = createRequestUrl("results");
+    // const requestUrl = createRequestUrl("results");
+    const requestUrl = 'https://api.massiveonlinemarketing.nl:8000/api/results?site_url=https://www.fiveelephant.com/&refresh_token=1//05RrSrqDcLoqUCgYIARAAGAUSNwF-L9IrCtKpNa8XCg_vayjD5GiIghZqfSw8QynLZrRdfDq5Asvxz3jkUmYgccfzfNFxmfSI1R4&start_date=2024-04-10&end_date=2024-05-10'
     console.log("requestUrl", requestUrl);
     if (!requestUrl) return;
     try {
@@ -128,7 +129,8 @@ const Page = () => {
   };
 
   const fetchQueryData = async () => {
-    const requestUrl = createRequestUrl("query_data");
+    // const requestUrl = createRequestUrl("query_data");
+    const requestUrl = 'https://api.massiveonlinemarketing.nl:8000/api/query_data?site_url=https://www.fiveelephant.com/&refresh_token=1//05RrSrqDcLoqUCgYIARAAGAUSNwF-L9IrCtKpNa8XCg_vayjD5GiIghZqfSw8QynLZrRdfDq5Asvxz3jkUmYgccfzfNFxmfSI1R4&start_date=2024-04-10&end_date=2024-05-10'
     console.log("requestUrl", requestUrl);
     if (!requestUrl) return;
 

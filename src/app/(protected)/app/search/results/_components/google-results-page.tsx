@@ -18,6 +18,7 @@ import { format, parse } from "date-fns";
 import { constants } from "@/styles/styles";
 import AddFilter from "./add-filter";
 import FilterSelection from "./google-filter-selection";
+import RemoveFilterButtonTest from "./remove-filter-button-test";
 
 type GoogleResultPageProps = {
   chartData: Data[];
@@ -66,6 +67,7 @@ const GoogleResultPage = ({
         <div className="flex gap-3">
           <FilterSelection />
           <AddFilter />
+          <RemoveFilterButtonTest />
           <DateRangeButton
             className="ml-auto"
             isLoading={isLoading}

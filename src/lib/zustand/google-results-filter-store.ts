@@ -5,6 +5,9 @@ import { create } from "zustand";
 
 export type GoogleResultFilterActions = {
   setGoogleResultFilter: (filter: GoogleResultFilterWithUrls[]) => void;
+  addGoogleResultFilter: (filterToAdd: GoogleResultFilterWithUrls) => void;
+  removeGoogleResultFilter: (filterToRemove: GoogleResultFilter) => void;
+
   setSelectedResultsFilter: (filter: GoogleResultFilterWithUrls[]) => void;
 };
 
@@ -27,6 +30,20 @@ export const useGoogleFilterStore = create<GoogleResultFilterStore>((set) => ({
     set({
       googleResultFilter: filter,
     });
+  },
+
+  addGoogleResultFilter: (filterToAdd) =>{ 
+    set((state) => ({
+      googleResultFilter: [...state.googleResultFilter, filterToAdd]
+    }))
+  },
+
+  removeGoogleResultFilter: (filterToRemove: GoogleResultFilter) => {
+    set((state) => ({
+      googleResultFilter: state.googleResultFilter.filter(
+        filter => filter.id !== filterToRemove.id
+      )
+    }))
   },
 
   setSelectedResultsFilter: (filter: GoogleResultFilterWithUrls[]) => {

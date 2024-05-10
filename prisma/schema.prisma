@@ -205,8 +205,8 @@ model GoogleResultFilter {
   id        String                  @id @default(cuid())
   name      String
   urls      GoogleResultFilterURL[]
-  Website   Website?                @relation(fields: [websiteId], references: [id], onDelete: Cascade)
-  websiteId String?
+  Website   Website                 @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String
 }
 
 model GoogleResultFilterURL {
