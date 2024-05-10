@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod'
-import { GoogleSearchProjectSchema } from '../schema';
+import { GoogleSearchProjectSchema } from '../../schema';
 
 import { db } from  '@/lib/db'
 import { auth } from '@/auth/auth'

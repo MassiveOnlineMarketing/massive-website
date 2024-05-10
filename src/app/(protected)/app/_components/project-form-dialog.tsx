@@ -1,7 +1,7 @@
 "use client";
 
 // External libraries
-import React, { SetStateAction, useEffect } from "react";
+import React, { useEffect } from "react";
 import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -14,29 +14,21 @@ import { GoogleSearchProjectSchema } from "@/dashboard/schema";
 import { GoogleSearchProject } from "@prisma/client";
 
 // Internal functions
-import { updateGoogleSearchProjectA } from "@/dashboard/actions/update-google-search-project";
-import { createGoogleSearchProjectA } from "@/dashboard/actions/create-google-search-project";
 import { splitAndTrimKeywords } from "@/dashboard/google-search/lib/utils";
 import { useProcessNewKeywords } from "@/dashboard/google-search/hooks/useProcessNewKeywords";
+
+// Actions
+import { updateGoogleSearchProjectA } from "@/dashboard/google-search/actions/update-google-search-project";
+import { createGoogleSearchProjectA } from "@/dashboard/google-search/actions/create-google-search-project";
 
 // Store
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
 import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
 
 // Components
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-} from "@/website/features/dialog/dialog"; // replace with your actual import
+import { Dialog, DialogContent, DialogHeader } from "@/website/features/dialog/dialog";
 import { InputFieldApp, TextareaApp } from "@/components/ui/input/fields";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/input/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/input/select";
 import { useToast } from "@/website/features/toast/use-toast";
 
 interface GoogleSearchProjectFormDialogProps {

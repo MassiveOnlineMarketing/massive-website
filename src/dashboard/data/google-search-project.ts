@@ -2,8 +2,6 @@
 
 import { db } from "@/lib/db";
 
-
-
 export const getGoogleSearchProjectByUserId = async (userId: string) => {
   const project = await db.googleSearchProject.findMany({
     where: { userId },
