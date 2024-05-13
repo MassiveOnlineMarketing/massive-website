@@ -19,7 +19,7 @@ const ERROR_MESSAGES = {
   GENNERAL_FILTER_ERROR: "An error occurred while creating the filter",
 };
 
-export const createFilter = async ({
+export const createFilterA = async ({
   data,
   userDomain,
   websiteId,
@@ -45,7 +45,7 @@ export const createFilter = async ({
 
     let urlObjects = urls.map((url) => ({ url: url }));
 
-    const filter = await db.googleResultFilter.create({
+    const filterWithUrls = await db.googleResultFilter.create({
       data: {
         name: data.filterName,
         websiteId: websiteId,
@@ -53,23 +53,38 @@ export const createFilter = async ({
           create: urlObjects,
         },
       },
+      include: {
+        urls: { select: { url: true } }
+      }
     });
 
-    return { success: filter };
+    return { success: filterWithUrls };
   } catch (error) {
     console.error(error);
     return { error: ERROR_MESSAGES.GENNERAL_FILTER_ERROR };
   }
 };
 
+export const deleteFilterA = async ({
+  filterId
+}: {
+  filterId: string
+}) => {
 
-export const getFiltersByWebsiteId = async (websiteId: string) => {
-  return await db.googleResultFilter.findMany({
-    where: {
-      websiteId: websiteId,
-    },
-    include: {
-      urls: { select: { url: true } },
-    },
-  });
-};
+  if (!filterId){
+    return { error: 'No filter to delete'}
+  }
+
+  try {
+    const filter = await db.googleResultFilter.delete({
+      where: {
+        id: filterId
+      }
+    })
+
+    return { success: filter}
+  } catch (error) {
+    console.error('Error deleting tag with id: ', filterId)
+    return { error: 'An error accured while deleting the filter'}
+  }
+} 

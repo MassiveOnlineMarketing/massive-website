@@ -1,7 +1,7 @@
 "use client";
 
 // External libraries
-import React, { SetStateAction, useEffect } from "react";
+import React, { useEffect } from "react";
 import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -14,31 +14,21 @@ import { GoogleSearchProjectSchema } from "@/dashboard/schema";
 import { GoogleSearchProject } from "@prisma/client";
 
 // Internal functions
-import {
-  createGoogleSearchProject,
-  updateGoogleSearchProject,
-} from "@/dashboard/data/google-search-project";
 import { splitAndTrimKeywords } from "@/dashboard/google-search/lib/utils";
 import { useProcessNewKeywords } from "@/dashboard/google-search/hooks/useProcessNewKeywords";
+
+// Actions
+import { updateGoogleSearchProjectA } from "@/dashboard/google-search/actions/update-google-search-project";
+import { createGoogleSearchProjectA } from "@/dashboard/google-search/actions/create-google-search-project";
 
 // Store
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
 import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
 
 // Components
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-} from "@/website/features/dialog/dialog"; // replace with your actual import
+import { Dialog, DialogContent, DialogHeader } from "@/website/features/dialog/dialog";
 import { InputFieldApp, TextareaApp } from "@/components/ui/input/fields";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/input/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/input/select";
 import { useToast } from "@/website/features/toast/use-toast";
 
 interface GoogleSearchProjectFormDialogProps {
@@ -49,6 +39,37 @@ interface GoogleSearchProjectFormDialogProps {
 }
 
 type Schema = z.infer<typeof GoogleSearchProjectSchema>;
+
+const languageOptions = [
+  { value: "en", label: "English" },
+  { value: "nl", label: "Dutch" },
+  { value: "fr", label: "French" },
+  { value: "de", label: "German" },
+  { value: "es", label: "Spanish" },
+  { value: "it", label: "Italian" },
+  { value: "ru", label: "Russian" },
+  { value: "jp", label: "Japanese" },
+  { value: "kr", label: "Korean" },
+  { value: "cn", label: "Chinese" },
+  { value: "br", label: "Brazilian" },
+];
+
+const countryOptions = [
+  { value: "US", label: "United States" },
+  { value: "GB", label: "United Kingdom" },
+  { value: "NL", label: "Netherlands" },
+  { value: "CA", label: "Canada" },
+  { value: "AU", label: "Australia" },
+  { value: "DE", label: "Germany" },
+  { value: "FR", label: "France" },
+  { value: "IT", label: "Italy" },
+  { value: "ES", label: "Spain" },
+  { value: "JP", label: "Japan" },
+  { value: "KR", label: "South Korea" },
+  { value: "BR", label: "Brazil" },
+  { value: "RU", label: "Russia" },
+  { value: "CN", label: "China" },
+];
 
 const GoogleSearchProjectFormDialog: React.FC<
   GoogleSearchProjectFormDialogProps
@@ -84,97 +105,57 @@ const GoogleSearchProjectFormDialog: React.FC<
   }, [open]);
 
   const onSubmit: SubmitHandler<Schema> = async (data) => {
-    if (!user.data?.user.id) return;
-    if (!currentWebsite) {
+    const actionSuccessMessage = googleSearchProject
+    ? "Google Search Campaign updated"
+    : "Google Search Campaign  created";
+  const actionErrorMessage = googleSearchProject
+    ? "Updating the Google Search Campaign "
+    : "Creating the Google Search Campaign ";
+
+    let res;
+
+    if (googleSearchProject) {
+      res = await updateGoogleSearchProjectA({ projectId: googleSearchProject.id, data: data})
+    } else {
+      res = await createGoogleSearchProjectA({ websiteId: currentWebsite?.id, domainUrl: currentWebsite?.domainUrl, data: data})
+      if (res.success && handleAddProjectToSidebar) {
+        handleAddProjectToSidebar(res.success)
+      }
+    }
+
+    if (res.success) {
+      setProjectDetails(res.success)
+
+      if (data.keywords){
+        const keywordsArray = splitAndTrimKeywords(data.keywords)
+        processNewKeywords(keywordsArray, res.success)
+      }
+
+      setOpen(false)
+      reset()
+
       toast({
-        description: "Please add a website first",
-        variant: "warning",
-        icon: "warning",
+        description: actionSuccessMessage,
+        variant: 'success',
+        icon: 'success',
         duration: 5000,
-      });
-      setOpen(false);
+      })
+
+      router.push(`/app/search/google-search/${res.success.id}`);
+
       return;
     }
 
-    try {
-      let res: GoogleSearchProject | null = null;
-      if (googleSearchProject) {
-        res = await updateGoogleSearchProject(googleSearchProject.id, data);
-      } else {
-        res = await createGoogleSearchProject(
-          user.data.user.id,
-          currentWebsite.id,
-          currentWebsite.domainUrl,
-          data,
-        );
+    toast({
+      description: res.error || actionErrorMessage,
+      variant: 'destructive',
+      icon: 'destructive',
+      duration: 5000
+    })
 
-        setProjectDetails(res);
-        if (handleAddProjectToSidebar) {
-          handleAddProjectToSidebar(res);
-        }
-      }
-
-      if (res) {
-        if (data.keywords) {
-          const keywordsArray = splitAndTrimKeywords(data.keywords);
-          processNewKeywords(keywordsArray, res);
-        }
-
-        setProjectDetails(res);
-        setOpen(false);
-        reset();
-        toast({
-          description: `Google Search Campaign ${googleSearchProject ? "updated " : "created "}`,
-          variant: "success",
-          icon: "success",
-          duration: 5000,
-        });
-        router.push(`/app/search/google-search/${res.id}`);
-      }
-    } catch (error) {
-      console.error(
-        `Error ${googleSearchProject ? "updating" : "creating"} website:`,
-        error,
-      );
-      toast({
-        description: `${googleSearchProject ? "Updating" : "Creating"} the Google Search Campaign. Please try again.`,
-        variant: "destructive",
-        icon: "destructive",
-        duration: 5000,
-      });
-    }
+    return;
   };
 
-  const languageOptions = [
-    { value: "en", label: "English" },
-    { value: "nl", label: "Dutch" },
-    { value: "fr", label: "French" },
-    { value: "de", label: "German" },
-    { value: "es", label: "Spanish" },
-    { value: "it", label: "Italian" },
-    { value: "ru", label: "Russian" },
-    { value: "jp", label: "Japanese" },
-    { value: "kr", label: "Korean" },
-    { value: "cn", label: "Chinese" },
-    { value: "br", label: "Brazilian" },
-  ];
-
-  const countryOptions = [
-    { value: "US", label: "United States" },
-    { value: "GB", label: "United Kingdom" },
-    { value: "NL", label: "Netherlands" },
-    { value: "CA", label: "Canada" },
-    { value: "AU", label: "Australia" },
-    { value: "DE", label: "Germany" },
-    { value: "FR", label: "France" },
-    { value: "IT", label: "Italy" },
-    { value: "ES", label: "Spain" },
-    { value: "JP", label: "Japan" },
-    { value: "KR", label: "South Korea" },
-    { value: "BR", label: "Brazil" },
-    { value: "RU", label: "Russia" },
-    { value: "CN", label: "China" },
-  ];
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

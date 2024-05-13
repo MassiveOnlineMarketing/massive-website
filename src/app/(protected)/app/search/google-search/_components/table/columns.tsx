@@ -10,6 +10,7 @@ import { GoogleSearchResult } from "@prisma/client";
 
 import { format } from "date-fns";
 import KeywordRowActionDropdown from "./column/keyword-row-action-dropdown";
+import { urlWithoutDomain } from "@/dashboard/utils";
 
 const urlSortingFn: SortingFn<GoogleSearchResult> = (
   rowA: Row<GoogleSearchResult>,
@@ -45,7 +46,7 @@ const positionSortingFn: SortingFn<GoogleSearchResult> = (
   }
 };
 
-export const columns = (): ColumnDef<GoogleSearchResult>[] => [
+export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => [
   // * Select column
   {
     id: "select",
@@ -145,9 +146,17 @@ export const columns = (): ColumnDef<GoogleSearchResult>[] => [
       } else {
         return (
           <p className="mx-auto text-sm leading-5 font-medium text-gray-500">
-            {(row.getValue("url") as string).length > 52
-              ? (row.getValue("url") as string).substring(0, 52) + "..."
-              : row.getValue("url")}
+            {
+              domainUrl ? (
+                (row.getValue("url") as string).length > 52
+                  ? urlWithoutDomain(row.getValue("url") as string, domainUrl).substring(0, 52) + "..."
+                  : urlWithoutDomain(row.getValue("url") as string, domainUrl)
+              ) : (
+                (row.getValue("url") as string).length > 52
+                  ? (row.getValue("url") as string).substring(0, 52) + "..."
+                  : row.getValue("url")
+              )
+            }
           </p>
         );
       }

@@ -11,10 +11,8 @@ import {
 
 export const useTags = () => {
   const { toast } = useToast();
-  // const { results, setResults } = useKeywordResults();
 
   const results = useKeywordResultsStore((state) => state.keywordResults);
-  // ! Check if we dont need to use updateResults instead of setResults
   const setResults = useKeywordResultsStore((state) => state.setKeywordResults);
 
   /**
@@ -77,7 +75,7 @@ export const useTags = () => {
           duration: 5000,
         });
 
-        console.log("Tag added to keywords:", tagResponse);
+        // console.log("Tag added to keywords:", tagResponse);
         return tagResponse;
       }
     } catch (error) {
@@ -145,12 +143,10 @@ export const useTags = () => {
 
         if (tagResponse) {
           tagResponse.push(response);
-          console.log("Tag deleted from keywords:", response);
+          // console.log("Tag deleted from keywords:", response);
         }
       }
 
-      // const tagResponse = await deleteTagFromKeywords(keywordIds, tagName);
-      console.log("Tag response:", tagResponse);
       if (tagResponse) {
         deleteTagFromResults(tagName, keywordIds);
 

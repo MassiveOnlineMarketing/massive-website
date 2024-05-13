@@ -61,10 +61,10 @@ function Page({ params }: Props) {
   );
   const filteredResults = useFilteredKeywordResults();
 
-  // // Clean up old results
-  // useEffect(() => {
-  //     resetKweywordResults()
-  // }, [])
+  // Clean up old results
+  useEffect(() => {
+      resetKweywordResults()
+  }, [])
 
   // Fetch project details + keyword results
   useEffect(() => {
@@ -129,7 +129,7 @@ function Page({ params }: Props) {
         projectName={googleSearchProjectDetails.projectName}
       />
       {keywordResults ? <ProjectStats /> : <div>Loading...</div>}
-      <DataTable columns={columns()} data={filteredResults} />
+      <DataTable columns={columns(currentWebsite?.domainUrl)} data={filteredResults} />
 
       {/* Dialog for deleting keyword */}
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

@@ -84,16 +84,20 @@ const Page = () => {
               )}
             </TabContent>
             <TabContent id={2}>
-              {" "}
-              <h1>Tab 2</h1>{" "}
+              <h1>Tab 2</h1>
             </TabContent>
             <TabContent id={3}>
-              {" "}
-              <h1>Tab 3</h1>{" "}
+              <h1>Tab 3</h1>
             </TabContent>
             <TabContent id={4}>
-              {" "}
-              <h1>Tab 4</h1>{" "}
+              <h1>Updates</h1>
+
+              <div>
+                <p>13/05/2024</p>
+                <ul>
+                  <li>Add domain verification</li>
+                </ul>
+              </div>
             </TabContent>
           </div>
         </TabContainer>

@@ -38,6 +38,8 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
     [],
   );
 
+  const domainUrl = useWebsiteDetailsStore((state) => state.WebsiteDetails?.domainUrl);
+
   useEffect(() => {
     setSearchConsoleData(null);
     fetchSearchConsoleData(keywordData.keywordName);
@@ -83,7 +85,7 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
             Details Overview
           </p>
           <div className="max-w-[530px] flex flex-col">
-            <UserResultDetails keywordData={keywordData} />
+            <UserResultDetails keywordData={keywordData} domainUrl={domainUrl} />
           </div>
         </Card>
       )}

@@ -5,35 +5,24 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { z } from "zod";
-import { useSession } from "next-auth/react";
 
 import { PythonApiSite } from "@/dashboard/types";
 import { Website } from "@prisma/client";
 
 import { WebsiteDetailsSchema } from "@/dashboard/schema";
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
-import { DEFAULT_APP_SETTING_PAGE } from "../../../../../routes";
 import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
 import { fetchConnectedSites } from "@/dashboard/google-search/connected-sites";
 
-// Components
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-} from "@/website/features/dialog/dialog"; // replace with your actual import
-import { ErrorMessage, InputFieldApp } from "@/components/ui/input/fields";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/input/select";
-import { useToast } from "@/website/features/toast/use-toast";
-import valudateWebsiteUrl from "@/dashboard/actions/validate-website-url";
+// Actions
 import { updateWebsiteDetails } from "@/dashboard/actions/update-website";
 import { createWebsite } from "@/dashboard/actions/create-website";
+
+// Components
+import { Dialog, DialogContent, DialogHeader } from "@/website/features/dialog/dialog"; 
+import { ErrorMessage, InputFieldApp } from "@/components/ui/input/fields";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/input/select";
+import { useToast } from "@/website/features/toast/use-toast";
 
 interface WebsiteFormDialogProps {
   open: boolean;
@@ -48,23 +37,14 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
   setOpen,
   website,
 }) => {
-  const user = useSession();
   const refresh_token = useGoogleRefreshToken("search-console");
 
   const [sites, setSites] = useState<PythonApiSite[]>();
-  const [checkedWebsiteUrl, setCheckedWebsiteUrl] = useState<string | null>(
-    null,
-  );
   const { toast } = useToast();
 
   const setWebsiteDetails = useWebsiteDetailsStore(
     (state) => state.setWebsiteDetails,
   );
-
-  let currentWebsiteDetails: Website | null = null;
-  if (website) {
-    currentWebsiteDetails = website;
-  }
 
   const {
     register,
@@ -77,14 +57,14 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
 
   useEffect(() => {
     if (open) {
-      if (currentWebsiteDetails) {
-        setValue("websiteName", currentWebsiteDetails.websiteName);
-        setValue("domainUrl", currentWebsiteDetails.domainUrl);
+      if (website) {
+        setValue("websiteName", website.websiteName);
+        setValue("domainUrl", website.domainUrl);
         if (
-          currentWebsiteDetails.gscUrl &&
-          currentWebsiteDetails.gscUrl !== ""
+          website.gscUrl &&
+          website.gscUrl !== ""
         ) {
-          setValue("gscUrl", currentWebsiteDetails.gscUrl);
+          setValue("gscUrl", website.gscUrl);
         } else {
           setValue("gscUrl", "");
         }
@@ -101,14 +81,13 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
   };
 
   const onSubmit: SubmitHandler<Schema> = async (data) => {
-    if (!user.data?.user.id) return;
 
     const actionSuccessMessage = website
       ? "Website updated"
       : "Website created";
     const actionErrorMessage = website
-      ? "updating the website"
-      : "creating the website";
+      ? "Updating the website"
+      : "Creating the website";
 
     let res;
     if (website) {
@@ -136,6 +115,8 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
       icon: "destructive",
       duration: 5000,
     });
+
+    return;
   };
 
   return (
@@ -143,7 +124,7 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
       <DialogContent>
         <DialogHeader>
           <h2 className="font-medium text-2xl text-gray-800">
-            {currentWebsiteDetails
+            {website
               ? "Update your Website"
               : "Setup your website"}
           </h2>
@@ -168,7 +149,7 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
           <p className="mt-7">Domain Url</p>
           <InputFieldApp
             type="text"
-            placeholder="example.com"
+            placeholder="https://www.example.com"
             required
             {...register("domainUrl", { required: true })}
           />
@@ -225,7 +206,7 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
             type="submit"
             className="mt-8 px-6 py-2 w-fit flex mx-auto rounded-lg text-lg font-semibold"
           >
-            {currentWebsiteDetails ? "Update" : "Create"}
+            {website ? "Update" : "Create"}
           </button>
         </form>
       </DialogContent>

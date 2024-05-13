@@ -22,11 +22,13 @@ const pillVariants = cva("rounded-full text-xs leading-4 font-medium border", {
 interface PillProps extends VariantProps<typeof pillVariants> {
   children: React.ReactNode;
   className?: string;
+
+  onClick?: () => void; 
 }
 
-const Pill = ({ children, className, variant, color }: PillProps) => {
+const Pill = ({ children, className, variant, color, onClick, ...rest }: PillProps) => {
   return (
-    <span className={cn(pillVariants({ variant, color }), className)}>
+    <span className={cn(pillVariants({ variant, color }), className)} onClick={onClick} {...rest}>
       {children}
     </span>
   );
