@@ -149,7 +149,7 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
           <p className="mt-7">Domain Url</p>
           <InputFieldApp
             type="text"
-            placeholder="example.com"
+            placeholder="https://www.example.com"
             required
             {...register("domainUrl", { required: true })}
           />
