@@ -4,126 +4,82 @@ import { Pill } from "@/components/ui/pill";
 
 // charts
 import { Cell, Pie, PieChart } from "recharts";
+import { urlWithoutDomain } from "@/dashboard/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const META_TITLE_LIMIT = 60;
 type PillColor = "red" | "yellow" | "green";
 
 const CONFIG = {
   metaTitle: [
-    {
-      min: 0,
-      max: 35,
-      color: "red",
-      text: "Poor",
-      activePieColor: "#ef4444",
-      pieColor: "#ef444440",
-    },
-    {
-      min: 35,
-      max: 50,
-      color: "yellow",
-      text: "Moderate",
-      activePieColor: "#f59e0b",
-      pieColor: "#f59e0b40",
-    },
-    {
-      min: 50,
-      max: 60,
-      color: "green",
-      text: "Excellent",
-      activePieColor: "#059669",
-      pieColor: "#05966940",
-    },
-    {
-      min: 60,
-      max: Infinity,
-      color: "red",
-      text: "Poor",
-      activePieColor: "#ef4444",
-      pieColor: "#ef444440",
-    },
+    { min: 0, max: 35, color: "red", text: "Poor", activePieColor: "#ef4444", pieColor: "#ef444440" },
+    { min: 35, max: 50, color: "yellow", text: "Moderate", activePieColor: "#f59e0b", pieColor: "#f59e0b40" },
+    { min: 50, max: 60, color: "green", text: "Excellent", activePieColor: "#059669", pieColor: "#05966940" },
+    { min: 60, max: Infinity, color: "red", text: "Poor", activePieColor: "#ef4444", pieColor: "#ef444440" },
   ],
   metaDescription: [
-    {
-      min: 0,
-      max: 100,
-      color: "red",
-      text: "Poor",
-      activePieColor: "#ef4444",
-      pieColor: "#ef444440",
-    },
-    {
-      min: 100,
-      max: 140,
-      color: "yellow",
-      text: "Moderate",
-      activePieColor: "#f59e0b",
-      pieColor: "#f59e0b40",
-    },
-    {
-      min: 140,
-      max: 160,
-      color: "green",
-      text: "Excellent",
-      activePieColor: "#059669",
-      pieColor: "#05966940",
-    },
-    {
-      min: 160,
-      max: Infinity,
-      color: "red",
-      text: "Poor",
-      activePieColor: "#ef4444",
-      pieColor: "#ef444440",
-    },
+    { min: 0, max: 100, color: "red", text: "Poor", activePieColor: "#ef4444", pieColor: "#ef444440" },
+    { min: 100, max: 140, color: "yellow", text: "Moderate", activePieColor: "#f59e0b", pieColor: "#f59e0b40" },
+    { min: 140, max: 160, color: "green", text: "Excellent", activePieColor: "#059669", pieColor: "#05966940" },
+    { min: 160, max: Infinity, color: "red", text: "Poor", activePieColor: "#ef4444", pieColor: "#ef444440" },
   ],
   position: [
-    {
-      min: 0,
-      max: 5,
-      color: "green",
-      text: "Excellent",
-      activePieColor: "#059669",
-      pieColor: "#05966940",
-    },
-    {
-      min: 5,
-      max: 10,
-      color: "yellow",
-      text: "Moderate",
-      activePieColor: "#f59e0b",
-      pieColor: "#f59e0b40",
-    },
-    {
-      min: 10,
-      max: Infinity,
-      color: "red",
-      text: "Poor",
-      activePieColor: "#ef4444",
-      pieColor: "#ef444440",
-    },
+    { min: 0, max: 5, color: "green", text: "Excellent", activePieColor: "#059669", pieColor: "#05966940" },
+    { min: 5, max: 10, color: "yellow", text: "Moderate", activePieColor: "#f59e0b", pieColor: "#f59e0b40" },
+    { min: 10, max: Infinity, color: "red", text: "Poor", activePieColor: "#ef4444", pieColor: "#ef444440" },
   ],
 };
 
 const UserResultDetails = ({
   keywordData,
+  domainUrl,
 }: {
   keywordData: KeywordResultWithTagProp;
+  domainUrl: string | undefined;
 }) => {
+
+  const copyUrlToClipboard = (url: string | null) => {
+    if (!url) return;
+
+    navigator.clipboard.writeText(url);
+  }
+
   return (
     <>
+      {/* Keyword */}
       <div className="py-3 flex justify-between items-center w-full border-b border-dashed border-gray-200">
         <p className="text-gray-800 font-medium">Keyword</p>
         <Pill color="primary" variant="text">
           {keywordData.keywordName}
         </Pill>
       </div>
+
+      {/* Url */}
       <div className="py-3 flex justify-between items-center w-full border-b border-dashed border-gray-200">
         <p className="text-gray-800 font-medium">Url</p>
-        <Pill color="primary" variant="text">
-          {keywordData.url?.substring(0, 52)}
-        </Pill>
+        <Tooltip>
+          <TooltipTrigger>
+            <Pill color="primary" variant="text" onClick={() => copyUrlToClipboard(keywordData.url)}>
+              {
+                domainUrl && keywordData.url ? (
+                  (keywordData.url as string).length > 52
+                    ? urlWithoutDomain(keywordData.url as string, domainUrl).substring(0, 52) + "..."
+                    : urlWithoutDomain(keywordData.url as string, domainUrl)
+                ) : (
+                  (keywordData.url as string).length > 52
+                    ? (keywordData.url as string).substring(0, 52) + "..."
+                    : keywordData.url
+                )
+              }
+            </Pill>
+          </TooltipTrigger>
+          <TooltipContent>
+            Copy URL
+          </TooltipContent>
+        </Tooltip>
       </div>
+
+      {/* Position */}
       <div className="py-3 flex items-center w-full border-b border-dashed border-gray-200">
         <p className="text-gray-800 font-medium">Position</p>
         {keywordData.position && (
@@ -142,6 +98,8 @@ const UserResultDetails = ({
           #{keywordData.position}
         </Pill>
       </div>
+
+      {/* Meta Title */}
       <div className="py-3 flex items-center w-full border-b border-dashed border-gray-200">
         <p className="text-gray-800 font-medium">Meta Title</p>
         {keywordData.position && (
@@ -176,6 +134,8 @@ const UserResultDetails = ({
       <p className="py-3 text-base leading-6 font-normal text-gray-500">
         {keywordData.metaTitle}
       </p>
+
+      {/* Meta Description */}
       <div className="py-3 flex items-center w-full border-b border-dashed border-gray-200">
         <p className="text-gray-800 font-medium">Meta Description</p>
         {keywordData.position && (
@@ -294,9 +254,9 @@ const getPieChartData = (
           value === item.max
             ? [{ name: item.text, value: value }]
             : [
-                { name: item.text, value: value },
-                { name: "Good", value: item.max - value },
-              ],
+              { name: item.text, value: value },
+              { name: "Good", value: item.max - value },
+            ],
       };
     }
   }
