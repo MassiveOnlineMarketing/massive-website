@@ -108,23 +108,49 @@ model Website {
 }
 
 model GoogleSearchProject {
-  id          String                      @id @default(cuid())
-  userId      String
-  websiteId   String
-  projectName String
-  domainUrl   String
-  language    String
-  country     String
-  gscUrl      String?
-  createdAt   DateTime                    @default(now())
-  updatedAt   DateTime                    @updatedAt
-  keyword     GoogleSearchKeyword[]
-  results     GoogleSearchProjectResult[]
+  id               String                         @id @default(cuid())
+  userId           String
+  websiteId        String
+  projectName      String
+  domainUrl        String
+  language         String
+  country          String
+  gscUrl           String?
+  createdAt        DateTime                       @default(now())
+  updatedAt        DateTime                       @updatedAt
+  keyword          GoogleSearchKeyword[]
+  results          GoogleSearchProjectResult[]
+  competitor       GoogleSearchCompetitor[]
 
   website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([id])
+}
+
+model GoogleSearchCompetitor {
+  id                    String   @id @default(cuid())
+  googleSearchProjectId String
+  domainUrl             String
+  // competitorName        String
+  createdAt             DateTime @default(now())
+
+  googleSearchProject          GoogleSearchProject            @relation(fields: [googleSearchProjectId], references: [id], onDelete: Cascade)
+  GoogleSearchCompetitorResult GoogleSearchCompetitorResult[]
+}
+
+model GoogleSearchCompetitorResult {
+  id                       String   @id @default(cuid())
+  googleSearchCompetitorId String
+  keywordId                String
+  position                 Int?
+  url                      String?
+  metaTitle                String?
+  metaDescription          String?
+  createdAt                DateTime @default(now())
+  googleSearchProjectId    String
+
+  googleSearchCompetitor GoogleSearchCompetitor @relation(fields: [googleSearchCompetitorId], references: [id], onDelete: Cascade)
 }
 
 model GoogleSearchProjectResult {
@@ -150,10 +176,10 @@ model GoogleSearchKeyword {
   keyword               String
   createdAt             DateTime @default(now())
 
-  googleSearchProject GoogleSearchProject      @relation(fields: [googleSearchProjectId], references: [id], onDelete: Cascade)
-  googleSerpResult    GoogleSearchSerpResult[]
-  Result              GoogleSearchResult[]
-  tags                GoogleSearchKeywordTag[]
+  googleSearchProject          GoogleSearchProject            @relation(fields: [googleSearchProjectId], references: [id], onDelete: Cascade)
+  googleSerpResult             GoogleSearchSerpResult[]
+  Result                       GoogleSearchResult[]
+  tags                         GoogleSearchKeywordTag[]
 }
 
 model GoogleSearchSerpResult {
