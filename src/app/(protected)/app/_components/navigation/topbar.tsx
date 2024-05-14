@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 import { ExtendedUser } from "../../../../../../next-auth";
 import { logout } from "@/auth/actions/logout";
 import { useCurrentUser } from "@/auth/hooks/use-current-user";
-import Credits from "@/dashboard/components/credits";
 
 // Components
 import {
@@ -23,7 +22,10 @@ import {
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { MassiveTextLogo } from "@/assets/branding";
-import WebsiteSelectionButton from "./website-selection-button";
+
+// User Account 
+import { useUserDetailsStore } from "@/lib/zustand/user-details-store";
+import { getAccountByUserId } from "@/auth/data/account";
 
 const TopBar = ({
   setMobileSidebarOpen,
@@ -31,6 +33,22 @@ const TopBar = ({
   setMobileSidebarOpen: (open: boolean) => void;
 }) => {
   const user = useCurrentUser();
+  const setAccount = useUserDetailsStore((state) => state.setAccountDetails);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchAccount = async () => {
+      const fetchedAccount = await getAccountByUserId(user.id as string);
+      // console.log('fetchedAccount test provider', fetchedAccount?.id)
+
+      if (!fetchedAccount) return;
+
+      setAccount(fetchedAccount);
+    };
+
+    fetchAccount();
+  }, [user]);
 
   return (
     <div className="h-16 w-full flex shrink-0 items-center gap-x-4 bg-white px-4 sm:gap-x-6 sm:px-6 lg:px-8">
