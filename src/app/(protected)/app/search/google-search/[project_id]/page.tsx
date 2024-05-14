@@ -96,7 +96,7 @@ function Page({ params }: Props) {
       ) as KeywordResultWithTagProp[];
 
       // check if the result is empty, happens after routing to project page when keywords are processed yet
-      if (filteredKeywords.length === 0) {
+      if (filteredKeywords[0].id === undefined) {
         console.log("no result");
       } else {
         setKeywordResults(filteredKeywords);
