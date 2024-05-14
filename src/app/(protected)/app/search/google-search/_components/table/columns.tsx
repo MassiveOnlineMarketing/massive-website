@@ -1,10 +1,12 @@
 "use client";
 
-import { ColumnDef, Row, SortingFn } from "@tanstack/react-table";
+import { ColumnDef, Row, SortDirection, SortingFn } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   ArrowTrendingDownIcon,
   ArrowTrendingUpIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
 } from "@heroicons/react/20/solid";
 import { GoogleSearchResult } from "@prisma/client";
 
@@ -79,40 +81,17 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     enableSorting: false,
     enableHiding: false,
   },
-  // * Position
-  {
-    accessorKey: "position",
-    header: ({ column }) => {
-      return (
-        <p
-          className="flex font-medium text-gray-600 mx-auto"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Position
-        </p>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="flex mx-auto h-full">
-          <p className="mx-auto text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("position")}
-          </p>
-        </div>
-      );
-    },
-    sortingFn: positionSortingFn,
-  },
   // * Name
   {
     accessorKey: "keywordName",
     header: ({ column }) => {
       return (
         <p
-          className="flex font-medium text-gray-600"
+          className="flex items-center font-medium text-gray-600"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Keyword
+          <SortingIndicator sorting={column.getIsSorted()} />
         </p>
       );
     },
@@ -129,10 +108,11 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     accessorKey: "url",
     header: ({ column }) => (
       <p
-        className="flex font-medium text-gray-600 mx-auto"
+        className="flex items-center font-medium text-gray-600 mx-auto"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Url
+        <SortingIndicator sorting={column.getIsSorted()} />
       </p>
     ),
     cell: ({ row }) => {
@@ -163,16 +143,42 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     },
     sortingFn: urlSortingFn,
   },
+  // * Position
+  {
+    accessorKey: "position",
+    header: ({ column }) => {
+      return (
+        <p
+          className="flex items-center font-medium text-gray-600 mx-auto"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Position
+          <SortingIndicator sorting={column.getIsSorted()} />
+        </p>
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <div className="flex mx-auto h-full">
+          <p className="text-sm leading-5 font-medium text-gray-800">
+            {row.getValue("position")}
+          </p>
+        </div>
+      );
+    },
+    sortingFn: positionSortingFn,
+  },
   // * First Position
   {
     accessorKey: "firstPosition",
     header: ({ column }) => {
       return (
         <p
-          className="flex font-medium text-gray-600 mx-auto"
+          className="flex items-center font-medium text-gray-600 mx-auto"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           First Position
+          <SortingIndicator sorting={column.getIsSorted()} />
         </p>
       );
     },
@@ -191,16 +197,17 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     header: ({ column }) => {
       return (
         <p
-          className="flex font-medium text-gray-600"
+          className="flex items-center font-medium text-gray-600"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Best Position
+          <SortingIndicator sorting={column.getIsSorted()} />
         </p>
       );
     },
     cell: ({ row }) => {
       return (
-        <p className="text-sm leading-5 font-medium text-gray-800">
+        <p className="text-sm leading-5 font-medium text-gray-500">
           {row.getValue("bestPosition")}
         </p>
       );
@@ -213,15 +220,16 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     header: ({ column }) => {
       return (
         <p
-          className="flex font-medium text-gray-600"
+          className="flex items-center font-medium text-gray-600"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Latest Change
+          <SortingIndicator sorting={column.getIsSorted()} />
         </p>
       );
     },
     cell: ({ row }) => {
-      let colorClass = "text-sm leading-5 font-medium text-gray-800";
+      let colorClass = "text-sm leading-5 font-medium text-gray-500";
       let icon = null;
 
       if (row.original && row.original.latestChange) {
@@ -249,10 +257,11 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     header: ({ column }) => {
       return (
         <p
-          className="flex font-medium text-gray-600"
+          className="flex items-center font-medium text-gray-600"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Date Retrieved
+          Last Updated
+          <SortingIndicator sorting={column.getIsSorted()} />
         </p>
       );
     },
@@ -273,6 +282,9 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
   },
   // * Actions
   {
+    header: ({ column }) => (
+      <p className="font-medium text-gray-600">Actions</p>
+    ),
     id: "actions",
     cell: ({ row }) => {
       const keyword = row.original;
@@ -281,3 +293,14 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     },
   },
 ];
+
+
+const SortingIndicator = (props: {sorting: false | SortDirection}) => {
+  if (props.sorting === "asc") {
+    return <ChevronUpIcon className="w-4 h-4 text-gray-600 ml-1" />;
+  } else if (props.sorting === "desc") {
+    return <ChevronDownIcon className="w-4 h-4 text-gray-600 ml-1" />;
+  } else {
+    return null;
+  }
+}

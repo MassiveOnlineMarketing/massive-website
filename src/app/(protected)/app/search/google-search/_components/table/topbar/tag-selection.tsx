@@ -56,7 +56,7 @@ const TagSelection = () => {
           {tagSting ? (
             <span className="text-gray-800">{tagSting}</span>
           ) : (
-            <span className="text-gray-800">All</span>
+            <span className="text-gray-800">All Keywords</span>
           )}
           <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </OutlinedButton>
@@ -71,8 +71,8 @@ const TagSelection = () => {
           />
           {uniqueTags.length > 0 && (
             <CommandGroup>
-              <CommandItem value="" onSelect={() => clearTags()}>
-                all
+              <CommandItem value="" onSelect={() => clearTags()} className="hover:bg-gray-100">
+                All Keywords
               </CommandItem>
               {uniqueTags.map((tag) => (
                 <CommandItem

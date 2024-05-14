@@ -57,7 +57,25 @@ export function DataTableTopBar<TData>({
 }: TopBarProps<TData>) {
   return (
     <div className="flex items-center">
-      <TagSelection />
+      {/* Searchbar */}
+      <div className="relative rounded-md shadow-sm h-[34px]">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <MagnifyingGlassIcon
+            className="h-5 w-5 text-gray-400"
+            aria-hidden="true"
+          />
+        </div>
+        <input
+          placeholder="Search by keyword name..."
+          value={
+            (table.getColumn("keywordName")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("keywordName")?.setFilterValue(event.target.value)
+          }
+          className="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm leading-6"
+        />
+      </div>
 
       {/* Selected rows */}
       <div className="ml-2">
@@ -65,7 +83,7 @@ export function DataTableTopBar<TData>({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <OutlinedButton size="smD" className="text-gray-800">
-                Row actions
+                Bulk Actions
               </OutlinedButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
@@ -99,30 +117,13 @@ export function DataTableTopBar<TData>({
         )}
       </div>
 
-      {/* Searchbar */}
-      <div className="relative rounded-md shadow-sm h-[34px]">
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <MagnifyingGlassIcon
-            className="h-5 w-5 text-gray-400"
-            aria-hidden="true"
-          />
-        </div>
-        <input
-          placeholder="Filter by keword name..."
-          value={
-            (table.getColumn("keywordName")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("keywordName")?.setFilterValue(event.target.value)
-          }
-          className="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm leading-6"
-        />
-      </div>
+      {/* Tag selection */}
+      <TagSelection />
 
-      {/* Download to Excell */}
-      <div className="ml-2">
+      {/* Sorting */}
+      {/* <div className="ml-2">
         <SortingRows sorting={sorting} setSorting={setSorting} />
-      </div>
+      </div> */}
 
       <TooltipProvider delayDuration={0}>
         {/* Add keyword */}
@@ -140,7 +141,7 @@ export function DataTableTopBar<TData>({
           </TooltipContent>
         </Tooltip>
 
-        {/* Download to Excell */}
+        {/* Download to Excel */}
         <Tooltip>
           <TooltipTrigger>
             <OutlinedTextButton
@@ -153,7 +154,7 @@ export function DataTableTopBar<TData>({
             </OutlinedTextButton>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Download Excell</p>
+            <p>Download Excel</p>
           </TooltipContent>
         </Tooltip>
 
