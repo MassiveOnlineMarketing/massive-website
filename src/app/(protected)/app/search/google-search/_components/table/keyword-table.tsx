@@ -25,7 +25,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table/table";
 import KeywordDetailsRow from "./keywords-details-row";
 import { DataTableTopBar } from "./topbar";
 import DataTablePagination from "@/components/table-pagination";

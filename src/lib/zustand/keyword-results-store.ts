@@ -6,6 +6,8 @@ export type KeywordResultsActions = {
   updateKeywordResults: (newKeywordResults: KeywordResultWithTagProp[]) => void;
   resetKeywordResults: () => void;
   setSelectedTags: (tags: string[]) => void;
+  removeSelectedTag: (tag: string) => void;
+
   resetSelectedTags: () => void;
 };
 
@@ -44,6 +46,12 @@ export const useKeywordResultsStore = create<KeywordResultsStore>((set) => ({
     set({
       selectedTags: tags,
     });
+  },
+
+  removeSelectedTag: (tag: string) => {
+    set((state) => ({
+      selectedTags: state.selectedTags.filter((t) => t !== tag),
+    }));
   },
 
   resetSelectedTags: () => {

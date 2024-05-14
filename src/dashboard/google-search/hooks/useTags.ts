@@ -14,6 +14,7 @@ export const useTags = () => {
 
   const results = useKeywordResultsStore((state) => state.keywordResults);
   const setResults = useKeywordResultsStore((state) => state.setKeywordResults);
+  const removeSelectedTag = useKeywordResultsStore((state) => state.removeSelectedTag);
 
   /**
    * ? Adds a tag to the results based on the provided keyword IDs.
@@ -112,6 +113,7 @@ export const useTags = () => {
       return result;
     });
     setResults(updatedResults);
+    removeSelectedTag(tagName);
   };
 
   /**

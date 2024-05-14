@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTags } from "@/dashboard/google-search/hooks/useTags";
 
-export const DeleteTagFromKeyword = ({
+const DeleteTagFromKeyword = ({
   selectedRows,
   onActionFinished,
 }: {
@@ -62,3 +62,6 @@ export const DeleteTagFromKeyword = ({
     </DropdownMenuSub>
   );
 };
+
+
+export default DeleteTagFromKeyword;

@@ -1,6 +1,6 @@
 import xlsx, { IJsonSheet } from "json-as-xlsx";
 
-export function downloadToExcel(data: any) {
+function downloadToExcel(data: any) {
   // @ts-ignore
   let columns: IJsonSheet = [
     {
@@ -30,3 +30,5 @@ export function downloadToExcel(data: any) {
   // @ts-ignore
   xlsx(columns, settings);
 }
+
+export default downloadToExcel;

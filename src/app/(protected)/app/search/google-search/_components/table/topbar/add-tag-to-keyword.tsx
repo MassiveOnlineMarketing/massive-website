@@ -12,7 +12,7 @@ import {
 import { GoogleSearchKeywordTag } from "@prisma/client";
 import { useTags } from "@/dashboard/google-search/hooks/useTags";
 
-export const AddTagToKeywords = ({
+const AddTagToKeywords = ({
   selectedRows,
   onActionFinished,
 }: {
@@ -53,3 +53,5 @@ export const AddTagToKeywords = ({
     </DropdownMenuSub>
   );
 };
+
+export default AddTagToKeywords;

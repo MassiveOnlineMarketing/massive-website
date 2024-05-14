@@ -19,7 +19,7 @@ import {
 import { OutlinedTextButton } from "@/components/ui/text-button";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
-export const DeleteKeywordSelectedRowButton = ({
+const DeleteKeywordSelectedRowButton = ({
   selectedRows,
   onActionFinished,
 }: {
@@ -83,3 +83,5 @@ export const DeleteKeywordSelectedRowButton = ({
     </DropdownMenu>
   );
 };
+
+export default DeleteKeywordSelectedRowButton;

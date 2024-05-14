@@ -30,14 +30,17 @@ import {
 import { PlusIcon } from "@heroicons/react/20/solid";
 
 // Topbar components
-import { AddTagToKeywords } from "@/app/(protected)/app/search/google-search/_components/table/topbar/add-tag-to-keyword";
+import AddTagToKeywords from "@/app/(protected)/app/search/google-search/_components/table/topbar/add-tag-to-keyword";
+import DeleteTagFromKeyword from "@/app/(protected)/app/search/google-search/_components/table/topbar/delete-tag-from-keyword";
+import AddNewTagInput from "@/app/(protected)/app/search/google-search/_components/table/topbar/add-new-tag-input";
 import TagSelection from "./topbar/tag-selection";
-import { DeleteTagFromKeyword } from "@/app/(protected)/app/search/google-search/_components/table/topbar/delete-tag-from-keyword";
-import { AddNewTagInput } from "@/app/(protected)/app/search/google-search/_components/table/topbar/add-new-tag-input";
-import { SortingRows } from "./topbar/row-sorting";
-import { downloadToExcel } from "@/dashboard/google-search/lib/xlsx";
+
+import DeleteKeywordSelectedRowButton from "@/app/(protected)/app/search/google-search/_components/table/topbar/delete-keyword-selected-row-button";
+
 import AddKeywordsFrom from "@/app/(protected)/app/search/google-search/_components/table/topbar/add-keywords-form";
-import { DeleteKeywordSelectedRowButton } from "@/app/(protected)/app/search/google-search/_components/table/topbar/delete-keyword-selected-row-button";
+import downloadToExcel from "@/dashboard/google-search/lib/xlsx";
+
+import { SortingRows } from "./topbar/row-sorting";
 
 interface TopBarProps<TData> {
   table: Table<TData>;
@@ -73,7 +76,7 @@ export function DataTableTopBar<TData>({
           onChange={(event) =>
             table.getColumn("keywordName")?.setFilterValue(event.target.value)
           }
-          className="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm leading-6"
+          className="block w-full min-w-[245px] rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm leading-6"
         />
       </div>
 
@@ -87,7 +90,7 @@ export function DataTableTopBar<TData>({
               </OutlinedButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>Tag Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <AddTagToKeywords

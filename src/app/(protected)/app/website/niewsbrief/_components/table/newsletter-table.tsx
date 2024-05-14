@@ -22,7 +22,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table/table";
 
 import { cn } from "@/lib/utils";
 import { Heading } from "@/components/ui/typography/typography";
