@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import { useKeywords } from "@/dashboard/google-search/hooks/useKeywords";
-import { DeleteTagFromKeyword } from "../topbar/delete-tag-from-keyword";
+// import { DeleteTagFromKeyword } from "../topbar/delete-tag-from-keyword";
 import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
 import { useTags } from "@/dashboard/google-search/hooks/useTags";
 

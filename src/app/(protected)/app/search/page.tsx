@@ -23,6 +23,7 @@ import { columns } from "./_components/search-project-table-columns";
 import { LoadingSpinner } from "@/components/loading-spinner";
 
 import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
+import { TableTitle } from "@/components/ui/table";
 
 const Page = () => {
   const user = useCurrentUser();
@@ -68,6 +69,7 @@ const Page = () => {
 
           <div className="bg-white shadow-base rounded-2xl p-8">
             <TabContent id={1}>
+              <TableTitle heading="All Search Projects" />
               {projectWithLatestResult ? (
                 <DataTable data={projectWithLatestResult} columns={columns()} />
               ) : (

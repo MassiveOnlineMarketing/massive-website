@@ -2,53 +2,21 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+
+import { GoogleSearchProjectsWithLatestResult } from "@/dashboard/google-search/data/google-search-project";
+
+import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
 
 // Components
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  Row,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu";
+import { ColumnDef, ColumnFiltersState, Row, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table/table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 import { OutlinedTextButton } from "@/components/ui/text-button";
 
-import {
-  MagnifyingGlassIcon,
-  ViewColumnsIcon,
-} from "@heroicons/react/24/outline";
-import { GoogleSearchProjectsWithLatestResult } from "@/dashboard/google-search/data/google-search-project";
-import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
+// Icons
+import { MagnifyingGlassIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -110,14 +78,10 @@ function DataTable<TData, TValue>({
   };
 
   return (
-    <div>
-      <div className="pb-8 pt-2 flex items-center">
-        <p className="text-2xl leading-8 font-medium text-gray-800">
-          All Search Projects
-        </p>
-
+    <>
+      <div className="w-full pb-8 flex items-center">
         {/* Searchbar */}
-        <div className="ml-auto relative rounded-md shadow-sm h-[34px]">
+        <div className="mr-auto relative rounded-md shadow-sm h-[34px]">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <MagnifyingGlassIcon
               className="h-5 w-5 text-gray-400"
@@ -143,7 +107,7 @@ function DataTable<TData, TValue>({
               <DropdownMenuTrigger asChild>
                 <OutlinedTextButton
                   size="smD"
-                  className="ml-2"
+                  className="ml-auto"
                   buttonClassName="px-2"
                 >
                   <ViewColumnsIcon className="w-5 h-5 text-gray-500" />
@@ -240,7 +204,7 @@ function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-    </div>
+    </>
   );
 }
 

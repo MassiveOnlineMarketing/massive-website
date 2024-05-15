@@ -1,40 +1,13 @@
 "use client";
 
-import { ColumnDef, Row, SortingFn } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  ArrowTrendingDownIcon,
-  ArrowTrendingUpIcon,
-} from "@heroicons/react/20/solid";
-
-import { format } from "date-fns";
 import { GoogleSearchProjectsWithLatestResult } from "@/dashboard/google-search/data/google-search-project";
 
-// const urlSortingFn: SortingFn<GoogleSearchProjectsWithLatestResult> = (rowA: Row<GoogleSearchProjectsWithLatestResult>, rowB: Row<GoogleSearchProjectsWithLatestResult>, columnId) => {
-//   const valueA = rowA.getValue(columnId) as string || "";
-//   const valueB = rowB.getValue(columnId) as string || "";
+import { ColumnDef } from "@tanstack/react-table";
+import { DateRowCell, StandardHeaderCell, StandardRowCell } from "@/components/ui/table";
 
-//   if (valueA && !valueB) return -1;
-//   if (!valueA && valueB) return 1;
-//   return valueA.localeCompare(valueB);
-// }
+import { Checkbox } from "@/components/ui/checkbox";
 
-// const positionSortingFn: SortingFn<GoogleSearchProjectsWithLatestResult> = (rowA: Row<GoogleSearchProjectsWithLatestResult>, rowB: Row<GoogleSearchProjectsWithLatestResult>, columnId) => {
-//   const valueA = rowA.getValue(columnId) as number || null;
-//   const valueB = rowB.getValue(columnId) as number || null;
 
-//   if (valueA === null && valueB !== null) return 1;
-//   if (valueB === null && valueA !== null) return -1;
-//   if (valueA === null && valueB === null) return 0;
-
-//   // Add a null check for valueA and valueB before subtraction
-//   if (valueA !== null && valueB !== null) {
-//     return valueA - valueB;
-//   } else {
-//     // Decide what to return when either valueA or valueB is null
-//     return 0;
-//   }
-// }
 
 export const columns =
   (): ColumnDef<GoogleSearchProjectsWithLatestResult>[] => [
@@ -73,243 +46,117 @@ export const columns =
     // * Project Name
     {
       accessorKey: "projectName",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Project Name
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("projectName")}
-          </p>
-        );
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Project Name" />
+      ),
+      cell: ({ row: { original: { projectName } } }) => (
+        <StandardRowCell value={projectName} highlight={true} />
+      ),
       // sortingFn: positionSortingFn,
     },
     // * Domain
     {
       accessorKey: "domainUrl",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Domain
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("domainUrl")}
-          </p>
-        );
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Domain" />
+      ),
+      cell: ({ row: { original: { domainUrl } } }) => (
+        <StandardRowCell value={domainUrl} highlight={true} />
+      ),
     },
     // * Language
     {
       accessorKey: "language",
       header: ({ column }) => (
-        <p
-          className="flex font-medium text-gray-600"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Language
-        </p>
+        <StandardHeaderCell sorting={true} column={column} title="Language" />
       ),
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("language")}
-          </p>
-        );
-      },
+      cell: ({ row: { original: { language } } }) => (
+        <StandardRowCell value={language} highlight={true} />
+      ),
       // sortingFn: urlSortingFn,
     },
     // * Country
     {
       accessorKey: "country",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Country
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("country")}
-          </p>
-        );
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Country" />
+      ),
+      cell: ({ row: { original: { country } } }) => (
+        <StandardRowCell value={country} highlight={true} />
+      ),
       // sortingFn: positionSortingFn,
     },
     // * Improved
     {
       accessorKey: "improved",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Improved
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("improved")}
-          </p>
-        );
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Improved" />
+      ),
+      cell: ({ row: { original: { improved } } }) => (
+        <StandardRowCell value={improved} highlight={true} />
+      ),
       // sortingFn: positionSortingFn,
     },
     // * Worsened
     {
       accessorKey: "worsened",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Worsened
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("worsened")}
-          </p>
-        );
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Worsened" />
+      ),
+      cell: ({ row: { original: { worsened } } }) => (
+        <StandardRowCell value={worsened} highlight={true} />
+      ),
       // sortingFn: positionSortingFn,
     },
     // * Total
     {
       accessorKey: "total",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Total
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("total")}
-          </p>
-        );
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Total KW" />
+      ),
+      cell: ({ row: { original: { total } } }) => (
+        <StandardRowCell value={total} highlight={true} />
+      ),
     },
     // * Top 3
     {
       accessorKey: "topThree",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Top 3
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("topThree")}
-          </p>
-        );
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Top 3" />
+      ),
+      cell: ({ row: { original: { topThree } } }) => (
+        <StandardRowCell value={topThree} highlight={true} />
+      ),
     },
     // * Top 10
     {
       accessorKey: "topTen",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Top 10
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("topTen")}
-          </p>
-        );
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Top 10" />
+      ),
+      cell: ({ row: { original: { topTen } } }) => (
+        <StandardRowCell value={topTen} highlight={true} />
+      ),
     },
     // * Top 100
     {
       accessorKey: "topHundred",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Top 100
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("topHundred")}
-          </p>
-        );
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Top 100" />
+      ),
+      cell: ({ row: { original: { topHundred } } }) => (
+        <StandardRowCell value={topHundred} highlight={true} />
+      ),
     },
     // * Checked
     {
       accessorKey: "createdAt",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Checked
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        const date = new Date(row.getValue("createdAt"));
-        if (date.toString() === "Invalid Date")
-          return (
-            <p className=" text-sm leading-5 font-medium text-gray-500">
-              Not yet Checked
-            </p>
-          );
-        return (
-          <p className=" text-sm leading-5 font-medium text-gray-500">
-            {format(date, "MM/dd/yyyy")}
-          </p>
-        ); // or any other format you prefer
-      },
+      header: ({ column }) => (
+        <StandardHeaderCell sorting={true} column={column} title="Checked" />
+      ),
+      cell: ({ row: { original: { createdAt } } }) => (
+        <DateRowCell value={createdAt} />
+      ),
     },
     // // * Actions
     // {
