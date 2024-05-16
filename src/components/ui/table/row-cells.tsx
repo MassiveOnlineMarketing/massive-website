@@ -56,7 +56,6 @@ const TrendingIndicatorRowCell: React.FC<TrendingIndicatorProps> = ({ value }) =
 
 interface DateRowCellProps {
   value: Date;
-  // highlight?: boolean
 }
 
 const DateRowCell: React.FC<DateRowCellProps> = ({ value }) => {
