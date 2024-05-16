@@ -1,52 +1,88 @@
-import { useState } from "react";
-import MetricsLabelGoogleChart from "./metrics-label";
-import DateRangeButton, { DateRangeObject } from "./date-range-button";
-import { Data } from "../google/page";
+import React, { useState } from "react";
 
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  Brush,
-  TooltipProps,
-} from "recharts";
+// Types
+import { GoogleResultFilterWithUrls } from "@/dashboard/types";
+
+// Date utilities
 import { format, parse } from "date-fns";
 
-import { constants } from "@/styles/styles";
+// Custom hooks
+import useFetchData from "../google/hooks/use-fetch-search-result-api-data";
+
+// Components
+import MetricsLabelGoogleChart from "./metrics-label";
+import DateRangeButton, { DateRangeObject } from "./date-range-button";
 import AddFilter from "./add-filter";
 import FilterSelection from "./google-filter-selection";
 import RemoveFilterButtonTest from "./remove-filter-button-test";
 
+// Styles
+import { constants } from "@/styles/styles";
+
+// Charting library
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, Brush, TooltipProps } from "recharts";
+import { LoadingSpinner } from "@/components/loading-spinner";
+
+interface ResultSearchApiResponse {
+  currentData: SearchGraphDataArray;
+  previousData: SearchGraphDataArray;
+  data:
+  {
+    [key: string]: Metrics;
+  },
+}
+
+type Metrics = {
+  clicks: number;
+  ctr: number;
+  impressions: number;
+  position: number;
+};
+
+
 type GoogleResultPageProps = {
-  chartData: Data[];
-  currentData: Data;
-  previousData: Data;
-  isLoading: boolean;
+  site_url: string | null | undefined;
+  refresh_token: string | null;
+  selectedFilter: GoogleResultFilterWithUrls[];
   selectedRange: DateRangeObject;
   setSelectedRange: React.Dispatch<React.SetStateAction<DateRangeObject>>;
 };
 
 const GoogleResultPage = ({
-  chartData,
-  currentData,
-  previousData,
-  isLoading,
+  site_url,
+  refresh_token,
   selectedRange,
+  selectedFilter,
   setSelectedRange,
 }: GoogleResultPageProps) => {
+
+  const { data: resultResponse, isLoading: graphIsLoading } = useFetchData({
+    endpoint: "results",
+    site_url,
+    refresh_token,
+    selectedRange,
+    selectedFilter,
+  });
+
   const [showClicks, setShowClicks] = useState(true);
   const [showCtr, setShowCtr] = useState(false);
   const [showImpressions, setShowImpressions] = useState(false);
   const [showPosition, setShowPosition] = useState(false);
 
+  const graphData = resultResponse as ResultSearchApiResponse | null;
+  
+  if (graphIsLoading || !graphData) return <div className="w-full h-[532px] mt-4 bg-white rounded-2xl shadow-base flex items-center justify-center"><LoadingSpinner /></div>;
+    
+  const formattedData = Object.entries(graphData.data).map(([date, metrics]) => ({
+    date: date,
+    ...metrics,
+  }));
+
   const metrics = [
-    { title: "Clicks", value: currentData.clicks, previousValue: previousData.clicks, show: showClicks, setShow: setShowClicks },
-    { title: "Impressions", value: currentData.impressions, previousValue: previousData.impressions, show: showImpressions, setShow: setShowImpressions },
-    { title: "CTR", value: currentData.ctr, previousValue: previousData.ctr, show: showCtr, setShow: setShowCtr },
-    { title: "Position", value: currentData.position, previousValue: previousData.position, show: showPosition, setShow: setShowPosition },
+    { title: "Clicks", value: graphData.currentData.clicks, previousValue: graphData.previousData.clicks, show: showClicks, setShow: setShowClicks },
+    { title: "Impressions", value: graphData.currentData.impressions, previousValue: graphData.previousData.impressions, show: showImpressions, setShow: setShowImpressions },
+    { title: "CTR", value: graphData.currentData.ctr, previousValue: graphData.previousData.ctr, show: showCtr, setShow: setShowCtr },
+    { title: "Position", value: graphData.currentData.position, previousValue: graphData.previousData.position, show: showPosition, setShow: setShowPosition },
   ];
 
   return (
@@ -70,14 +106,14 @@ const GoogleResultPage = ({
           <RemoveFilterButtonTest />
           <DateRangeButton
             className="ml-auto"
-            isLoading={isLoading}
+            isLoading={graphIsLoading}
             selectedRange={selectedRange}
             setSelectedRange={setSelectedRange}
           />
         </div>
         <div className="pt-16 h-[280px] w-full">
           <AreaChartTest
-            chartData={chartData}
+            chartData={formattedData}
             showClicks={showClicks}
             showCtr={showCtr}
             showImpressions={showImpressions}
@@ -92,12 +128,21 @@ const GoogleResultPage = ({
 export default GoogleResultPage;
 
 type LineChartProps = {
-  chartData: Data[];
+  chartData: SearchGraphDataArray[];
   showClicks: boolean;
   showPosition: boolean;
   showImpressions: boolean;
   showCtr: boolean;
 };
+
+type SearchGraphDataArray = {
+  clicks: number;
+  ctr: number;
+  impressions: number;
+  position: number;
+  date: string;
+};
+
 
 const AreaChartTest = ({
   chartData,
@@ -188,6 +233,7 @@ type CustomTooltipProps = TooltipProps<string, string> & {
   showPosition: boolean;
 };
 
+// TODO: Change styling
 const CustomTooltip = ({
   active,
   payload,
@@ -196,7 +242,7 @@ const CustomTooltip = ({
   showImpressions,
   showPosition,
 }: CustomTooltipProps) => {
-  const data = payload?.[0]?.payload as Data;
+  const data = payload?.[0]?.payload as SearchGraphDataArray;
 
   if (active && payload && payload.length) {
     return (

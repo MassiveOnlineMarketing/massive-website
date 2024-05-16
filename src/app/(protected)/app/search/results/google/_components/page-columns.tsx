@@ -9,6 +9,7 @@ import {
 
 import { format } from "date-fns";
 import { QueryObject } from "../page";
+import { StandardHeaderCell, StandardRowCell } from "@/components/ui/table";
 
 
 export const columns =
@@ -48,82 +49,30 @@ export const columns =
     // * Query
     {
       accessorKey: "query",
-      header: ({ column }) => {
-        return (
-          <p
-            className="flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Query
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("query")}
-          </p>
-        );
-      },
+      header: ({ column }) => (<StandardHeaderCell column={column} title='Query' sorting={true} />),
+      cell: ({ row: { original: { querry } } }) => (<StandardRowCell value={querry} highlight={true} />),
       // sortingFn: positionSortingFn,
     },
     // * Clicks
     {
       accessorKey: "clicks",
-      header: ({ column }) => {
-        return (
-          <p
-            className="w-20 flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Clicks
-          </p>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <p className="w-20 text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("clicks")}
-          </p>
-        );
-      },
+      header: ({ column }) => (<StandardHeaderCell column={column} title='Clicks' sorting={true} />),
+      cell: ({ row: { original: { clicks } } }) => (<StandardRowCell value={clicks} highlight={true} />),
     },
     // * Impressions
     {
       accessorKey: "impressions",
-      header: ({ column }) => (
-        <p
-          className="w-20 flex font-medium text-gray-600"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Impressions
-        </p>
-      ),
-      cell: ({ row }) => {
-        return (
-          <p className="w-20 text-sm leading-5 font-medium text-gray-800">
-            {row.getValue("impressions")}
-          </p>
-        );
-      },
+      header: ({ column }) => (<StandardHeaderCell column={column} title='Impressions' sorting={true} />),
+      cell: ({ row: { original: { impressions } } }) => (<StandardRowCell value={impressions} highlight={true} />),
       // sortingFn: urlSortingFn,
     },
     // * Ctr
     {
       accessorKey: "ctr",
-      header: ({ column }) => {
-        return (
-          <p
-            className="w-20 flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Ctr
-          </p>
-        );
-      },
+      header: ({ column }) => (<StandardHeaderCell column={column} title='Ctr' sorting={true} />),
       cell: ({ row }) => {
         const ctr: number = row.getValue("ctr");
-        const renderValue = ctr*100
+        const renderValue = ctr * 100
 
         return (
           <p className="w-20 text-sm leading-5 font-medium text-gray-800">
@@ -136,16 +85,7 @@ export const columns =
     // * Position
     {
       accessorKey: "position",
-      header: ({ column }) => {
-        return (
-          <p
-            className="w-20 flex font-medium text-gray-600"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Position
-          </p>
-        );
-      },
+      header: ({ column }) => (<StandardHeaderCell column={column} title='Position' sorting={true} />),
       cell: ({ row }) => {
         const position: number = row.getValue("position");
 
@@ -157,7 +97,7 @@ export const columns =
       },
       // sortingFn: positionSortingFn,
     },
- 
+
     // // * Actions
     // {
     //     id: "actions",

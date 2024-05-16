@@ -100,14 +100,10 @@ function DataTable<TData, TValue>({
   const numberOfVisibleColumns = table.getVisibleFlatColumns().length;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-8 mt-8">
+    <>
       <div className="pb-8 pt-2 flex items-center">
-        <p className="text-2xl leading-8 font-medium text-gray-800">
-          All Queries
-        </p>
-
         {/* Searchbar */}
-        <div className="ml-auto relative rounded-md shadow-sm h-[34px]">
+        <div className="mr-auto relative rounded-md shadow-sm h-[34px]">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <MagnifyingGlassIcon
               className="h-5 w-5 text-gray-400"
@@ -233,7 +229,7 @@ function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-    </div>
+    </>
   );
 }
 

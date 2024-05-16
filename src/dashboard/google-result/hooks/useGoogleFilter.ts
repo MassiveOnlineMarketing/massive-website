@@ -99,7 +99,7 @@ export function useGoogleFilter() {
     }
 
     const res = await getFiltersByWebsiteId(currentWebsite?.id);
-    console.log("res", res);
+    // console.log("res", res);
 
     if (res.length) {
       setGoogleResultFilter(res as GoogleResultFilterWithUrls[])

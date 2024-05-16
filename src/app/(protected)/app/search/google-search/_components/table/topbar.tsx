@@ -51,7 +51,7 @@ interface TopBarProps<TData> {
   setSorting: React.Dispatch<React.SetStateAction<SortingState>>;
 }
 
-export function DataTableTopBar<TData>({
+function DataTableTopBar<TData>({
   table,
   data,
   deselectAllRows,
@@ -210,3 +210,5 @@ export function DataTableTopBar<TData>({
     </div>
   );
 }
+
+export default DataTableTopBar;

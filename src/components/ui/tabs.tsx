@@ -67,9 +67,10 @@ interface TabTitleProps {
   children: React.ReactNode;
   id: number;
   className?: string;
+  onClick?: () => void;	
 }
 
-const TabTitle: React.FC<TabTitleProps> = ({ children, id, className }) => {
+const TabTitle: React.FC<TabTitleProps> = ({ children, id, className, onClick }) => {
   const { activeTab, setActiveTab, updateTabWidth } = useTab();
   const tabRef = useRef<HTMLDivElement>(null);
 
@@ -79,6 +80,13 @@ const TabTitle: React.FC<TabTitleProps> = ({ children, id, className }) => {
     }
   }, [id]);
 
+  const handleClick = () => {
+    setActiveTab(id);
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <div
       ref={tabRef}
@@ -86,7 +94,7 @@ const TabTitle: React.FC<TabTitleProps> = ({ children, id, className }) => {
         `cursor-pointer px-4 ${activeTab === id ? "text-primary-500" : "text-gray-400"}`,
         className,
       )}
-      onClick={() => setActiveTab(id)}
+      onClick={handleClick}
     >
       {children}
     </div>

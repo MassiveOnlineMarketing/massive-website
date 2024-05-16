@@ -4,26 +4,16 @@ import React from "react";
 
 import { GoogleSearchResult } from "@prisma/client";
 
+import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
+
 // Components
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table/table";
+import DataTableTopBar from "./topbar";
+import KeywordTableHead from "./keyword-table-head";
 import KeywordDetailsRow from "./keywords-details-row";
-import { DataTableTopBar } from "./topbar";
 import DataTablePagination from "@/components/table-pagination";
 
-import KeywordTableHead from "./keyword-table-head";
-import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

@@ -2,12 +2,12 @@
 
 import React, { useEffect } from 'react'
 
+import { useUserDetailsStore } from "@/lib/zustand/user-details-store";
+import { getAccountByUserId } from "@/auth/data/account";
+import { ExtendedUser } from '../../../../../next-auth';
+
 import { TabContainer, TabContent, TabIndicatorLineAnimated, TabTitle } from "@/components/ui/tabs";
-
-
 import { LoadingSpinner } from "@/components/loading-spinner";
-
-import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
 
 // Table
 import {
@@ -17,11 +17,10 @@ import {
 import DataTable from "./_components/search-project-table";
 import { TableTitle } from "@/components/ui/table";
 import { columns } from "./_components/search-project-table-columns";
-import { ExtendedUser } from '../../../../../next-auth';
-import { cn } from '@/lib/utils';
 
-import { useUserDetailsStore } from "@/lib/zustand/user-details-store";
-import { getAccountByUserId } from "@/auth/data/account";
+
+
+import MessageFromTeam from './_components/message-from-team';
 
 const SearchPage = ({ user }: { user: ExtendedUser | undefined }) => {
 
@@ -116,31 +115,3 @@ const SearchPage = ({ user }: { user: ExtendedUser | undefined }) => {
 
 export default SearchPage
 
-type MessageFromTeamProps = {
-  heading: string;
-  message: string;
-  className?: string;
-};
-const MessageFromTeam = ({
-  heading,
-  message,
-  className,
-}: MessageFromTeamProps) => {
-  return (
-    <div
-      className={cn(
-        "p-6 bg-white rounded-2xl shadow-base flex gap-2",
-        className,
-      )}
-    >
-      <ChatBubbleBottomCenterTextIcon className="min-w-6 h-6 text-gray-700 mt-1 flex-0" />
-      <div>
-        <p className="mb-2 font-medium text-lg text-gray-800">{heading}</p>
-        <p
-          className="text-sm text-gray-500"
-          dangerouslySetInnerHTML={{ __html: message }}
-        />
-      </div>
-    </div>
-  );
-};
