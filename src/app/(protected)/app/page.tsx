@@ -1,12 +1,15 @@
-"use client";
-
 import React from "react";
 import HomeScreenBanner from "./_components/home-screen-banner";
+import { auth } from "@/auth/auth";
 
-const page = () => {
+const page = async () => {
+
+  const session = await auth();
+  const user = session?.user;
+
   return (
     <div className="p-3">
-      <HomeScreenBanner>Home</HomeScreenBanner>
+      <HomeScreenBanner user={user}>Home</HomeScreenBanner>
       page
     </div>
   );
