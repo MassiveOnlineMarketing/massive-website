@@ -60,18 +60,20 @@ interface DateRowCellProps {
 }
 
 const DateRowCell: React.FC<DateRowCellProps> = ({ value }) => {
-  if (value.toString() === "Invalid date")
+  if (value && value.toString() !== "Invalid date") {
     return (
       <p className=" text-sm leading-5 font-medium text-gray-500">
-        Not yet Checked
+        {format(value, "MM/dd/yyyy")}
       </p>
     );
+  }
 
   return (
     <p className=" text-sm leading-5 font-medium text-gray-500">
-      {format(value, "MM/dd/yyyy")}
+      Not yet Checked
     </p>
   );
+
 }
 
 
