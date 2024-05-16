@@ -12,14 +12,16 @@ import {
   LinkIcon,
   UserCircleIcon,
 } from "@heroicons/react/20/solid";
+import { useCurrentUser } from "@/auth/hooks/use-current-user";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const lastPath = pathname.split("/").filter(Boolean).pop() || "";
+  const user = useCurrentUser();
 
   return (
     <>
-      <HomeScreenBanner className="m-3">
+      <HomeScreenBanner user={user} className="m-3">
         <Link href="/app/search">Home</Link>
         <ChevronRightIcon className="h-4 w-4" />
         <span>Settings</span>

@@ -1,5 +1,4 @@
 import React from "react";
-import { useCurrentUser } from "@/auth/hooks/use-current-user";
 import { cn } from "@/lib/utils";
 
 import { constants } from "@/styles/styles";
@@ -9,6 +8,7 @@ import { Button } from "@/components/ui/button";
 
 import { MassiveLogoColor } from "@/assets/branding";
 import { ShieldCheckIcon } from "@heroicons/react/24/outline";
+import { ExtendedUser } from "../../../../../next-auth";
 
 /**
  * Renders the home screen banner component.
@@ -21,11 +21,12 @@ import { ShieldCheckIcon } from "@heroicons/react/24/outline";
 const HomeScreenBanner = ({
   children,
   className,
+  user
 }: {
   children?: React.ReactNode;
   className?: string;
+  user: ExtendedUser | undefined; 
 }) => {
-  const user = useCurrentUser();
 
   /**
    * Gets the appropriate greeting based on the current hour.
