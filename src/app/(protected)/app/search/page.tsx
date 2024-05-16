@@ -24,9 +24,31 @@ import { LoadingSpinner } from "@/components/loading-spinner";
 
 import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
 import { TableTitle } from "@/components/ui/table";
+import { useUserDetailsStore } from "@/lib/zustand/user-details-store";
+import { getAccountByUserId } from "@/auth/data/account";
 
 const Page = () => {
   const user = useCurrentUser();
+
+  const setAccount = useUserDetailsStore((state) => state.setAccountDetails);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchAccount = async () => {
+      const fetchedAccount = await getAccountByUserId(user.id as string);
+      // console.log('fetchedAccount test provider', fetchedAccount?.id)
+
+      if (!fetchedAccount) return;
+
+      setAccount(fetchedAccount);
+    };
+
+    fetchAccount();
+  }, [user]);
+
+  
+
   const [projectWithLatestResult, setProjectWithLatestResult] = React.useState<
     GoogleSearchProjectsWithLatestResult[] | undefined
   >(undefined);

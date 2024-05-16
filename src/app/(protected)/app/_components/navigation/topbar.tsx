@@ -33,22 +33,6 @@ const TopBar = ({
   setMobileSidebarOpen: (open: boolean) => void;
 }) => {
   const user = useCurrentUser();
-  const setAccount = useUserDetailsStore((state) => state.setAccountDetails);
-
-  useEffect(() => {
-    if (!user) return;
-
-    const fetchAccount = async () => {
-      const fetchedAccount = await getAccountByUserId(user.id as string);
-      // console.log('fetchedAccount test provider', fetchedAccount?.id)
-
-      if (!fetchedAccount) return;
-
-      setAccount(fetchedAccount);
-    };
-
-    fetchAccount();
-  }, [user]);
 
   return (
     <div className="h-16 w-full flex shrink-0 items-center gap-x-4 bg-white px-4 sm:gap-x-6 sm:px-6 lg:px-8">
