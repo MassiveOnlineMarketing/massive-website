@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { cn } from "@/lib/utils";
 
 import { GoogleSearchResult } from "@prisma/client";
 
@@ -18,14 +17,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table/table";
 import KeywordDetailsRow from "./keywords-details-row";
 import { DataTableTopBar } from "./topbar";
 import DataTablePagination from "@/components/table-pagination";
