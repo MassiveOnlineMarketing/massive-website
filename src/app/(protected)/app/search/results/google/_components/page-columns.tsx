@@ -50,7 +50,7 @@ export const columns =
     {
       accessorKey: "query",
       header: ({ column }) => (<StandardHeaderCell column={column} title='Query' sorting={true} />),
-      cell: ({ row: { original: { querry } } }) => (<StandardRowCell value={querry} highlight={true} />),
+      cell: ({ row: { original: { query } } }) => (<StandardRowCell value={query} highlight={true} />),
       // sortingFn: positionSortingFn,
     },
     // * Clicks
