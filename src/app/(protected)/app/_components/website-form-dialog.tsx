@@ -193,11 +193,11 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
             <p className="mt-4 w-fit mx-auto text-gray-500 font-normal">
               Authenticate your{" "}
               <Link
-                href="/app/settings/itegrations"
+                href="/app/settings/integrations"
                 className="text-primary-500"
               >
-                Search Console
-              </Link>{" "}
+                Search Console{" "}
+              </Link>
               Account
             </p>
           )}
