@@ -6,6 +6,7 @@ import { useCurrentUser } from "@/auth/hooks/use-current-user";
 import React, { useEffect, useState } from "react";
 import axios from "axios"; // You may need to install axios via npm or yarn
 import { testUrl, verifyDomain } from "./actions";
+import { validateAndFetchUrl } from "@/dashboard/actions/validate-website-url";
 
 const Page = () => {
   const user = useCurrentUser();
@@ -44,17 +45,14 @@ function DomainChecker() {
   const [result, setResult] = useState<boolean | null>(null);
 
   const handleCheckDomain = async () => {
-    try {
-      const response = await verifyDomain({ domain });
-      console.log("response", response);
-      if (response.exists) {
-        setResult(true);
-      } else {
-        setResult(false);
-      }
-    } catch (error) {
-      console.error("Error checking domain:", error);
-      setResult(false);
+    const finalUrl = await validateAndFetchUrl({ url: domain });
+
+    if (finalUrl) {
+      // Proceed with the validated URL
+      console.log('Final validated URL:', finalUrl);
+    } else {
+      // Show an error message to the user
+      alert('Please enter a valid and reachable URL.');
     }
   };
 

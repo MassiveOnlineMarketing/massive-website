@@ -1,4 +1,6 @@
 "use server";
+import normalizeUrl from 'normalize-url';
+
 
 /**
  * Tests the validity of a given URL by making a fetch request and checking the response.
@@ -12,6 +14,8 @@ async function valudateWebsiteUrl({ url }: { url: string }) {
   try {
     const response = await fetch(url);
 
+    console.log('response', response)
+
     // Get the final URL after redirection
     const finalUrl = response.url;
 
@@ -23,3 +27,53 @@ async function valudateWebsiteUrl({ url }: { url: string }) {
 }
 
 export default valudateWebsiteUrl;
+
+
+const validateAndNormalizeUrl = ({ url }: { url: string }) => {
+  try {
+    const normalizedUrl = normalizeUrl(url, { forceHttps: true, stripWWW: false });
+    return normalizedUrl;
+  } catch (error) {
+    // Handle invalid URL
+    console.error('Invalid URL:', error);
+    return null;
+  }
+};
+const checkActualUrl = async ({url, maxRedirects = 5}: {url: string, maxRedirects?: number}) => {
+  try {
+    let currentUrl = url;
+    let redirectsFollowed = 0;
+
+    while (redirectsFollowed < maxRedirects) {
+      const response = await fetch(currentUrl, { method: 'HEAD', redirect: 'follow' });
+
+      if (!response.ok) {
+        throw new Error('URL is not reachable');
+      }
+
+      const finalUrl = response.url;
+
+      if (finalUrl === currentUrl) {
+        // No more redirects, return the final URL
+        return finalUrl;
+      } else {
+        // Follow the redirect to the next URL
+        currentUrl = finalUrl;
+        redirectsFollowed++;
+      }
+    }
+
+    throw new Error('Max redirects reached');
+  } catch (error) {
+    console.error('Error checking URL:', error);
+    return null;
+  }
+};
+export const validateAndFetchUrl = async ({ url }: { url: string }) => {
+  const normalizedUrl = validateAndNormalizeUrl({url});
+  if (normalizedUrl) {
+    const actualUrl = await checkActualUrl({url: normalizedUrl});
+    return actualUrl;
+  }
+  return null;
+};
