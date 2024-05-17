@@ -21,14 +21,20 @@ const QueryTableContainer = ({ site_url, refresh_token, selectedFilter, selected
     selectedFilter,
   });
 
-  if (queryIsLoading) return (
-    <div>Query Data Is Loading...</div>
-  );
+  // if (queryIsLoading) return (
+  //   <div>Query Data Is Loading...</div>
+  // );
 
-  if (!queryResponse) return null;
+  // if (!queryResponse) return null;
+
+  let TableData: any[] = [];
+
+  if (queryResponse) {
+    TableData = queryResponse;
+  }
 
   return (
-    <DataTable data={queryResponse} columns={columns()} />
+    <DataTable data={TableData} columns={columns()} />
   )
 }
 

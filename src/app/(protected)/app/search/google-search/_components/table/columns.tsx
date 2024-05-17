@@ -137,8 +137,8 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Latest Change" />
     ),
-    cell: ({ row: { original: { firstPosition } } }) => (
-      <TrendingIndicatorRowCell value={firstPosition} />
+    cell: ({ row: { original: { latestChange } } }) => (
+      <TrendingIndicatorRowCell value={latestChange} />
     ),
     sortingFn: positionSortingFn,
   },

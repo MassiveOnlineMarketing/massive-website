@@ -43,8 +43,8 @@ const SearchPage = ({ user }: { user: ExtendedUser | undefined }) => {
 
 
   const [projectWithLatestResult, setProjectWithLatestResult] = React.useState<
-    GoogleSearchProjectsWithLatestResult[] | undefined
-  >(undefined);
+    GoogleSearchProjectsWithLatestResult[] | [] | undefined
+  >([]);
 
   useEffect(() => {
     const getTotalKeywordCount = async () => {
