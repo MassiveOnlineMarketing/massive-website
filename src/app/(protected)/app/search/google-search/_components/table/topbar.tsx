@@ -40,7 +40,8 @@ import DeleteKeywordSelectedRowButton from "@/app/(protected)/app/search/google-
 import AddKeywordsFrom from "@/app/(protected)/app/search/google-search/_components/table/topbar/add-keywords-form";
 import downloadToExcel from "@/dashboard/google-search/lib/xlsx";
 
-import { SortingRows } from "./topbar/row-sorting";
+// import { SortingRows } from "./topbar/row-sorting";
+// import AddCompetitorDialog from "@/dashboard/google-search/components/add-competitor-dialog";
 
 interface TopBarProps<TData> {
   table: Table<TData>;
@@ -79,6 +80,8 @@ function DataTableTopBar<TData>({
           className="block w-full min-w-[245px] rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm leading-6"
         />
       </div>
+
+      {/* <AddCompetitorDialog /> */}
 
       {/* Selected rows */}
       <div className="ml-2">

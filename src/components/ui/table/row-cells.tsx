@@ -5,7 +5,7 @@ import {
   ArrowTrendingDownIcon,
   ArrowTrendingUpIcon,
 } from "@heroicons/react/20/solid";
-import { format } from "date-fns";
+import { format, parseISO, isValid } from 'date-fns';
 
 interface ColumnRowCellProps {
   value: string | number | null;
@@ -55,25 +55,30 @@ const TrendingIndicatorRowCell: React.FC<TrendingIndicatorProps> = ({ value }) =
 
 
 interface DateRowCellProps {
-  value: Date;
+  value: Date | string;
 }
-
 const DateRowCell: React.FC<DateRowCellProps> = ({ value }) => {
-  if (value && value.toString() !== "Invalid date") {
-    return (
-      <p className=" text-sm leading-5 font-medium text-gray-500">
-        {format(value, "MM/dd/yyyy")}
-      </p>
-    );
+  console.log('value', value);
+
+  if (value && isValid(value)) {
+    const date = value instanceof Date ? value : parseISO(value.toString());
+    if (isValid(date)) {
+      return (
+        <p className="text-sm leading-5 font-medium text-gray-500">
+          {format(date, "MM/dd/yyyy")}
+        </p>
+      );
+    }
   }
 
   return (
-    <p className=" text-sm leading-5 font-medium text-gray-500">
+    <p className="text-sm leading-5 font-medium text-gray-500">
       Not yet Checked
     </p>
   );
+};
 
-}
+export default DateRowCell;
 
 
 interface UrlRowCellProps {
