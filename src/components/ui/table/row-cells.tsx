@@ -58,8 +58,6 @@ interface DateRowCellProps {
   value: Date | string;
 }
 const DateRowCell: React.FC<DateRowCellProps> = ({ value }) => {
-  console.log('value', value);
-
   if (value && isValid(value)) {
     const date = value instanceof Date ? value : parseISO(value.toString());
     if (isValid(date)) {
