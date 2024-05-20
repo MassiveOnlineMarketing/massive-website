@@ -18,6 +18,7 @@ import PeopleAlsoAsk from "./keyword-details-row/people-also-ask";
 import GoogleSearchConsoleGraphs from "./keyword-details-row/google-search-console-graphs";
 import SerpResultCard from "./keyword-details-row/serp-result-card";
 import UserResultDetails from "./keyword-details-row/user-result-details";
+import TestGraph from "./keyword-details-row/test-graph";
 
 type Props = {
   keywordData: KeywordResultWithTagProp;
@@ -84,8 +85,12 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
           <p className="mb-3 pt-2 text-lg leading-7 font-medium text-gray-800">
             Details Overview
           </p>
+          <div className="grid grid-cols-2 gap-4">
           <div className="max-w-[530px] flex flex-col">
             <UserResultDetails keywordData={keywordData} domainUrl={domainUrl} />
+          </div>
+          
+        <TestGraph />
           </div>
         </Card>
       )}
