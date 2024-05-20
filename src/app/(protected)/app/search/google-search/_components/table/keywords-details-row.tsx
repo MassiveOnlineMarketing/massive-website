@@ -18,6 +18,8 @@ import PeopleAlsoAsk from "./keyword-details-row/people-also-ask";
 import GoogleSearchConsoleGraphs from "./keyword-details-row/google-search-console-graphs";
 import SerpResultCard from "./keyword-details-row/serp-result-card";
 import UserResultDetails from "./keyword-details-row/user-result-details";
+import CompetitorsGraph from "./keyword-details-row/competitors-graph";
+import { getCompetitorResultDataGraphA } from "@/dashboard/google-search/actions/get-competitors-result-data-graph";
 
 type Props = {
   keywordData: KeywordResultWithTagProp;
@@ -44,6 +46,8 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
     setSearchConsoleData(null);
     fetchSearchConsoleData(keywordData.keywordName);
     fetchTopTenResults(keywordData.keywordId);
+    fetchCompetitorResults(keywordData.keywordId);
+    console.log('keywordData', keywordData)
   }, [keywordData]);
 
   const fetchSearchConsoleData = async (keyword: string) => {
@@ -70,6 +74,11 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
     setTopTenResults(res);
   };
 
+  const fetchCompetitorResults = async (keywordId: string) => {
+    const res = await getCompetitorResultDataGraphA({ keywordId });
+    console.log('res', res)
+  }
+
   return (
     <div>
       <GoogleSearchConsoleGraphs
@@ -84,8 +93,11 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
           <p className="mb-3 pt-2 text-lg leading-7 font-medium text-gray-800">
             Details Overview
           </p>
-          <div className="max-w-[530px] flex flex-col">
-            <UserResultDetails keywordData={keywordData} domainUrl={domainUrl} />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="max-w-[530px] flex flex-col">
+              <UserResultDetails keywordData={keywordData} domainUrl={domainUrl} />
+            </div>
+            <CompetitorsGraph keywordId={keywordData.id}/>
           </div>
         </Card>
       )}
