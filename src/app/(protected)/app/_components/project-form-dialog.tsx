@@ -30,6 +30,7 @@ import { Dialog, DialogContent, DialogHeader } from "@/website/features/dialog/d
 import { InputFieldApp, TextareaApp } from "@/components/ui/input/fields";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/input/select";
 import { useToast } from "@/website/features/toast/use-toast";
+import { getCompetitorsByProjectId } from "@/dashboard/google-search/data/google-search-competitor";
 
 interface GoogleSearchProjectFormDialogProps {
   open: boolean;
@@ -78,12 +79,9 @@ const GoogleSearchProjectFormDialog: React.FC<
   const router = useRouter();
 
   const { processNewKeywords } = useProcessNewKeywords();
-  const setProjectDetails = useGoogleSearchProjectDetailsStore(
-    (state) => state.setProjectDetails,
-  );
-  const currentWebsite = useWebsiteDetailsStore(
-    (state) => state.WebsiteDetails,
-  );
+  const setProjectDetails = useGoogleSearchProjectDetailsStore((state) => state.setProjectDetails);
+  const setCompetitors = useGoogleSearchProjectDetailsStore((state) => state.setCompetitors);
+  const currentWebsite = useWebsiteDetailsStore((state) => state.WebsiteDetails);
 
   const { toast } = useToast();
 
@@ -143,6 +141,9 @@ const GoogleSearchProjectFormDialog: React.FC<
 
       router.push(`/app/search/google-search/${res.success.id}`);
 
+      const competitors = await getCompetitorsByProjectId(res.success.id)
+      setCompetitors(competitors)
+      
       return;
     }
 

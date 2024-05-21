@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import DataTable from "../_components/table/keyword-table";
 import { columns } from "../_components/table/columns";
+import { getCompetitorsByProjectId } from "@/dashboard/google-search/data/google-search-competitor";
 
 type Props = {
   params: {
@@ -40,25 +41,14 @@ function Page({ params }: Props) {
     (state) => state.WebsiteDetails,
   );
 
-  const setGoogleSearchProjectDetails = useGoogleSearchProjectDetailsStore(
-    (state) => state.setProjectDetails,
-  );
-  const googleSearchProjectDetails = useGoogleSearchProjectDetailsStore(
-    (state) => state.ProjectDetails,
-  );
+  const setCompetitors = useGoogleSearchProjectDetailsStore((state) => state.setCompetitors);
+  const setGoogleSearchProjectDetails = useGoogleSearchProjectDetailsStore((state) => state.setProjectDetails);
+  const googleSearchProjectDetails = useGoogleSearchProjectDetailsStore((state) => state.ProjectDetails);
 
-  const keywordResults = useKeywordResultsStore(
-    (state) => state.keywordResults,
-  );
-  const setKeywordResults = useKeywordResultsStore(
-    (state) => state.setKeywordResults,
-  );
-  const resetKweywordResults = useKeywordResultsStore(
-    (state) => state.resetKeywordResults,
-  );
-  const resetSelectedTags = useKeywordResultsStore(
-    (state) => state.resetSelectedTags,
-  );
+  const keywordResults = useKeywordResultsStore((state) => state.keywordResults);
+  const setKeywordResults = useKeywordResultsStore((state) => state.setKeywordResults);
+  const resetKweywordResults = useKeywordResultsStore((state) => state.resetKeywordResults);
+  const resetSelectedTags = useKeywordResultsStore((state) => state.resetSelectedTags);
   const filteredResults = useFilteredKeywordResults();
 
   // Clean up old results
@@ -77,6 +67,8 @@ function Page({ params }: Props) {
 
     if (res.websiteId === currentWebsite?.id) {
       setGoogleSearchProjectDetails(res);
+      const competitors = await getCompetitorsByProjectId(res.id);
+      setCompetitors(competitors);
 
       fetchKeywordResults(res.id);
     } else {
