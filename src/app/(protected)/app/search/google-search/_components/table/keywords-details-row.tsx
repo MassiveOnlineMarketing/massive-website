@@ -21,6 +21,7 @@ import SerpResultCard from "./keyword-details-row/serp-result-card";
 import UserResultDetails from "./keyword-details-row/user-result-details";
 import TestGraph from "./keyword-details-row/test-graph";
 import { FormattedDataItem, getCompetitorResultDataGraphA } from "@/dashboard/google-search/actions/get-competitor-result-data";
+import CompetitorsGraph from "./keyword-details-row/competitors-graph";
 
 type Props = {
   keywordData: KeywordResultWithTagProp;
@@ -98,8 +99,7 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
           <div className="max-w-[530px] flex flex-col">
             <UserResultDetails keywordData={keywordData} domainUrl={domainUrl} />
           </div>
-          
-          <TestGraph data={competitorResults} />
+          <CompetitorsGraph data={competitorResults} />
           </div>
         </Card>
       )}

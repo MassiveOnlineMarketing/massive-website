@@ -70,9 +70,9 @@ const GoogleResultPage = ({
   const [showPosition, setShowPosition] = useState(false);
 
   const graphData = resultResponse as ResultSearchApiResponse | null;
-  
+
   if (graphIsLoading || !graphData) return <div className="w-full h-[532px] mt-4 bg-white rounded-2xl shadow-base flex items-center justify-center"><LoadingSpinner /></div>;
-    
+
   const formattedData = Object.entries(graphData.data).map(([date, metrics]) => ({
     date: date,
     ...metrics,
@@ -151,6 +151,13 @@ const AreaChartTest = ({
   showImpressions,
   showPosition,
 }: LineChartProps) => {
+  const areaConfigs = [
+    { show: showClicks, yAxisId: "clicks", stroke: "#3B82F6", dataKey: "clicks" },
+    { show: showCtr, yAxisId: "ctr", stroke: "#059669", dataKey: "ctr" },
+    { show: showPosition, yAxisId: "position", stroke: "#F59E0B", dataKey: "position" },
+    { show: showImpressions, yAxisId: "impressions", stroke: "#7857FE", dataKey: "impressions" },
+  ];
+
   return (
     <ResponsiveContainer>
       <AreaChart data={chartData} margin={{ left: 20, right: 10 }}>
@@ -177,49 +184,19 @@ const AreaChartTest = ({
           }
         />
         <Brush dataKey="date" height={40} fill="#F8F8FF" />
-        {showClicks && (
-          <Area
-            isAnimationActive={false}
-            yAxisId="clicks"
-            type="linear"
-            dataKey="clicks"
-            stroke="#3B82F6"
-            strokeWidth={3}
-            fill="transparent"
-          />
-        )}
-        {showCtr && (
-          <Area
-            isAnimationActive={false}
-            yAxisId="ctr"
-            type="linear"
-            dataKey="ctr"
-            stroke="#059669"
-            strokeWidth={3}
-            fill="transparent"
-          />
-        )}
-        {showPosition && (
-          <Area
-            isAnimationActive={false}
-            yAxisId="position"
-            type="linear"
-            dataKey="position"
-            stroke="#F59E0B"
-            strokeWidth={3}
-            fill="transparent"
-          />
-        )}
-        {showImpressions && (
-          <Area
-            isAnimationActive={false}
-            yAxisId="impressions"
-            type="linear"
-            dataKey="impressions"
-            strokeWidth={3}
-            stroke="#7857FE"
-            fill="transparent"
-          />
+        {areaConfigs.map((config) =>
+          config.show && (
+            <Area
+              key={config.yAxisId}
+              isAnimationActive={false}
+              yAxisId={config.yAxisId}
+              type="linear"
+              dataKey={config.dataKey}
+              stroke={config.stroke}
+              strokeWidth={3}
+              fill="transparent"
+            />
+          )
         )}
       </AreaChart>
     </ResponsiveContainer>
