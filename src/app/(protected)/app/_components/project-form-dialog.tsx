@@ -80,7 +80,7 @@ const GoogleSearchProjectFormDialog: React.FC<
 
   const { processNewKeywords } = useProcessNewKeywords();
   const setProjectDetails = useGoogleSearchProjectDetailsStore((state) => state.setProjectDetails);
-  const setCompetitors = useGoogleSearchProjectDetailsStore((state) => state.setCompetitors);
+  // const setCompetitors = useGoogleSearchProjectDetailsStore((state) => state.setCompetitors);
   const currentWebsite = useWebsiteDetailsStore((state) => state.WebsiteDetails);
 
   const { toast } = useToast();
@@ -142,7 +142,7 @@ const GoogleSearchProjectFormDialog: React.FC<
       router.push(`/app/search/google-search/${res.success.id}`);
 
       const competitors = await getCompetitorsByProjectId(res.success.id)
-      setCompetitors(competitors)
+      // setCompetitors(competitors)
       
       return;
     }

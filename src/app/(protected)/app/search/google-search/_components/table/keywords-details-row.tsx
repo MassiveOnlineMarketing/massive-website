@@ -6,8 +6,8 @@ import { GoogleSearchSerpResult } from "@prisma/client";
 import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
 
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
-import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
 import { getTopTenSerpResults } from "@/dashboard/google-search/data/google-search-serp-result";
+import { FormattedDataItem, getCompetitorResultDataGraphA } from "@/dashboard/google-search/actions/get-competitor-result-data";
 
 // Components
 import { Card, CardTitle } from "./keyword-details-row/card";
@@ -19,9 +19,9 @@ import PeopleAlsoAsk from "./keyword-details-row/people-also-ask";
 import GoogleSearchConsoleGraphs from "./keyword-details-row/google-search-console-graphs";
 import SerpResultCard from "./keyword-details-row/serp-result-card";
 import UserResultDetails from "./keyword-details-row/user-result-details";
-import TestGraph from "./keyword-details-row/test-graph";
-import { FormattedDataItem, getCompetitorResultDataGraphA } from "@/dashboard/google-search/actions/get-competitor-result-data";
 import CompetitorsGraph from "./keyword-details-row/competitors-graph";
+
+
 
 type Props = {
   keywordData: KeywordResultWithTagProp;
@@ -32,7 +32,6 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
   const domainUrl = useWebsiteDetailsStore((state) => state.WebsiteDetails?.domainUrl);
   const gscUrl = useWebsiteDetailsStore((state) => state.WebsiteDetails?.gscUrl);
   const hasGscUrl = gscUrl !== null && gscUrl !== "";
-  const competitors = useGoogleSearchProjectDetailsStore((state) => state.Competitors);
 
   const [showAll, setShowAll] = useState(false);
 
@@ -40,7 +39,6 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
   const [topTenResults, setTopTenResults] = useState<GoogleSearchSerpResult[]>([]);
   const [competitorResults, setCompetitorResults] = useState<FormattedDataItem[]>([]);
 
-  console.log('competitors', competitors)
 
   useEffect(() => {
     setSearchConsoleData(null);

@@ -41,7 +41,7 @@ function Page({ params }: Props) {
     (state) => state.WebsiteDetails,
   );
 
-  const setCompetitors = useGoogleSearchProjectDetailsStore((state) => state.setCompetitors);
+  // const setCompetitors = useGoogleSearchProjectDetailsStore((state) => state.setCompetitors);
   const setGoogleSearchProjectDetails = useGoogleSearchProjectDetailsStore((state) => state.setProjectDetails);
   const googleSearchProjectDetails = useGoogleSearchProjectDetailsStore((state) => state.ProjectDetails);
 
@@ -68,7 +68,7 @@ function Page({ params }: Props) {
     if (res.websiteId === currentWebsite?.id) {
       setGoogleSearchProjectDetails(res);
       const competitors = await getCompetitorsByProjectId(res.id);
-      setCompetitors(competitors);
+      // setCompetitors(competitors);
 
       fetchKeywordResults(res.id);
     } else {

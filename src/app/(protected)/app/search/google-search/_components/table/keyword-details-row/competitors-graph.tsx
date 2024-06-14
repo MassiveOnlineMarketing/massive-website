@@ -3,7 +3,7 @@ import React from 'react'
 import { YAxis, Tooltip, ResponsiveContainer, Area, AreaChart, CartesianGrid, Legend } from "recharts";
 
 import { FormattedDataItem } from '@/dashboard/google-search/actions/get-competitor-result-data';
-import { createXAxis } from '@/components/recharts/recharts';
+import { createXAxis } from '@/components/recharts';
 
 
 // Define a color array for the different websites
