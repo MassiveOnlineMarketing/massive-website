@@ -27,6 +27,7 @@ import {
 import DataTable from "../_components/table/keyword-table";
 import { columns } from "../_components/table/columns";
 import { getCompetitorsByProjectId } from "@/dashboard/google-search/data/google-search-competitor";
+import { Website } from "@prisma/client";
 
 type Props = {
   params: {
@@ -53,7 +54,7 @@ function Page({ params }: Props) {
 
   // Clean up old results
   useEffect(() => {
-      resetKweywordResults()
+    resetKweywordResults()
   }, [])
 
   // Fetch project details + keyword results
@@ -61,11 +62,19 @@ function Page({ params }: Props) {
     fetchProjectDetails();
   }, [currentWebsite]);
 
+  
+  
+  
   const fetchProjectDetails = async () => {
     const res = await getGoogleSearchProjectById(params.project_id);
     if (!res) return;
-
-    if (res.websiteId === currentWebsite?.id) {
+    
+    let websiteDetails: Website | null = null;
+    if (typeof window !== 'undefined') {
+      websiteDetails = JSON.parse(sessionStorage.getItem('websiteDetails') || '{}');
+    }
+    
+    if (res.websiteId === websiteDetails?.id) {
       setGoogleSearchProjectDetails(res);
       const competitors = await getCompetitorsByProjectId(res.id);
       // setCompetitors(competitors);
@@ -107,7 +116,7 @@ function Page({ params }: Props) {
 
   return (
     <div className="px-6 pb-6 w-full">
-      <BreadCrumbsSearchKeywords projectName={googleSearchProjectDetails?.projectName}/>
+      <BreadCrumbsSearchKeywords projectName={googleSearchProjectDetails?.projectName} />
       {keywordResults ? <ProjectStats /> : <div>Loading...</div>}
       <DataTable columns={columns(currentWebsite?.domainUrl)} data={filteredResults} />
 

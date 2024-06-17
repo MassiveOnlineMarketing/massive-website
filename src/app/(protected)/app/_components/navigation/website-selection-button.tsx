@@ -10,17 +10,8 @@ import { cn } from "@/lib/utils";
 
 // Components
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Command, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 // Assets
 import {
@@ -45,10 +36,17 @@ const WebsiteSelectionButton = () => {
   const [websiteDialogOpen, setWebsiteDialogOpen] = useState(false);
 
   useEffect(() => {
+    const sessionDetails = sessionStorage.getItem("websiteDetails");
+    if (sessionDetails && !currentWebsite) {
+      setSelectedWebsite(JSON.parse(sessionDetails));
+    }
+  },[])
+
+  useEffect(() => {
     setIsLoading(true);
     fetchWebsites();
-  }, [currentWebsite]);
-
+  }, [popoverOpen]);
+  
   async function fetchWebsites() {
     if (userId) {
       const res = await getWebsiteByUserId(userId);
@@ -57,7 +55,7 @@ const WebsiteSelectionButton = () => {
 
     setIsLoading(false);
   }
-
+  
   const handleSelectWebsite = (website: Website) => {
     if (currentWebsite?.id === website.id) {
       setPopoverOpen(false);

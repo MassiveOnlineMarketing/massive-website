@@ -11,12 +11,16 @@ export type WebsiteDetailsState = {
 
 export type WebsiteDetailsStore = WebsiteDetailsState & WebsiteDetailsActions;
 
-export const useWebsiteDetailsStore = create<WebsiteDetailsStore>((set) => ({
-  WebsiteDetails: null,
+export const useWebsiteDetailsStore = create<WebsiteDetailsStore>((set) => {
 
-  setWebsiteDetails: (websiteDetails: Website) => {
-    set({
-      WebsiteDetails: websiteDetails,
-    });
-  },
-}));
+  return {
+    WebsiteDetails: null,
+
+    setWebsiteDetails: (websiteDetails: Website) => {
+      set({
+        WebsiteDetails: websiteDetails,
+      });
+      sessionStorage.setItem("websiteDetails", JSON.stringify(websiteDetails));
+    },
+  };
+});
