@@ -103,23 +103,11 @@ function Page({ params }: Props) {
     setIsDialogOpen,
     confirmDelete,
     cancelDelete,
-    deleteKeywords,
   } = useKeywords();
-
-  if (!googleSearchProjectDetails) {
-    return (
-      <div className="px-6 w-full">
-        <BreadCrumbsSearchKeywords />
-        <div>No project selected</div>
-      </div>
-    );
-  }
 
   return (
     <div className="px-6 pb-6 w-full">
-      <BreadCrumbsSearchKeywords
-        projectName={googleSearchProjectDetails.projectName}
-      />
+      <BreadCrumbsSearchKeywords projectName={googleSearchProjectDetails?.projectName}/>
       {keywordResults ? <ProjectStats /> : <div>Loading...</div>}
       <DataTable columns={columns(currentWebsite?.domainUrl)} data={filteredResults} />
 
