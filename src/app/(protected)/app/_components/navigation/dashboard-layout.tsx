@@ -2,6 +2,9 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { useUserDetailsStore } from "@/lib/zustand/user-details-store";
+import { getAccountByUserId } from "@/auth/data/account";
+
 // Components
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -21,6 +24,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import TopBar from "./topbar";
+import { useCurrentUser } from "@/auth/hooks/use-current-user";
 
 export type NavigationProps = {
   name: string;
@@ -80,6 +84,24 @@ export default function DashboardLayout({
       (pathname.includes(href) && href !== "/app")
     );
   };
+
+  // Fetch account details
+  const setAccount = useUserDetailsStore((state) => state.setAccountDetails);
+  const user = useCurrentUser();
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchAccount = async () => {
+      const fetchedAccount = await getAccountByUserId(user.id as string);
+
+      if (!fetchedAccount) return;
+
+      setAccount(fetchedAccount);
+    };
+
+    fetchAccount();
+  }, [user]);
 
   return (
     <main className="h-full">

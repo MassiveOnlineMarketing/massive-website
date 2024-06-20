@@ -31,8 +31,12 @@ function DataTable<TData, TValue>({
     [],
   );
   // visibility state
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
+    competition: false,
+    competitionIndex: false,
+    highTopOfBidPage: false,
+    lowTopOfBidPage: false,
+  });
   // Row selection state
   const [rowSelection, setRowSelection] = React.useState({});
   // console.log('rowSelection', rowSelection)
@@ -51,6 +55,7 @@ function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     // row selection
     onRowSelectionChange: setRowSelection,
+
     state: {
       sorting,
       columnFilters,

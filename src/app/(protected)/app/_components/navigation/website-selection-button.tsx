@@ -22,12 +22,8 @@ import { getWebsiteByUserId } from "@/dashboard/data/website";
 import CreateWebsiteFormDialog from "../website-form-dialog";
 
 const WebsiteSelectionButton = () => {
-  const currentWebsite = useWebsiteDetailsStore(
-    (state) => state.WebsiteDetails,
-  );
-  const setSelectedWebsite = useWebsiteDetailsStore(
-    (state) => state.setWebsiteDetails,
-  );
+  const currentWebsite = useWebsiteDetailsStore((state) => state.WebsiteDetails);
+  const setSelectedWebsite = useWebsiteDetailsStore((state) => state.setWebsiteDetails);
   const userId = useCurrentUser()?.id;
 
   const [websites, setWebsites] = useState<Website[] | Website | null>(null);

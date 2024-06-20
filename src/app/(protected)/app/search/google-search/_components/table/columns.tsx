@@ -8,6 +8,7 @@ import { DateRowCell, StandardHeaderCell, StandardRowCell, TrendingIndicatorRowC
 import { Checkbox } from "@/components/ui/checkbox";
 
 import KeywordRowActionDropdown from "./column/keyword-row-action-dropdown";
+import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
 
 
 const urlSortingFn: SortingFn<GoogleSearchResult> = (
@@ -44,7 +45,7 @@ const positionSortingFn: SortingFn<GoogleSearchResult> = (
   }
 };
 
-export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => [
+export const columns = (domainUrl?: string): ColumnDef<KeywordResultWithTagProp>[] => [
   // * Select column
   {
     id: "select",
@@ -151,6 +152,51 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     cell: ({ row: { original: {createdAt}} }) => (
       <DateRowCell value={createdAt} />
     )
+  },
+  {
+    accessorKey: "avgMonthlySearches",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Avg Monthly Searches" />
+    ),
+    cell: ({ row: { original: {avgMonthlySearches} } }) => (
+      <StandardRowCell value={avgMonthlySearches} />
+    ),
+  },
+  {
+    accessorKey: "competition",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Competition" />
+    ),
+    cell: ({ row: { original: {competition} } }) => (
+      <StandardRowCell value={competition} />
+    ),
+  },
+  {
+    accessorKey: "competitionIndex",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Competition Index" />
+    ),
+    cell: ({ row: { original: {competitionIndex} } }) => (
+      <StandardRowCell value={competitionIndex} />
+    ),
+  },
+  {
+    accessorKey: "highTopOfBidPage",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="High Top Of Page Bid" />
+    ),
+    cell: ({ row: { original: {highTopOfBidPage} } }) => (
+      <StandardRowCell value={highTopOfBidPage} />
+    ),
+  },
+  {
+    accessorKey: "lowTopOfBidPage",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Low Top Of Page Bid" />
+    ),
+    cell: ({ row: { original: {lowTopOfBidPage} } }) => (
+      <StandardRowCell value={lowTopOfBidPage} />
+    ),
   },
   // * Actions
   {

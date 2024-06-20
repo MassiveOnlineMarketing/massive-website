@@ -8,7 +8,7 @@ import {
 import { format, parseISO, isValid } from 'date-fns';
 
 interface ColumnRowCellProps {
-  value: string | number | null;
+  value: string | number | null | undefined;
   highlight?: boolean
 }
 

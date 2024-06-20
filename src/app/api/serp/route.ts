@@ -1,12 +1,14 @@
 // app/api/serp.ts
 
 import { decrementUserCredits } from "@/auth/data/user";
+import { insertKeywordMetrics, KeywordMetricsInput } from "@/dashboard/google-search/data/google-ads-keyword-metrics";
 import { insertKeywords } from "@/dashboard/google-search/data/google-search-keyword";
 import {
   getLatestKeywordResultWithTagByKeywordId,
   insertUserResults,
 } from "@/dashboard/google-search/data/google-search-result";
 import { insertSERPResults } from "@/dashboard/google-search/data/google-search-serp-result";
+import { GoogleSearchKeyword } from "@prisma/client";
 import axios from "axios";
 
 const BATCH_SIZE = 100;
@@ -27,10 +29,14 @@ export async function POST(request: Request) {
 
   const { projectId, keyword, language, country, domainUrl, userId } = data;
 
-  console.time("addKeywordToProject"); // Start the timer
+  // console.time("addKeywordToProject"); // Start the timer
+  console.log("🟡 addKeywordToProject");
 
   // add keywords to keywords table in the database
   const keywords = await insertKeywords(projectId, keyword);
+
+  await handleGoogleAdsMetrics(keywords.keywordResponse, country, language, keyword);
+
 
   // make api call to serperApi to get the serp results
   const response = await fetchSERPResults(
@@ -186,6 +192,38 @@ async function fetchSERPResults(
   }
 
   return successfulFetches;
+}
+
+type Keyword = {
+  keyword: string;
+  id: string;
+};
+
+async function handleGoogleAdsMetrics(keywords: Keyword[], country: string, language: string, keyword: string[]) {
+    // Create a dictionary where the keys are the keyword texts and the values are the keyword IDs
+    const keywordIdMap = keywords.reduce<{ [key: string]: string }>((map, keyword) => {
+      map[keyword.keyword] = keyword.id;
+      return map;
+    }, {});
+    // console.log('keywordIdMap', keywordIdMap);
+  
+    // make api call to adsApi to get the keyword metrices
+    const reqUrl = `http://127.0.0.1:5000/historical-metrics?country-code=${country}&language-code=${language}&keywords=${keyword.join(",")}`
+    console.log('reqUrl', reqUrl)
+    const keywordMetricsRes = await axios(reqUrl);
+  
+    // console.log('keywordMetricsRes', keywordMetricsRes);
+  
+    // Map the response to include the keyword IDs
+    const resultsWithIds = keywordMetricsRes.data.result.results.map((result: KeywordMetricsInput) => {
+      return {
+        ...result,
+        id: keywordIdMap[result.text]
+      };
+    });
+  
+    // console.log('resultsWithIds', resultsWithIds);
+    insertKeywordMetrics(resultsWithIds);
 }
 
 async function handleTopTenSerpResults(response: SuccessfulSerpApiFetches[]) {
