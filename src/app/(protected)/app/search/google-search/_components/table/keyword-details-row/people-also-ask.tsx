@@ -1,11 +1,11 @@
 import React from "react";
 
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 const PeopleAlsoAsk = ({
   keywordData,
 }: {
-  keywordData: KeywordResultWithTagProp;
+  keywordData: LatestResultsDTO;
 }) => {
   return (
     <div>

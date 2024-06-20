@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { PythonApiKeywordDetailSearchConsoleData } from "@/dashboard/types";
 import { GoogleSearchSerpResult } from "@prisma/client";
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
 import { getTopTenSerpResults } from "@/dashboard/google-search/data/google-search-serp-result";
@@ -24,7 +24,7 @@ import CompetitorsGraph from "./keyword-details-row/competitors-graph";
 
 
 type Props = {
-  keywordData: KeywordResultWithTagProp;
+  keywordData: LatestResultsDTO;
   refresh_token: string | null;
 };
 
@@ -73,7 +73,7 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
 
   const fetchCompetitorResult = async (keywordId: string) => {
     const res = await getCompetitorResultDataGraphA({ keywordId });
-    console.log('comp results', res)
+    // console.log('comp results', res)
 
     if (!res) return;
     setCompetitorResults(res);

@@ -1,6 +1,6 @@
 "use client";
 
-import { GoogleSearchResult } from "@prisma/client";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 import { ColumnDef, Row, SortingFn } from "@tanstack/react-table";
 import { DateRowCell, StandardHeaderCell, StandardRowCell, TrendingIndicatorRowCell, UrlRowCell } from "@/components/ui/table";
@@ -8,12 +8,11 @@ import { DateRowCell, StandardHeaderCell, StandardRowCell, TrendingIndicatorRowC
 import { Checkbox } from "@/components/ui/checkbox";
 
 import KeywordRowActionDropdown from "./column/keyword-row-action-dropdown";
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
 
 
-const urlSortingFn: SortingFn<GoogleSearchResult> = (
-  rowA: Row<GoogleSearchResult>,
-  rowB: Row<GoogleSearchResult>,
+const urlSortingFn: SortingFn<LatestResultsDTO> = (
+  rowA: Row<LatestResultsDTO>,
+  rowB: Row<LatestResultsDTO>,
   columnId,
 ) => {
   const valueA = (rowA.getValue(columnId) as string) || "";
@@ -24,9 +23,9 @@ const urlSortingFn: SortingFn<GoogleSearchResult> = (
   return valueA.localeCompare(valueB);
 };
 
-const positionSortingFn: SortingFn<GoogleSearchResult> = (
-  rowA: Row<GoogleSearchResult>,
-  rowB: Row<GoogleSearchResult>,
+const positionSortingFn: SortingFn<LatestResultsDTO> = (
+  rowA: Row<LatestResultsDTO>,
+  rowB: Row<LatestResultsDTO>,
   columnId,
 ) => {
   const valueA = (rowA.getValue(columnId) as number) || null;
@@ -45,7 +44,7 @@ const positionSortingFn: SortingFn<GoogleSearchResult> = (
   }
 };
 
-export const columns = (domainUrl?: string): ColumnDef<KeywordResultWithTagProp>[] => [
+export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * Select column
   {
     id: "select",

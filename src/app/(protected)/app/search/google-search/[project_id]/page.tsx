@@ -7,7 +7,7 @@ import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
 import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
 import { useKeywordResultsStore } from "@/lib/zustand/keyword-results-store";
 
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 import { getLatestKeywordResultWithTags } from "@/dashboard/google-search/actions/get-latest-keywords-with-tags";
 import { getGoogleSearchProjectById } from "@/dashboard/data/google-search-project";
 import { useKeywords } from "@/dashboard/google-search/hooks/useKeywords";
@@ -94,7 +94,7 @@ function Page({ params }: Props) {
       const flattenedKeywords = result.flat();
       const filteredKeywords = flattenedKeywords.filter(
         (result) => result !== undefined,
-      ) as KeywordResultWithTagProp[];
+      ) as LatestResultsDTO[];
 
       // check if the result is empty, happens after routing to project page when keywords are processed yet
       if (filteredKeywords[0].id === undefined) {

@@ -5,6 +5,7 @@ import { useCurrentUser } from "@/auth/hooks/use-current-user";
 import { decrementDisplayCredits } from "@/auth/actions/credits";
 import { useToast } from "@/website/features/toast/use-toast";
 import { GoogleSearchConsoleProjectDetails } from "@/lib/zustand/google-search-details-store";
+import { createLatestResultsDTO } from "../utils";
 
 export function useProcessNewKeywords() {
   const { addResults } = useKeywords();
@@ -82,7 +83,6 @@ export function useProcessNewKeywords() {
         const resultResponse = await response.json();
 
         if (resultResponse.results && resultResponse.success) {
-          console.log("resultResponse", resultResponse.results)
           const updatedResults = resultResponse.results.map(
             (res: RenderResultResponse[]) => ({
               ...res,
@@ -115,23 +115,4 @@ export function useProcessNewKeywords() {
     return error;
   };
   return { processNewKeywords, isLoading, error };
-}
-
-// TODO: Fix types/ create one generic DTO producer (getLatestKeywordResultWithTags)
-function createLatestResultsDTO(data: any[]){
-
-  const latestResultsDTO = data.map((result: any) => {
-    return {
-      ...result,
-      tags: result?.keyword?.tags || [],
-      avgMonthlySearches: result?.keyword.keywordMetrics[0].avgMonthlySearches,
-      competition: result?.keyword.keywordMetrics[0].competition,
-      competitionIndex: result?.keyword.keywordMetrics[0].competitionIndex,
-      highTopOfBidPage: result?.keyword.keywordMetrics[0].highTopOfPageBid,
-      lowTopOfBidPage: result?.keyword.keywordMetrics[0].lowTopOfPageBid,
-      keyword: undefined,
-    };
-  });
-
-  return latestResultsDTO;
 }

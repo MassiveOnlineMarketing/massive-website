@@ -18,7 +18,6 @@ export type KeywordMetricsInput = {
 }
 
 export const insertKeywordMetrics = async (data: KeywordMetricsInput[]) => {
-  console.log("🟢 data", data)
 
   const keywordMetrics = data.map((item) => ({
     googleSearchKeywordId: item.id,

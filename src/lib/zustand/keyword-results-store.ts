@@ -1,9 +1,9 @@
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 import { create } from "zustand";
 
 export type KeywordResultsActions = {
-  setKeywordResults: (keywordResults: KeywordResultWithTagProp[]) => void;
-  updateKeywordResults: (newKeywordResults: KeywordResultWithTagProp[]) => void;
+  setKeywordResults: (keywordResults: LatestResultsDTO[]) => void;
+  updateKeywordResults: (newKeywordResults: LatestResultsDTO[]) => void;
   resetKeywordResults: () => void;
   setSelectedTags: (tags: string[]) => void;
   removeSelectedTag: (tag: string) => void;
@@ -12,7 +12,7 @@ export type KeywordResultsActions = {
 };
 
 export type KeywordResultsState = {
-  keywordResults: KeywordResultWithTagProp[] | [];
+  keywordResults: LatestResultsDTO[] | [];
   selectedTags: string[];
 };
 
@@ -26,12 +26,12 @@ export const useKeywordResultsStore = create<KeywordResultsStore>((set) => ({
   keywordResults: [],
   selectedTags: [],
 
-  setKeywordResults: (keywordResults: KeywordResultWithTagProp[]) => {
+  setKeywordResults: (keywordResults: LatestResultsDTO[]) => {
     set({
       keywordResults: keywordResults,
     });
   },
-  updateKeywordResults: (newKeywordResults: KeywordResultWithTagProp[]) => {
+  updateKeywordResults: (newKeywordResults: LatestResultsDTO[]) => {
     set((state) => ({
       keywordResults: [...state.keywordResults, ...newKeywordResults],
     }));
