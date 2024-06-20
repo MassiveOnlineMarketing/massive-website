@@ -44,7 +44,7 @@ export function useProcessNewKeywords() {
       return;
     }
 
-    if (keywordsArray.length > user?.credits) {
+    if (keywordsArray.length >= user?.credits) {
       // setError('Not enough credits to process all keywords');
       const neededCredits = keywordsArray.length - user?.credits;
       toast({

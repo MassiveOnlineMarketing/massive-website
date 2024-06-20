@@ -12,7 +12,7 @@ export type LatestResultsDTO = {
   firstPosition: number | null;
   bestPosition: number | null;
   latestChange: number | null;
-  createdAt: Date;
+  createdAt: string;
   relatedSearches: string[];
   peopleAlsoAsk: string[];
   tags: GoogleSearchKeywordTag[];

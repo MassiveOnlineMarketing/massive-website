@@ -209,8 +209,8 @@ async function handleGoogleAdsMetrics(keywords: Keyword[], country: string, lang
   
     // TODO: Make a constans + env variable for the adsApi URL
     // make api call to adsApi to get the keyword metrices
-    const reqUrl = `http://127.0.0.1:5000/historical-metrics?country-code=${country}&language-code=${language}&keywords=${keyword.join(",")}`
-    // console.log('reqUrl', reqUrl)
+    const reqUrl = `${process.env.NEXT_PUBLIC_PYTHON_API_URL}/historical-metrics?country-code=${country}&language-code=${language}&keywords=${keyword.join(",")}`
+    console.log('reqUrl', reqUrl)
     const keywordMetricsRes = await axios(reqUrl);
   
     // console.log('keywordMetricsRes', keywordMetricsRes);
