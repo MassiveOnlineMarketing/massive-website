@@ -1,8 +1,11 @@
-import { GoogleSearchProject } from "@prisma/client";
+import { GoogleSearchCompetitor, GoogleSearchProject } from "@prisma/client";
 import { create } from "zustand";
+
+// ! Competitors is currently not being used
 
 export type GoogleSearchProjectDetailsActions = {
   setProjectDetails: (projectDetails: GoogleSearchProject) => void;
+  // setCompetitors: (competitors: GoogleSearchCompetitor[] | null) => void;
 };
 
 export type GoogleSearchConsoleProjectDetails = {
@@ -20,6 +23,7 @@ export type GoogleSearchConsoleProjectDetails = {
 
 export type ProjectDetailsState = {
   ProjectDetails: GoogleSearchConsoleProjectDetails | null;
+  // Competitors: GoogleSearchCompetitor[] | null;
 };
 
 export type GoogleSearchProjectDetailsStore = ProjectDetailsState &
@@ -28,10 +32,18 @@ export type GoogleSearchProjectDetailsStore = ProjectDetailsState &
 export const useGoogleSearchProjectDetailsStore =
   create<GoogleSearchProjectDetailsStore>((set) => ({
     ProjectDetails: null,
+    // Competitors: null,
 
     setProjectDetails: (projectDetails: GoogleSearchProject | null) => {
       set({
         ProjectDetails: projectDetails,
       });
     },
+
+    // setCompetitors: (competitors: GoogleSearchCompetitor[] | null) => {
+    //   set({
+    //     Competitors: competitors,
+    //   });
+    // }
+
   }));

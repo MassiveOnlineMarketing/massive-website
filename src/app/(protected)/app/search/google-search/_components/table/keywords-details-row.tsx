@@ -3,10 +3,11 @@ import axios from "axios";
 
 import { PythonApiKeywordDetailSearchConsoleData } from "@/dashboard/types";
 import { GoogleSearchSerpResult } from "@prisma/client";
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
 import { getTopTenSerpResults } from "@/dashboard/google-search/data/google-search-serp-result";
+import { FormattedDataItem, getCompetitorResultDataGraphA } from "@/dashboard/google-search/actions/get-competitor-result-data";
 
 // Components
 import { Card, CardTitle } from "./keyword-details-row/card";
@@ -19,35 +20,31 @@ import GoogleSearchConsoleGraphs from "./keyword-details-row/google-search-conso
 import SerpResultCard from "./keyword-details-row/serp-result-card";
 import UserResultDetails from "./keyword-details-row/user-result-details";
 import CompetitorsGraph from "./keyword-details-row/competitors-graph";
-import { getCompetitorResultDataGraphA } from "@/dashboard/google-search/actions/get-competitors-result-data-graph";
+
+
 
 type Props = {
-  keywordData: KeywordResultWithTagProp;
+  keywordData: LatestResultsDTO;
   refresh_token: string | null;
 };
 
 const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
-  const gscUrl = useWebsiteDetailsStore(
-    (state) => state.WebsiteDetails?.gscUrl,
-  );
+  const domainUrl = useWebsiteDetailsStore((state) => state.WebsiteDetails?.domainUrl);
+  const gscUrl = useWebsiteDetailsStore((state) => state.WebsiteDetails?.gscUrl);
   const hasGscUrl = gscUrl !== null && gscUrl !== "";
 
   const [showAll, setShowAll] = useState(false);
 
-  const [searchConsoleData, setSearchConsoleData] =
-    useState<PythonApiKeywordDetailSearchConsoleData | null>(null);
-  const [topTenResults, setTopTenResults] = useState<GoogleSearchSerpResult[]>(
-    [],
-  );
+  const [searchConsoleData, setSearchConsoleData] = useState<PythonApiKeywordDetailSearchConsoleData | null>(null);
+  const [topTenResults, setTopTenResults] = useState<GoogleSearchSerpResult[]>([]);
+  const [competitorResults, setCompetitorResults] = useState<FormattedDataItem[]>([]);
 
-  const domainUrl = useWebsiteDetailsStore((state) => state.WebsiteDetails?.domainUrl);
 
   useEffect(() => {
     setSearchConsoleData(null);
     fetchSearchConsoleData(keywordData.keywordName);
     fetchTopTenResults(keywordData.keywordId);
-    fetchCompetitorResults(keywordData.keywordId);
-    console.log('keywordData', keywordData)
+    fetchCompetitorResult(keywordData.keywordId);
   }, [keywordData]);
 
   const fetchSearchConsoleData = async (keyword: string) => {
@@ -74,9 +71,12 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
     setTopTenResults(res);
   };
 
-  const fetchCompetitorResults = async (keywordId: string) => {
+  const fetchCompetitorResult = async (keywordId: string) => {
     const res = await getCompetitorResultDataGraphA({ keywordId });
-    console.log('res', res)
+    // console.log('comp results', res)
+
+    if (!res) return;
+    setCompetitorResults(res);
   }
 
   return (
@@ -94,10 +94,10 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
             Details Overview
           </p>
           <div className="grid grid-cols-2 gap-4">
-            <div className="max-w-[530px] flex flex-col">
-              <UserResultDetails keywordData={keywordData} domainUrl={domainUrl} />
-            </div>
-            <CompetitorsGraph keywordId={keywordData.id}/>
+          <div className="max-w-[530px] flex flex-col">
+            <UserResultDetails keywordData={keywordData} domainUrl={domainUrl} />
+          </div>
+          <CompetitorsGraph data={competitorResults} />
           </div>
         </Card>
       )}

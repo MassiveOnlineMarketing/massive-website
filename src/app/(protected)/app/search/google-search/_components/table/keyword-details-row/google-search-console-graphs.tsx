@@ -6,21 +6,8 @@ import { cn } from "@/lib/utils";
 import { PythonApiKeywordDetailSearchConsoleData } from "@/dashboard/types";
 
 // Components
-import {
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  TooltipProps,
-  Area,
-  AreaChart,
-  Brush,
-} from "recharts";
-import {
-  TooltipTrigger,
-  Tooltip as UiTooltop,
-  TooltipContent,
-} from "@/components/ui/tooltip";
+import { XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
+import { TooltipTrigger, Tooltip as UiTooltop, TooltipContent } from "@/components/ui/tooltip";
 
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { LoadingSpinner } from "@/components/loading-spinner";
@@ -38,6 +25,29 @@ const GoogleSearchConsoleGraphs = ({
 }: Props) => {
   const hasRefreshToken = refresh_token !== null;
 
+  const chartConfigs = [
+    {
+      title: "Clicks",
+      borderColor: "blue-100",
+      backgroundGradientColor: "Eff6FF",
+    },
+    {
+      title: "CTR",
+      borderColor: "green-100",
+      backgroundGradientColor: "ECFDF5",
+    },
+    {
+      title: "Position",
+      borderColor: "yellow-100",
+      backgroundGradientColor: "FFFBEB",
+    },
+    {
+      title: "Impressions",
+      borderColor: "primay-100",
+      backgroundGradientColor: "F8F8FF",
+    }
+  ]
+
   return (
     <div>
       {hasGscUrl ? (
@@ -46,47 +56,26 @@ const GoogleSearchConsoleGraphs = ({
             <SearchConsoleChart searchConsoleData={searchConsoleData} />
           ) : (
             <div className="flex gap-4 w-full h-[152px]">
-              <SearchConsoleLoading
-                title="Clicks"
-                borderColor="blue-100"
-                backgroundGradientColor="Eff6FF"
-              />
-              <SearchConsoleLoading
-                title="CTR"
-                borderColor="green-100"
-                backgroundGradientColor="ECFDF5"
-              />
-              <SearchConsoleLoading
-                title="Position"
-                borderColor="yellow-100"
-                backgroundGradientColor="FFFBEB"
-              />
-              <SearchConsoleLoading
-                title="Impressions"
-                borderColor="primay-100"
-                backgroundGradientColor="F8F8FF"
-              />
+              {chartConfigs.map((config, index) => (
+                <SearchConsoleLoading
+                  key={index}
+                  title={config.title}
+                  borderColor={config.borderColor}
+                  backgroundGradientColor={config.backgroundGradientColor}
+                />
+              ))}
             </div>
           )}
         </>
       ) : (
         <div className="flex gap-4 w-full h-[152px]">
-          <SearchConsoleNotAuthorized
-            title="Clicks"
-            hasRefreshToken={hasRefreshToken}
-          />
-          <SearchConsoleNotAuthorized
-            title="CTR"
-            hasRefreshToken={hasRefreshToken}
-          />
-          <SearchConsoleNotAuthorized
-            title="Position"
-            hasRefreshToken={hasRefreshToken}
-          />
-          <SearchConsoleNotAuthorized
-            title="Impressions"
-            hasRefreshToken={hasRefreshToken}
-          />
+          {chartConfigs.map((config, index) => (
+            <SearchConsoleNotAuthorized
+              key={index}
+              title={config.title}
+              hasRefreshToken={hasRefreshToken}
+            /> 
+          ))}
         </div>
       )}
     </div>
@@ -206,6 +195,7 @@ const SearchConsoleChart = ({
             data={data}
             color="#F59E0B"
             dataKey="position"
+            reversed={true}
           />
         </div>
       </div>
@@ -223,66 +213,45 @@ const SearchConsoleChart = ({
   );
 };
 
-const Chart = ({
-  title,
-  data,
-  color,
-  dataKey,
-}: {
+const Chart = ({ title, data, color, dataKey, reversed }: {
   title: string;
   data: any[];
   color: string;
   dataKey: string;
+  reversed?: boolean;
 }) => (
   <>
     <h2 className="ml-4 mt-4 text-base leading-6 font-medium text-gray-800">
       {title}
     </h2>
     <div style={{ width: "100%", height: 96 }}>
-      <ResponsiveContainer>
-        <AreaChart data={data} style={{ paddingBottom: 0 }}>
-          <defs>
-            <linearGradient id={`color${title}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={color} stopOpacity={0.15} />
-              <stop offset="100%" stopColor={color} stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <XAxis dataKey="date" hide={true} />
-          <YAxis axisLine={false} hide={true} />
-          <Tooltip />
-          <Area
-            type="linear"
-            strokeWidth={2}
-            dataKey={dataKey}
-            stroke={color}
-            fill={`url(#color${title})`}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+<ResponsiveContainer>
+  <AreaChart data={data} style={{ paddingBottom: 0 }}>
+<defs>
+  {reversed ? (
+    <linearGradient id={`color${title}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor={color} stopOpacity={0} />
+      <stop offset="100%" stopColor={color} stopOpacity={0.15} />
+    </linearGradient>
+  ) : (
+    <linearGradient id={`color${title}`} x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stopColor={color} stopOpacity={0.15} />
+      <stop offset="100%" stopColor={color} stopOpacity={0} />
+    </linearGradient>
+  )}
+</defs>
+    <XAxis dataKey="date" hide={true} />
+    <YAxis reversed={reversed} axisLine={false} hide={true} />
+    <Tooltip />
+    <Area
+      type="linear"
+      strokeWidth={2}
+      dataKey={dataKey}
+      stroke={color}
+      fill={`url(#color${title})`}
+    />
+  </AreaChart>
+</ResponsiveContainer>
     </div>
   </>
 );
-
-// use <Tooltip content={<CustomTooltip />} />
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-}: TooltipProps<string, string>) => {
-  if (active && payload && payload.length) {
-    return (
-      <div
-        className="custom-tooltip"
-        style={{
-          backgroundColor: "#ffff",
-          padding: "5px",
-          border: "1px solid #ccc",
-        }}
-      >
-        <p className="label">{`${label} : ${payload[0].value}`}</p>
-      </div>
-    );
-  }
-
-  return null;
-};

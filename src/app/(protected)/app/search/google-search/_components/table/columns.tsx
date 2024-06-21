@@ -1,6 +1,6 @@
 "use client";
 
-import { GoogleSearchResult } from "@prisma/client";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 import { ColumnDef, Row, SortingFn } from "@tanstack/react-table";
 import { DateRowCell, StandardHeaderCell, StandardRowCell, TrendingIndicatorRowCell, UrlRowCell } from "@/components/ui/table";
@@ -10,9 +10,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import KeywordRowActionDropdown from "./column/keyword-row-action-dropdown";
 
 
-const urlSortingFn: SortingFn<GoogleSearchResult> = (
-  rowA: Row<GoogleSearchResult>,
-  rowB: Row<GoogleSearchResult>,
+const urlSortingFn: SortingFn<LatestResultsDTO> = (
+  rowA: Row<LatestResultsDTO>,
+  rowB: Row<LatestResultsDTO>,
   columnId,
 ) => {
   const valueA = (rowA.getValue(columnId) as string) || "";
@@ -23,9 +23,9 @@ const urlSortingFn: SortingFn<GoogleSearchResult> = (
   return valueA.localeCompare(valueB);
 };
 
-const positionSortingFn: SortingFn<GoogleSearchResult> = (
-  rowA: Row<GoogleSearchResult>,
-  rowB: Row<GoogleSearchResult>,
+const positionSortingFn: SortingFn<LatestResultsDTO> = (
+  rowA: Row<LatestResultsDTO>,
+  rowB: Row<LatestResultsDTO>,
   columnId,
 ) => {
   const valueA = (rowA.getValue(columnId) as number) || null;
@@ -44,7 +44,7 @@ const positionSortingFn: SortingFn<GoogleSearchResult> = (
   }
 };
 
-export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => [
+export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * Select column
   {
     id: "select",
@@ -151,6 +151,51 @@ export const columns = (domainUrl?: string): ColumnDef<GoogleSearchResult>[] => 
     cell: ({ row: { original: {createdAt}} }) => (
       <DateRowCell value={createdAt} />
     )
+  },
+  {
+    accessorKey: "avgMonthlySearches",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Avg Monthly Searches" />
+    ),
+    cell: ({ row: { original: {avgMonthlySearches} } }) => (
+      <StandardRowCell value={avgMonthlySearches} />
+    ),
+  },
+  {
+    accessorKey: "competition",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Competition" />
+    ),
+    cell: ({ row: { original: {competition} } }) => (
+      <StandardRowCell value={competition} />
+    ),
+  },
+  {
+    accessorKey: "competitionIndex",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Competition Index" />
+    ),
+    cell: ({ row: { original: {competitionIndex} } }) => (
+      <StandardRowCell value={competitionIndex} />
+    ),
+  },
+  {
+    accessorKey: "highTopOfBidPage",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="High Top Of Page Bid" />
+    ),
+    cell: ({ row: { original: {highTopOfBidPage} } }) => (
+      <StandardRowCell value={highTopOfBidPage} />
+    ),
+  },
+  {
+    accessorKey: "lowTopOfBidPage",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Low Top Of Page Bid" />
+    ),
+    cell: ({ row: { original: {lowTopOfBidPage} } }) => (
+      <StandardRowCell value={lowTopOfBidPage} />
+    ),
   },
   // * Actions
   {

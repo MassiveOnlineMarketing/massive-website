@@ -5,6 +5,7 @@ import { useCurrentUser } from "@/auth/hooks/use-current-user";
 import { decrementDisplayCredits } from "@/auth/actions/credits";
 import { useToast } from "@/website/features/toast/use-toast";
 import { GoogleSearchConsoleProjectDetails } from "@/lib/zustand/google-search-details-store";
+import { createLatestResultsDTO } from "../utils";
 
 export function useProcessNewKeywords() {
   const { addResults } = useKeywords();
@@ -43,7 +44,7 @@ export function useProcessNewKeywords() {
       return;
     }
 
-    if (keywordsArray.length > user?.credits) {
+    if (keywordsArray.length >= user?.credits) {
       // setError('Not enough credits to process all keywords');
       const neededCredits = keywordsArray.length - user?.credits;
       toast({
@@ -93,7 +94,9 @@ export function useProcessNewKeywords() {
           // decrement user credits
           await decrementDisplayCredits(updatedResults.length);
 
-          addResults(updatedResults);
+          const latestResultsDTO = createLatestResultsDTO(updatedResults)
+
+          addResults(latestResultsDTO);
           toast({
             description: "Keywords processed successfully",
             variant: "success",

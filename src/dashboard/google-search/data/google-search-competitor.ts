@@ -15,3 +15,13 @@ export const createCompetitor = async (competitorUrl: string, projectId: string)
 
   return res;
 }
+
+export const getCompetitorsByProjectId = async (projectId: string) => {
+  const competitors = await db.googleSearchCompetitor.findMany({
+    where: {
+      googleSearchProjectId: projectId
+    }
+  });
+
+  return competitors;
+}

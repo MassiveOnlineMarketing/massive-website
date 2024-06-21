@@ -1,0 +1,8 @@
+{
+  "updateGoogleSearchProjectErrors": {
+    "noUserSession": "You must be signed in to update a Google Search Console Project",
+    "missingProjectId": "Please select a project first",
+    "invalidDataParse": "Please check the fields",
+    "generalError": "Something went wrong while creating your project"
+  }
+}

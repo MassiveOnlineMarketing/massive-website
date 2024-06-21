@@ -52,7 +52,7 @@ export const getKeywordResultById = async (keywordId: string[]) => {
 /**
  * Retrieves the latest keyword results along with their associated tags by keyword IDs.
  * @param keywordIds - An array of keyword IDs.
- * @returns An array of latest keyword results with associated tags.
+ * @returns An array of latest keyword results with associated tags and keyword metrics.
  */
 export const getLatestKeywordResultWithTagByKeywordId = async (
   keywordIds: string[],
@@ -70,19 +70,16 @@ export const getLatestKeywordResultWithTagByKeywordId = async (
       keyword: {
         include: {
           tags: true,
+          keywordMetrics: {
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 1,
+          },
         },
       },
-    },
+    }
   });
 
-  const latestResults = keywordIds.map((id) => {
-    const result = results.find((result) => result.keywordId === id);
-    return {
-      ...result,
-      tags: result?.keyword?.tags || [],
-      keyword: undefined,
-    };
-  });
-
-  return latestResults;
+  return results;
 };

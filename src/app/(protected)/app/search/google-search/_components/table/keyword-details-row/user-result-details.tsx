@@ -1,4 +1,4 @@
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 import { Pill } from "@/components/ui/pill";
 
@@ -34,7 +34,7 @@ const UserResultDetails = ({
   keywordData,
   domainUrl,
 }: {
-  keywordData: KeywordResultWithTagProp;
+  keywordData: LatestResultsDTO;
   domainUrl: string | undefined;
 }) => {
 

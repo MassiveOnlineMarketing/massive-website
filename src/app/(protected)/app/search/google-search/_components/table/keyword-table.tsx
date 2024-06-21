@@ -13,6 +13,7 @@ import DataTableTopBar from "./topbar";
 import KeywordTableHead from "./keyword-table-head";
 import KeywordDetailsRow from "./keywords-details-row";
 import DataTablePagination from "@/components/table-pagination";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 
 interface DataTableProps<TData, TValue> {
@@ -31,8 +32,12 @@ function DataTable<TData, TValue>({
     [],
   );
   // visibility state
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
+    competition: false,
+    competitionIndex: false,
+    highTopOfBidPage: false,
+    lowTopOfBidPage: false,
+  });
   // Row selection state
   const [rowSelection, setRowSelection] = React.useState({});
   // console.log('rowSelection', rowSelection)
@@ -51,6 +56,7 @@ function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     // row selection
     onRowSelectionChange: setRowSelection,
+
     state: {
       sorting,
       columnFilters,
@@ -68,7 +74,7 @@ function DataTable<TData, TValue>({
     null,
   );
   const [keywordData, setKeywordData] =
-    React.useState<GoogleSearchResult | null>(null);
+    React.useState<LatestResultsDTO | null>(null);
 
   const handleClickRow =
     (id: string) => (event: React.MouseEvent<HTMLTableRowElement>) => {
@@ -84,7 +90,7 @@ function DataTable<TData, TValue>({
       if (!isNaN(index) && index >= 0 && index < data.length) {
         let item = data[index];
         // console.log(item); // Check what the object looks like
-        setKeywordData(item as GoogleSearchResult);
+        setKeywordData(item as LatestResultsDTO);
       } else {
         console.log("Invalid index");
       }
@@ -147,7 +153,7 @@ function DataTable<TData, TValue>({
                 <React.Fragment key={row.id}>
                   <TableRow
                     data-state={row.getIsSelected() && "selected"}
-                    className="border-b border-gray-200 hover:bg-neutral-100/50"
+                    className="border-b border-gray-200 hover:bg-neutral-100/50 cursor-pointer"
                     // handle click row, open keyword detail
                     onClick={handleClickRow(row.id)}
                   >

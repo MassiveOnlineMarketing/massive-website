@@ -1,4 +1,4 @@
-import { KeywordResultWithTagProp } from "../serp-types";
+import { LatestResultsDTO } from "../serp-types";
 
 // hooks
 import { useState } from "react";
@@ -54,7 +54,7 @@ export const useKeywords = () => {
       }
 
       const newResults = results.filter(
-        (result: KeywordResultWithTagProp) =>
+        (result: LatestResultsDTO) =>
           !keywordsToDelete.includes(result.keywordId),
       );
       setResults(newResults);
@@ -70,9 +70,9 @@ export const useKeywords = () => {
    * ? Adds new keyword results to the existing results.
    * * If the newResults array is empty, it removes all empty arrays from the results.
    *
-   * @param newResults - An array of KeywordResultWithTagProp objects representing the new keyword results to be added.
+   * @param newResults - An array of LatestResultsDTO objects representing the new keyword results to be added.
    */
-  const addResults = (newResults: KeywordResultWithTagProp[]) => {
+  const addResults = (newResults: LatestResultsDTO[]) => {
     updateKeywordResults(newResults);
   };
 

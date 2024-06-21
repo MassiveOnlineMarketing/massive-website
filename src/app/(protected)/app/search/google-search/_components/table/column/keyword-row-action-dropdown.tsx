@@ -21,11 +21,11 @@ import { Button } from "@/components/ui/button";
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import { useKeywords } from "@/dashboard/google-search/hooks/useKeywords";
 // import { DeleteTagFromKeyword } from "../topbar/delete-tag-from-keyword";
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 import { useTags } from "@/dashboard/google-search/hooks/useTags";
 
 type Props = {
-  keyword: KeywordResultWithTagProp;
+  keyword: LatestResultsDTO;
 };
 
 const KeywordRowActionDropdown = ({ keyword }: Props) => {
@@ -48,7 +48,7 @@ const KeywordRowActionDropdown = ({ keyword }: Props) => {
 
   // * Add Tags
   const handleAddTag = async (tag: GoogleSearchKeywordTag) => {
-    console.log("label", tag);
+    // console.log("label", tag);
     await addTagAndToast(tag, keyword.keywordId);
   };
 
@@ -56,7 +56,7 @@ const KeywordRowActionDropdown = ({ keyword }: Props) => {
   const { deleteKeywords, confirmDelete, isDialogOpen } = useKeywords();
 
   const handleKeywordsDelete = async (keywordId: string) => {
-    console.log("delete", keywordId);
+    // console.log("delete", keywordId);
     deleteKeywords([keywordId]);
   };
   useEffect(() => {

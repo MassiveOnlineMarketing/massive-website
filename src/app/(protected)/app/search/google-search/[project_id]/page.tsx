@@ -7,7 +7,7 @@ import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
 import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
 import { useKeywordResultsStore } from "@/lib/zustand/keyword-results-store";
 
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 import { getLatestKeywordResultWithTags } from "@/dashboard/google-search/actions/get-latest-keywords-with-tags";
 import { getGoogleSearchProjectById } from "@/dashboard/data/google-search-project";
 import { useKeywords } from "@/dashboard/google-search/hooks/useKeywords";
@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import DataTable from "../_components/table/keyword-table";
 import { columns } from "../_components/table/columns";
+import { getCompetitorsByProjectId } from "@/dashboard/google-search/data/google-search-competitor";
+import { Website } from "@prisma/client";
 
 type Props = {
   params: {
@@ -40,30 +42,19 @@ function Page({ params }: Props) {
     (state) => state.WebsiteDetails,
   );
 
-  const setGoogleSearchProjectDetails = useGoogleSearchProjectDetailsStore(
-    (state) => state.setProjectDetails,
-  );
-  const googleSearchProjectDetails = useGoogleSearchProjectDetailsStore(
-    (state) => state.ProjectDetails,
-  );
+  // const setCompetitors = useGoogleSearchProjectDetailsStore((state) => state.setCompetitors);
+  const setGoogleSearchProjectDetails = useGoogleSearchProjectDetailsStore((state) => state.setProjectDetails);
+  const googleSearchProjectDetails = useGoogleSearchProjectDetailsStore((state) => state.ProjectDetails);
 
-  const keywordResults = useKeywordResultsStore(
-    (state) => state.keywordResults,
-  );
-  const setKeywordResults = useKeywordResultsStore(
-    (state) => state.setKeywordResults,
-  );
-  const resetKweywordResults = useKeywordResultsStore(
-    (state) => state.resetKeywordResults,
-  );
-  const resetSelectedTags = useKeywordResultsStore(
-    (state) => state.resetSelectedTags,
-  );
+  const keywordResults = useKeywordResultsStore((state) => state.keywordResults);
+  const setKeywordResults = useKeywordResultsStore((state) => state.setKeywordResults);
+  const resetKweywordResults = useKeywordResultsStore((state) => state.resetKeywordResults);
+  const resetSelectedTags = useKeywordResultsStore((state) => state.resetSelectedTags);
   const filteredResults = useFilteredKeywordResults();
 
   // Clean up old results
   useEffect(() => {
-      resetKweywordResults()
+    resetKweywordResults()
   }, [])
 
   // Fetch project details + keyword results
@@ -71,12 +62,22 @@ function Page({ params }: Props) {
     fetchProjectDetails();
   }, [currentWebsite]);
 
+  
+  
+  
   const fetchProjectDetails = async () => {
     const res = await getGoogleSearchProjectById(params.project_id);
     if (!res) return;
-
-    if (res.websiteId === currentWebsite?.id) {
+    
+    let websiteDetails: Website | null = null;
+    if (typeof window !== 'undefined') {
+      websiteDetails = JSON.parse(sessionStorage.getItem('websiteDetails') || '{}');
+    }
+    
+    if (res.websiteId === websiteDetails?.id) {
       setGoogleSearchProjectDetails(res);
+      const competitors = await getCompetitorsByProjectId(res.id);
+      // setCompetitors(competitors);
 
       fetchKeywordResults(res.id);
     } else {
@@ -93,7 +94,7 @@ function Page({ params }: Props) {
       const flattenedKeywords = result.flat();
       const filteredKeywords = flattenedKeywords.filter(
         (result) => result !== undefined,
-      ) as KeywordResultWithTagProp[];
+      ) as LatestResultsDTO[];
 
       // check if the result is empty, happens after routing to project page when keywords are processed yet
       if (filteredKeywords[0].id === undefined) {
@@ -111,23 +112,11 @@ function Page({ params }: Props) {
     setIsDialogOpen,
     confirmDelete,
     cancelDelete,
-    deleteKeywords,
   } = useKeywords();
-
-  if (!googleSearchProjectDetails) {
-    return (
-      <div className="px-6 w-full">
-        <BreadCrumbsSearchKeywords />
-        <div>No project selected</div>
-      </div>
-    );
-  }
 
   return (
     <div className="px-6 pb-6 w-full">
-      <BreadCrumbsSearchKeywords
-        projectName={googleSearchProjectDetails.projectName}
-      />
+      <BreadCrumbsSearchKeywords projectName={googleSearchProjectDetails?.projectName} />
       {keywordResults ? <ProjectStats /> : <div>Loading...</div>}
       <DataTable columns={columns(currentWebsite?.domainUrl)} data={filteredResults} />
 

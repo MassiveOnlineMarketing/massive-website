@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { KeywordResultWithTagProp } from "@/dashboard/google-search/serp-types";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 // Hooks and Store
 import { useGoogleSearchProjectDetailsStore } from "@/lib/zustand/google-search-details-store";
@@ -18,7 +18,7 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 const RelatedSearchesComponent = ({
   keywordData,
 }: {
-  keywordData: KeywordResultWithTagProp;
+  keywordData: LatestResultsDTO;
 }) => {
   const currentProject = useGoogleSearchProjectDetailsStore(
     (state) => state.ProjectDetails,

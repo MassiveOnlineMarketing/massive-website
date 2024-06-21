@@ -178,7 +178,7 @@ function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="border-b border-gray-200 hover:bg-neutral-100/50"
+                  className="border-b border-gray-200 hover:bg-neutral-100/50 cursor-pointer"
                   onClick={handleClickRow(row)}
                 >
                   {row.getVisibleCells().map((cell) => (

@@ -2,8 +2,6 @@
 
 import React, { useEffect } from 'react'
 
-import { useUserDetailsStore } from "@/lib/zustand/user-details-store";
-import { getAccountByUserId } from "@/auth/data/account";
 import { ExtendedUser } from '../../../../../next-auth';
 
 import { TabContainer, TabContent, TabIndicatorLineAnimated, TabTitle } from "@/components/ui/tabs";
@@ -23,24 +21,6 @@ import { columns } from "./_components/search-project-table-columns";
 import MessageFromTeam from './_components/message-from-team';
 
 const SearchPage = ({ user }: { user: ExtendedUser | undefined }) => {
-
-  const setAccount = useUserDetailsStore((state) => state.setAccountDetails);
-
-  useEffect(() => {
-    if (!user) return;
-
-    const fetchAccount = async () => {
-      const fetchedAccount = await getAccountByUserId(user.id as string);
-      // console.log('fetchedAccount test provider', fetchedAccount?.id)
-
-      if (!fetchedAccount) return;
-
-      setAccount(fetchedAccount);
-    };
-
-    fetchAccount();
-  }, [user]);
-
 
   const [projectWithLatestResult, setProjectWithLatestResult] = React.useState<
     GoogleSearchProjectsWithLatestResult[] | [] | undefined
