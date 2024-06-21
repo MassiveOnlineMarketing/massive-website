@@ -13,6 +13,7 @@ import DataTableTopBar from "./topbar";
 import KeywordTableHead from "./keyword-table-head";
 import KeywordDetailsRow from "./keywords-details-row";
 import DataTablePagination from "@/components/table-pagination";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 
 interface DataTableProps<TData, TValue> {
@@ -73,7 +74,7 @@ function DataTable<TData, TValue>({
     null,
   );
   const [keywordData, setKeywordData] =
-    React.useState<GoogleSearchResult | null>(null);
+    React.useState<LatestResultsDTO | null>(null);
 
   const handleClickRow =
     (id: string) => (event: React.MouseEvent<HTMLTableRowElement>) => {
@@ -89,7 +90,7 @@ function DataTable<TData, TValue>({
       if (!isNaN(index) && index >= 0 && index < data.length) {
         let item = data[index];
         // console.log(item); // Check what the object looks like
-        setKeywordData(item as GoogleSearchResult);
+        setKeywordData(item as LatestResultsDTO);
       } else {
         console.log("Invalid index");
       }
