@@ -31,13 +31,13 @@ export function createLatestResultsDTO(data: any[], keywordIds?: string[]): Late
 
       tags: result?.keyword?.tags || [],
 
-      avgMonthlySearches: result?.keyword.keywordMetrics[0].avgMonthlySearches,
-      competition: result?.keyword.keywordMetrics[0].competition,
-      competitionIndex: result?.keyword.keywordMetrics[0].competitionIndex,
-      highTopOfBidPage: result?.keyword.keywordMetrics[0].highTopOfPageBid,
-      lowTopOfBidPage: result?.keyword.keywordMetrics[0].lowTopOfPageBid,
+      avgMonthlySearches: result?.keyword.keywordMetrics[0]?.avgMonthlySearches   || null,
+      competition: result?.keyword.keywordMetrics[0]?.competition                 || null,
+      competitionIndex: result?.keyword.keywordMetrics[0]?.competitionIndex       || null,
+      highTopOfBidPage: result?.keyword.keywordMetrics[0]?.highTopOfPageBid       || null,
+      lowTopOfBidPage: result?.keyword.keywordMetrics[0]?.lowTopOfPageBid         || null,
 
-      createdAt: result?.createdAt,
+      createdAt: result?.createdAt || format(new Date(), 'yyyy-MM-dd HH:mm:ss')
       // keyword: undefined,
     };
   });
