@@ -3,15 +3,13 @@
 // External libraries
 import React, { useEffect } from "react";
 import { z } from "zod";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
-// Internal libraries
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { GoogleSearchProjectSchema } from "@/dashboard/schema";
 
 // Internal types
+import { GoogleSearchProjectSchema } from "@/dashboard/schema";
 import { GoogleSearchProject } from "@prisma/client";
+import { COUNTRY_OPTIONS, LANGUAGE_OPTIONS } from "@/dashboard/constants/form-options";
 
 // Internal functions
 import { splitAndTrimKeywords } from "@/dashboard/google-search/lib/utils";
@@ -41,41 +39,9 @@ interface GoogleSearchProjectFormDialogProps {
 
 type Schema = z.infer<typeof GoogleSearchProjectSchema>;
 
-const languageOptions = [
-  { value: "en", label: "English" },
-  { value: "nl", label: "Dutch" },
-  { value: "fr", label: "French" },
-  { value: "de", label: "German" },
-  { value: "es", label: "Spanish" },
-  { value: "it", label: "Italian" },
-  { value: "ru", label: "Russian" },
-  { value: "jp", label: "Japanese" },
-  { value: "kr", label: "Korean" },
-  { value: "cn", label: "Chinese" },
-  { value: "br", label: "Brazilian" },
-];
-
-const countryOptions = [
-  { value: "US", label: "United States" },
-  { value: "GB", label: "United Kingdom" },
-  { value: "NL", label: "Netherlands" },
-  { value: "CA", label: "Canada" },
-  { value: "AU", label: "Australia" },
-  { value: "DE", label: "Germany" },
-  { value: "FR", label: "France" },
-  { value: "IT", label: "Italy" },
-  { value: "ES", label: "Spain" },
-  { value: "JP", label: "Japan" },
-  { value: "KR", label: "South Korea" },
-  { value: "BR", label: "Brazil" },
-  { value: "RU", label: "Russia" },
-  { value: "CN", label: "China" },
-];
-
 const GoogleSearchProjectFormDialog: React.FC<
   GoogleSearchProjectFormDialogProps
 > = ({ open, setOpen, googleSearchProject, handleAddProjectToSidebar }) => {
-  const user = useSession();
   const router = useRouter();
 
   const { processNewKeywords } = useProcessNewKeywords();
@@ -199,7 +165,7 @@ const GoogleSearchProjectFormDialog: React.FC<
                   />
                 </SelectTrigger>
                 <SelectContent>
-                  {languageOptions.map((option) => {
+                  {LANGUAGE_OPTIONS.map((option) => {
                     return (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -227,7 +193,7 @@ const GoogleSearchProjectFormDialog: React.FC<
                   />
                 </SelectTrigger>
                 <SelectContent>
-                  {countryOptions.map((option) => {
+                  {COUNTRY_OPTIONS.map((option) => {
                     return (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
