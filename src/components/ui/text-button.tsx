@@ -31,6 +31,16 @@ const TextButton = React.forwardRef<HTMLParagraphElement, props>(
 
 TextButton.displayName = "TextButton";
 
+/**
+ * Renders an outlined text button component.
+ *
+ * @component
+ * @param {string} props.className - The class name for the component.
+ * @param {string} props.outlineClassName - The class name for the outline element.
+ * @param {string} props.buttonClassName - The class name for the button element.
+ * @param {boolean} props.mbFull - Whether the button should take full width on mobile.
+ * @returns {React.ReactElement} The rendered outlined text button component.
+ */
 const OutlinedTextButton = React.forwardRef<HTMLParagraphElement, props>(
   (
     {

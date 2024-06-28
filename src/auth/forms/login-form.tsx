@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 
 import { LoginSchema } from "../schema/index";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -22,6 +21,8 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "./form-error";
 import { FormSuccess } from "./form-success";
 import { login } from "@/auth/actions/login";
+import { InputFieldAppWithIcon } from "@/components/ui/input/fields";
+import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -83,9 +84,10 @@ export const LoginForm = () => {
       showSocial
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
-            {/* {showTwoFactor && (
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="space-y-6">
+            <div className="space-y-8">
+              {/* {showTwoFactor && (
               <FormField
                 control={form.control}
                 name="code"
@@ -104,58 +106,63 @@ export const LoginForm = () => {
                 )}
               />
             )} */}
-            {/* {!showTwoFactor && ( */}
-            <>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="john.doe@example.com"
-                        type="email"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="******"
-                        type="password"
-                      />
-                    </FormControl>
-                    <Button
-                      size="sm"
-                      variant="link"
-                      asChild
-                      className="px-0 font-normal"
-                    >
-                      <Link href="/auth/reset">Forgot password?</Link>
-                    </Button>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-            {/* )} */}
+              {/* {!showTwoFactor && ( */}
+              <>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <InputFieldAppWithIcon
+                          className="bg-transparent"
+                          Icon={EnvelopeIcon}
+                          {...field}
+                          disabled={isPending}
+                          placeholder="john.doe@example.com"
+                          type="email"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem className="space-y-1">
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <InputFieldAppWithIcon
+                          className="bg-transparent"
+                          Icon={LockClosedIcon}
+                          {...field}
+                          disabled={isPending}
+                          placeholder="●●●●●●"
+                          type="password"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                      <Button
+                        size="sm"
+                        variant="link"
+                        asChild
+                        className="px-0 font-normal"
+                      >
+                        <Link href="/auth/reset">Forgot password?</Link>
+                      </Button>
+                    </FormItem>
+                  )}
+                />
+              </>
+              {/* )} */}
+            </div>
+            <FormError message={error || urlError} />
+            <FormSuccess message={success} />
           </div>
-          <FormError message={error || urlError} />
-          <FormSuccess message={success} />
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button disabled={isPending} type="submit" className="mt-20 w-full text-violet-50 relative gradient-mask primary-button hover:text-white bg-primary-500 font-medium" size='md'>
             {showTwoFactor ? "Confirm" : "Login"}
           </Button>
         </form>
