@@ -227,12 +227,12 @@ const SecondarySidebar = ({
               Website Settings
             </span>
           </button>
-          <Link href="/search/help" className="py-2 flex gap-4 items-center">
+          {/* <Link href="/search/help" className="py-2 flex gap-4 items-center">
             <QuestionMarkCircleIcon className="w-6 h-6 text-gray-400" />
             <span className="text-gray-500 text-base leading-6 font-medium">
               Help Center
             </span>
-          </Link>
+          </Link> */}
         </div>
       </div>
 

@@ -57,6 +57,37 @@ const InputFieldApp = React.forwardRef<HTMLInputElement, InputFieldProps>(
 );
 InputFieldApp.displayName = "InputFieldApp";
 
+export interface InputFieldWithIconProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  className?: string;
+  label?: string;
+  Icon: React.ElementType;
+}
+const InputFieldAppWithIcon = React.forwardRef<HTMLInputElement, InputFieldWithIconProps>(
+  ({ className, label, Icon, ...props }, ref) => {
+    return (
+      <div className="relative mt-3 rounded-md shadow-sm">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+          <Icon className="h-6 w-6 text-gray-300" aria-hidden="true" />
+        </div>
+        <input
+          ref={ref}
+          className={cn(
+            "block w-full rounded-xl p-4 pl-[50px] ",
+            'bg-primary-50/50 placeholder-gray-400',
+            'border border-primary-100 ',
+            'ring-primary-500 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+            'disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+            className,
+          )}
+          {...props}
+        />
+      </div>
+    );
+  },
+);
+InputFieldAppWithIcon.displayName = "InputFieldAppWithIcon";
+
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, label, ...props }, ref) => {
     return (
@@ -156,6 +187,7 @@ const ErrorMessage = ({ message }: { message?: string }) => {
 export {
   InputField,
   InputFieldApp,
+  InputFieldAppWithIcon,
   Textarea,
   TextareaApp,
   CheckField,
@@ -163,3 +195,24 @@ export {
   TestInput,
   ErrorMessage,
 };
+
+
+// import { EnvelopeIcon, LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
+
+{/* <InputFieldAppWithIcon
+type="email"
+placeholder="email@me"
+Icon={EnvelopeIcon}
+/>
+
+<InputFieldAppWithIcon
+type="text"
+placeholder="Username"
+Icon={UserIcon}
+/>
+
+<InputFieldAppWithIcon
+type="password"
+placeholder="*********"
+Icon={LockClosedIcon}
+/> */}

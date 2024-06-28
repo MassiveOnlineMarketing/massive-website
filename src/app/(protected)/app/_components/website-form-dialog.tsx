@@ -184,11 +184,12 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
                         </SelectItem>
                       );
                     })}
-                  <SelectItem value="noWebsite">No Website</SelectItem>
+                  <SelectItem value="noWebsite">Don&apos;t use a Website</SelectItem>
                 </SelectContent>
               </Select>
             )}
           />
+          
           {!refresh_token && (
             <p className="mt-4 w-fit mx-auto text-gray-500 font-normal">
               Authenticate your{" "}

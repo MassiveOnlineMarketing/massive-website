@@ -18,6 +18,7 @@ import { useProcessNewKeywords } from "@/dashboard/google-search/hooks/useProces
 // Actions
 import { updateGoogleSearchProjectA } from "@/dashboard/google-search/actions/update-google-search-project";
 import { createGoogleSearchProjectA } from "@/dashboard/google-search/actions/create-google-search-project";
+import { createCompetitors, deleteCompetitors, getCompetitorsByProjectId } from "@/dashboard/google-search/data/google-search-competitor";
 
 // Store
 import { useWebsiteDetailsStore } from "@/lib/zustand/website-details-store";
@@ -28,7 +29,9 @@ import { Dialog, DialogContent, DialogHeader } from "@/website/features/dialog/d
 import { InputFieldApp, TextareaApp } from "@/components/ui/input/fields";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/input/select";
 import { useToast } from "@/website/features/toast/use-toast";
-import { getCompetitorsByProjectId } from "@/dashboard/google-search/data/google-search-competitor";
+
+import { PlusIcon } from "@heroicons/react/24/outline";
+
 
 interface GoogleSearchProjectFormDialogProps {
   open: boolean;
@@ -46,7 +49,6 @@ const GoogleSearchProjectFormDialog: React.FC<
 
   const { processNewKeywords } = useProcessNewKeywords();
   const setProjectDetails = useGoogleSearchProjectDetailsStore((state) => state.setProjectDetails);
-  // const setCompetitors = useGoogleSearchProjectDetailsStore((state) => state.setCompetitors);
   const currentWebsite = useWebsiteDetailsStore((state) => state.WebsiteDetails);
 
   const { toast } = useToast();
@@ -65,23 +67,31 @@ const GoogleSearchProjectFormDialog: React.FC<
       setValue("projectName", googleSearchProject.projectName);
       setValue("language", googleSearchProject.language);
       setValue("country", googleSearchProject.country);
+
+      const fetchData = async () => {
+        if (!googleSearchProject) return;
+        const competitors = await getCompetitorsByProjectId(googleSearchProject.id);
+        setFetchedCompetitors(competitors.map(competitor => competitor.domainUrl));
+      };
+
+      fetchData();
     }
   }, [open]);
 
   const onSubmit: SubmitHandler<Schema> = async (data) => {
     const actionSuccessMessage = googleSearchProject
-    ? "Google Search Campaign updated"
-    : "Google Search Campaign  created";
-  const actionErrorMessage = googleSearchProject
-    ? "Updating the Google Search Campaign "
-    : "Creating the Google Search Campaign ";
+      ? "Google Search Campaign updated"
+      : "Google Search Campaign  created";
+    const actionErrorMessage = googleSearchProject
+      ? "Updating the Google Search Campaign "
+      : "Creating the Google Search Campaign ";
 
+    // Submit form
     let res;
-
     if (googleSearchProject) {
-      res = await updateGoogleSearchProjectA({ projectId: googleSearchProject.id, data: data})
+      res = await updateGoogleSearchProjectA({ projectId: googleSearchProject.id, data: data })
     } else {
-      res = await createGoogleSearchProjectA({ websiteId: currentWebsite?.id, domainUrl: currentWebsite?.domainUrl, data: data})
+      res = await createGoogleSearchProjectA({ websiteId: currentWebsite?.id, domainUrl: currentWebsite?.domainUrl, data: data })
       if (res.success && handleAddProjectToSidebar) {
         handleAddProjectToSidebar(res.success)
       }
@@ -90,7 +100,20 @@ const GoogleSearchProjectFormDialog: React.FC<
     if (res.success) {
       setProjectDetails(res.success)
 
-      if (data.keywords){
+      // Update competitors
+      if (addedCompetitors) {
+        console.log('addedCompetitors', addedCompetitors)
+        await createCompetitors(addedCompetitors, res.success.id)
+      }
+      if (removedCompetitors) {
+        console.log('removedCompetitors', removedCompetitors)
+        await deleteCompetitors(removedCompetitors, res.success.id)
+      }
+      // Reset state after successful submission
+      setAddedCompetitors([]);
+      setRemovedCompetitors([]);
+
+      if (data.keywords) {
         const keywordsArray = splitAndTrimKeywords(data.keywords)
         processNewKeywords(keywordsArray, res.success)
       }
@@ -107,9 +130,6 @@ const GoogleSearchProjectFormDialog: React.FC<
 
       router.push(`/app/search/google-search/${res.success.id}`);
 
-      const competitors = await getCompetitorsByProjectId(res.success.id)
-      // setCompetitors(competitors)
-      
       return;
     }
 
@@ -124,9 +144,35 @@ const GoogleSearchProjectFormDialog: React.FC<
   };
 
 
+  // Stuff for competitors 
+  const [domainInput, setDomainInput] = React.useState('');
+  const [fetchedCompetitors, setFetchedCompetitors] = React.useState<string[]>([]);
+  const [addedCompetitors, setAddedCompetitors] = React.useState<string[]>([]);
+  const [removedCompetitors, setRemovedCompetitors] = React.useState<string[]>([]);
+
+  const handleAddCompetitor = () => {
+    setAddedCompetitors(prev => [...prev, domainInput]);
+    setRemovedCompetitors(prev => prev.filter(domain => domain !== domainInput));
+    setDomainInput('');
+  };
+
+  const handleRemoveCompetitor = (domain: string) => {
+    if (fetchedCompetitors.includes(domain)) {
+      setRemovedCompetitors(prev => [...prev, domain]);
+    } else {
+      setAddedCompetitors(prev => prev.filter(d => d !== domain));
+    }
+  };
+
+  // Combine and filter competitors
+  const currentCompetitors = React.useMemo(() => {
+    const combinedCompetitors = [...fetchedCompetitors, ...addedCompetitors];
+    return combinedCompetitors.filter(domain => !removedCompetitors.includes(domain));
+  }, [fetchedCompetitors, addedCompetitors, removedCompetitors]);
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+    <Dialog open={open} onOpenChange={setOpen} >
+      <DialogContent className="max-h-screen overflow-y-auto">
         <DialogHeader>
           <h2 className="font-medium text-2xl text-gray-800">
             {googleSearchProject
@@ -137,6 +183,7 @@ const GoogleSearchProjectFormDialog: React.FC<
             Please enter the details of your Campaign
           </p>
         </DialogHeader>
+
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mt-4 text-gray-800 font-medium"
@@ -205,6 +252,26 @@ const GoogleSearchProjectFormDialog: React.FC<
             )}
           />
           {errors.country && <ErrorField error={"* Location is Required"} />}
+
+          <p className="mt-7">Competitors</p>
+          <div className="flex gap-2">
+            <InputFieldApp
+              type="text"
+              value={domainInput}
+              onChange={(e) => setDomainInput(e.target.value)}
+              placeholder="https://www.example.com"
+            />
+            <button onClick={handleAddCompetitor} type="button" className="p-4 mt-3 rounded-xl border border-primary-100 h-fit"><PlusIcon className="w-6 h-6 text-gray-400 " /></button>
+          </div>
+          <div className="p-2 space-y-2">
+            {currentCompetitors.map((domain, index) => (
+              <div key={index} className="flex justify-between items-center">
+                <p>{domain}</p>
+                {/* TODO: Set styles */}
+                <button type="button" onClick={() => handleRemoveCompetitor(domain)}>Remove</button>
+              </div>
+            ))}
+          </div>
 
           {!googleSearchProject && (
             <>

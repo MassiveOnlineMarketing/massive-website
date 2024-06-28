@@ -25,3 +25,27 @@ export const getCompetitorsByProjectId = async (projectId: string) => {
 
   return competitors;
 }
+
+export const deleteCompetitors = async (competitorDomains: string[], projectId: string) => {
+  const res = await db.googleSearchCompetitor.deleteMany({
+    where: {
+      domainUrl: {
+        in: competitorDomains
+      },
+      googleSearchProjectId: projectId
+    }
+  });
+
+  return res;
+}
+
+export const createCompetitors = async (competitorDomains: string[], projectId: string) => {
+  const res = await db.googleSearchCompetitor.createMany({
+    data: competitorDomains.map(domain => ({
+      domainUrl: domain,
+      googleSearchProjectId: projectId
+    }))
+  });
+
+  return res;
+}
