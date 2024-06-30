@@ -1,7 +1,9 @@
 import { auth } from "@/auth/auth";
 import { db } from "../../lib/db";
-import { storeSubcsriptionPlans } from "./constants/subscriptions";
+import { storeMonthlySubcsriptionPlans } from "./constants/subscriptions";
 import { stripe } from "./stripe";
+
+export type UserSubscriptionPlan = Awaited<ReturnType<typeof getUserSubscriptionPlan>>;
 
 export async function getUserSubscriptionPlan() {
   const session = await auth();
@@ -23,7 +25,7 @@ export async function getUserSubscriptionPlan() {
     user.stripeCurrentPeriodEnd.getTime() + 84_400_000 > Date.now();
 
   const plan = isSubscribed
-    ? storeSubcsriptionPlans.find(
+    ? storeMonthlySubcsriptionPlans.find(
         (plan) => plan.stripePriceId === user.stripePriceId,
       )
     : null;

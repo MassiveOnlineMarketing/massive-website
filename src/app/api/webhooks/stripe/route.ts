@@ -1,5 +1,5 @@
 import { storeOneTimeProducts } from "@/dashboard/stripe/constants/one-time-products";
-import { storeSubcsriptionPlans } from "@/dashboard/stripe/constants/subscriptions";
+import { storeMonthlySubcsriptionPlans } from "@/dashboard/stripe/constants/subscriptions";
 import { stripe } from "@/dashboard/stripe/stripe";
 import { db } from "@/lib/db";
 import { headers } from "next/headers";
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
       let credditsToAdd = 0;
 
-      const plan = storeSubcsriptionPlans.find(
+      const plan = storeMonthlySubcsriptionPlans.find(
         (plan) => plan.stripePriceId === subscription.items.data[0].price.id,
       );
 
