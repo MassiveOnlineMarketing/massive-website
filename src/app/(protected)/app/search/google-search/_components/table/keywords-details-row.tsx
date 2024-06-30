@@ -20,6 +20,8 @@ import GoogleSearchConsoleGraphs from "./keyword-details-row/google-search-conso
 import SerpResultCard from "./keyword-details-row/serp-result-card";
 import UserResultDetails from "./keyword-details-row/user-result-details";
 import CompetitorsGraph from "./keyword-details-row/competitors-graph";
+import { Pill } from "@/components/ui/pill";
+import PerformanceDetails from "./keyword-details-row/performance-details";
 
 
 
@@ -90,14 +92,17 @@ const KeywordDetailsRow = ({ keywordData, refresh_token }: Props) => {
       {keywordData.position && (
         <Card className="mt-6">
           <CardTitle heading="Keyword Insight" icon={GoogleIconSvg} />
-          <p className="mb-3 pt-2 text-lg leading-7 font-medium text-gray-800">
-            Details Overview
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-          <div className="max-w-[530px] flex flex-col">
-            <UserResultDetails keywordData={keywordData} domainUrl={domainUrl} />
-          </div>
-          <CompetitorsGraph data={competitorResults} />
+          <div className="grid grid-flow-col">
+            <div className="flex-grow flex flex-row gap-[10px] w-fit bg-primary-50 p-[6px] rounded-lg">
+              <UserResultDetails keywordData={keywordData} domainUrl={domainUrl} />
+              <PerformanceDetails keywordData={keywordData} />
+            </div>
+            {competitorResults && (
+              <div>
+                <h2 className="text-center text-lg leading-7 font-medium text-gray-800">Competitors Positions</h2>
+                <CompetitorsGraph data={competitorResults} />
+              </div>
+            )}
           </div>
         </Card>
       )}

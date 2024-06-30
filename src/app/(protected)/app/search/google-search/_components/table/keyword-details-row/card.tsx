@@ -42,7 +42,7 @@ const CardTitle = React.forwardRef<HTMLDivElement, CardTitleProps>(
         )}
         {...props}
       >
-        {Icon && <Icon className="mr-2" />}
+        {Icon && <Icon className="mr-2 w-6 h-6" />}
         <p className="text-xl leading-7 font-semibold text-gray-800">
           {heading}
         </p>
