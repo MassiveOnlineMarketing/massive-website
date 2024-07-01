@@ -6,7 +6,6 @@ import { useFilteredKeywordResults } from "@/dashboard/google-search/hooks/useFi
 // charts
 import { Cell, Pie, PieChart } from "recharts";
 
-// TODO: average position not working
 const ProjectStats = () => {
   const filteredResults = useFilteredKeywordResults();
 
@@ -16,10 +15,12 @@ const ProjectStats = () => {
   let numberOfKeywordsInTop100 = 0;
   let numberOfKeyowrdsBettered = 0;
   let numberOfKeyowrdsWorsened = 0;
-  let averagePosition = 99;
   let positionSum = 0;
 
   filteredResults.forEach((keyword) => {
+    if (keyword.position) {
+      positionSum += keyword.position;
+    }
     if (keyword.position && keyword.position <= 3) {
       numberOfKeywordsInTop3++;
     }
@@ -35,12 +36,7 @@ const ProjectStats = () => {
     if (keyword.latestChange && keyword.latestChange < 0) {
       numberOfKeyowrdsWorsened++;
     }
-    if (keyword.position) {
-      positionSum += keyword.position;
-    }
   });
-
-  // averagePosition = numberOfKeywords !== 0 ? positionSum / numberOfKeywords : 0;
 
   const data = [
     {
@@ -67,14 +63,14 @@ const ProjectStats = () => {
         { name: "Other", value: numberOfKeywords - numberOfKeywordsInTop100 },
       ],
     },
-    {
-      title: "Average Position",
-      pieColor: "#374151",
-      data: [
-        { name: "Average Position", value: numberOfKeywords },
-        { name: "Other", value: numberOfKeywords - numberOfKeywords },
-      ],
-    },
+    // {
+    //   title: "Average Position",
+    //   pieColor: "#374151",
+    //   data: [
+    //     { name: "Average Position", value: numberOfKeywords },
+    //     { name: "Other", value: numberOfKeywords - numberOfKeywords },
+    //   ],
+    // },
     {
       title: "Improved",
       pieColor: "#28a745",
@@ -146,6 +142,18 @@ const ProjectStats = () => {
           </div>
         </div>
       ))}
+      {/* Avg pos Card*/}
+      <div className="py-4 px-6 bg-white rounded-xl shadow-sm w-full h-full flex gap-6 items-center">
+        <p className="text-4xl font-semibold text-gray-700 w-[60px] h-[60px] flex items-center justify-center">
+          {positionSum / numberOfKeywords}
+        </p>
+        <div className="h-fit">
+          <h2 className="mr-auto mb-[20px] text-lg font-semibold text-gray-800">
+            Average Position
+          </h2>
+          <p className="text-sm text-gray-500 "></p>
+        </div>
+      </div>
     </div>
   );
 };

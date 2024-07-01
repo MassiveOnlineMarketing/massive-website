@@ -47,7 +47,7 @@ const UserResultDetails = ({
   return (
     <div className="max-w-[500px] flex flex-col bg-white rounded-lg shadow-base px-5 py-4">
       <p className="mb-1 text-lg leading-7 font-medium text-gray-800">
-        Details Overview
+        Result Overview
       </p>
       {/* Keyword */}
       <div className="py-3 flex justify-between items-center w-full border-b border-dashed border-gray-200">

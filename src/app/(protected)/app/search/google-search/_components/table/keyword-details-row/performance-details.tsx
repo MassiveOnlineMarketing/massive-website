@@ -5,8 +5,6 @@ import React from 'react'
 
 const PerformanceDetails = ({ keywordData }: { keywordData: LatestResultsDTO }) => {
 
-  console.log('keywordData', keywordData)
-
   return (
     <div className="w-[285px] px-5 mt-14">
       <div className='flex justify-center gap-2'>

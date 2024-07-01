@@ -48,6 +48,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * Select column
   {
     id: "select",
+    accessorKey: "select",
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -80,6 +81,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * Name
   {
     accessorKey: "keywordName",
+    id: "keywordName",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Keyword" />
     ),
@@ -90,6 +92,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * Url
   {
     accessorKey: "url",
+    id: "url",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Url" />
     ),
@@ -101,6 +104,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * Position
   {
     accessorKey: "position",
+    id: "position",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Position" />
     ),
@@ -112,6 +116,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * First Position
   {
     accessorKey: "firstPosition",
+    id: "firstPosition",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="First Position" />
     ),
@@ -123,6 +128,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * Best Position
   {
     accessorKey: "bestPosition",
+    id: "bestPosition",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Best Position" />
     ),
@@ -134,6 +140,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * Latest Change
   {
     accessorKey: "latestChange",
+    id: "latestChange",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Latest Change" />
     ),
@@ -145,6 +152,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   // * Date Retrieved
   {
     accessorKey: "createdAt",
+    id: "createdAt",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Last Updated" />
     ),
@@ -154,6 +162,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   },
   {
     accessorKey: "avgMonthlySearches",
+    id: "avgMonthlySearches",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Avg Monthly Searches" />
     ),
@@ -163,6 +172,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   },
   {
     accessorKey: "competition",
+    id: "competition",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Competition" />
     ),
@@ -172,6 +182,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   },
   {
     accessorKey: "competitionIndex",
+    id: "competitionIndex",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Competition Index" />
     ),
@@ -181,6 +192,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   },
   {
     accessorKey: "highTopOfBidPage",
+    id: "highTopOfBidPage",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="High Top Of Page Bid" />
     ),
@@ -190,6 +202,7 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   },
   {
     accessorKey: "lowTopOfBidPage",
+    id: "lowTopOfBidPage",
     header: ({ column }) => (
       <StandardHeaderCell sorting={true} column={column} title="Low Top Of Page Bid" />
     ),
@@ -199,10 +212,11 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
   },
   // * Actions
   {
+    accessorKey: "actions",
+    id: "actions",
     header: ({ column }) => (
       <p className="font-medium text-gray-600">Actions</p>
     ),
-    id: "actions",
     cell: ({ row }) => {
       const keyword = row.original;
 

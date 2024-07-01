@@ -1,19 +1,18 @@
 "use client";
 
-import React from "react";
-
-import { GoogleSearchResult } from "@prisma/client";
+import React, { useMemo, useState } from "react";
 
 import useGoogleRefreshToken from "@/auth/hooks/use-google-refresh-token";
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 // Components
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table/table";
+
 import DataTableTopBar from "./topbar";
 import KeywordTableHead from "./keyword-table-head";
 import KeywordDetailsRow from "./keywords-details-row";
 import DataTablePagination from "@/components/table-pagination";
-import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 
 interface DataTableProps<TData, TValue> {
@@ -25,56 +24,45 @@ function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  // sorting state
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  // filtering state
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  // visibility state
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
+
+  const [rowSelection, setRowSelection] = useState({});
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     competition: false,
     competitionIndex: false,
     highTopOfBidPage: false,
     lowTopOfBidPage: false,
   });
-  // Row selection state
-  const [rowSelection, setRowSelection] = React.useState({});
-  // console.log('rowSelection', rowSelection)
 
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    // sorting
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    // filtering
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    // visibility
-    onColumnVisibilityChange: setColumnVisibility,
-    // row selection
-    onRowSelectionChange: setRowSelection,
 
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-    initialState: {
-      pagination: { pageIndex: 0, pageSize: 50 },
-    },
-    getPaginationRowModel: getPaginationRowModel(),
-  });
+  //* Column order
+  const initialColumnOrder = useMemo(() => columns.map((c) => c.id).filter((id): id is string => id !== undefined), [columns]);
+  const [columnOrder, setColumnOrder] = useState(initialColumnOrder);
+  // Drag start handler
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, columnId: string) => {
+    e.dataTransfer.setData("text/plain", columnId);
+  };
 
+  // Drop handler
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, targetColumnId: string) => {
+    const sourceColumnId = e.dataTransfer.getData("text/plain");
+    const sourceIndex = columnOrder.indexOf(sourceColumnId);
+    const targetIndex = columnOrder.indexOf(targetColumnId);
+
+    const newColumnOrder = [...columnOrder];
+    newColumnOrder.splice(sourceIndex, 1);
+    newColumnOrder.splice(targetIndex, 0, sourceColumnId);
+
+    setColumnOrder(newColumnOrder);
+  };
+
+
+  //* Result Details row
   const refresh_token = useGoogleRefreshToken("search-console");
-  const [selectedRowIndex, setSelectedRowIndex] = React.useState<string | null>(
-    null,
-  );
-  const [keywordData, setKeywordData] =
-    React.useState<LatestResultsDTO | null>(null);
+  const [selectedRowIndex, setSelectedRowIndex] = useState<string | null>(null);
+  const [keywordData, setKeywordData] = useState<LatestResultsDTO | null>(null);
 
   const handleClickRow =
     (id: string) => (event: React.MouseEvent<HTMLTableRowElement>) => {
@@ -96,9 +84,30 @@ function DataTable<TData, TValue>({
       }
     };
 
-  const deselectAllRows = () => {
-    setRowSelection({});
-  };
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    onColumnOrderChange: setColumnOrder,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      columnOrder
+    },
+    initialState: {
+      pagination: { pageIndex: 0, pageSize: 50 },
+    },
+    getPaginationRowModel: getPaginationRowModel(),
+  });
 
   const numberOfVisibleColumns = table.getVisibleFlatColumns().length;
 
@@ -110,7 +119,7 @@ function DataTable<TData, TValue>({
       <DataTableTopBar
         table={table}
         data={data}
-        deselectAllRows={deselectAllRows}
+        deselectAllRows={() => setRowSelection({})}
         sorting={sorting}
         setSorting={setSorting}
       />
@@ -124,23 +133,14 @@ function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
-                      className={
-                        // add rounded corners to first and last cell
-                        header.column.getIndex() === 0
-                          ? "rounded-l-md overflow-hidden "
-                          : header.column.getIndex() ===
-                              numberOfVisibleColumns - 1
-                            ? "rounded-r-md "
-                            : ""
-                      }
+                      className="border border-red-900"
                       key={header.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, header.id)}
+                      onDrop={(e) => handleDrop(e, header.id)}
+                      onDragOver={(e) => e.preventDefault()}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -197,8 +197,6 @@ function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-      {/* Keyword Detail */}
-      {/* <KeywordDetail data={data} /> */}
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
     </div>
   );
