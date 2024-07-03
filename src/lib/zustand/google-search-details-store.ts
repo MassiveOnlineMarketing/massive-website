@@ -1,3 +1,5 @@
+'use client';
+
 import { GoogleSearchCompetitor, GoogleSearchProject } from "@prisma/client";
 import { create } from "zustand";
 

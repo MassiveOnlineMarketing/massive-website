@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from "react";
 import { useKeywordResultsStore } from "@/lib/zustand/keyword-results-store";
 

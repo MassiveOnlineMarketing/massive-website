@@ -1,3 +1,5 @@
+'use client';
+
 import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 import { create } from "zustand";
 

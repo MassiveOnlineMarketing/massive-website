@@ -1,13 +1,12 @@
 import React from "react";
 
-// state
-import { useFilteredKeywordResults } from "@/dashboard/google-search/hooks/useFilteredResults";
+// Types
+import { LatestResultsDTO } from "@/dashboard/google-search/serp-types";
 
 // charts
 import { Cell, Pie, PieChart } from "recharts";
 
-const ProjectStats = () => {
-  const filteredResults = useFilteredKeywordResults();
+export const ProjectStats = ({ filteredResults }: { filteredResults: LatestResultsDTO[] | [] }) => {
 
   const numberOfKeywords = filteredResults.length;
   let numberOfKeywordsInTop3 = 0;
@@ -144,7 +143,9 @@ const ProjectStats = () => {
       {/* Avg pos Card*/}
       <div className="py-4 px-6 bg-white rounded-xl shadow-sm w-full h-full flex gap-6 items-center">
         <p className="text-4xl font-semibold text-gray-700 w-[60px] h-[60px] flex items-center justify-center">
-          {(positionSum / numberOfKeywords).toFixed(1)}
+          {
+            ((positionSum / numberOfKeywords).toFixed(1) === "NaN" ? "0" : (positionSum / numberOfKeywords).toFixed(1))
+          }
         </p>
         <div className="h-fit">
           <h2 className="mr-auto mb-[20px] text-lg font-semibold text-gray-800">
