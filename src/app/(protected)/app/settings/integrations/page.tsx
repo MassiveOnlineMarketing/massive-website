@@ -60,7 +60,7 @@ const Page = () => {
           accountDetails={accountDetails}
           currentlyAvailable={true}
         />
-        <GoogleServiceCard
+        {/* <GoogleServiceCard
           scope="https://www.googleapis.com/auth/adwords"
           Icon={GoogleAdsSvg}
           heading="Google Ads"
@@ -68,7 +68,19 @@ const Page = () => {
           decodedToken={decodedToken}
           accountDetails={accountDetails}
           currentlyAvailable={true}
-        />
+        /> */}
+        <IntegrationCard
+          heading="Google Ads"
+          subHeading="Manage your account details and preferences here."
+          Icon={GoogleAdsSvg}
+        >
+          <Button 
+            variant="connect" 
+            onClick={() => {
+              window.location.href = "http://127.0.0.1:5000/authorize";
+            }}
+          />
+        </IntegrationCard>
       </div>
     </>
   );

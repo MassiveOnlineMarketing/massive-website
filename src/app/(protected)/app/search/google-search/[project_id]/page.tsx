@@ -76,7 +76,7 @@ function Page({ params }: Props) {
     
     if (res.websiteId === websiteDetails?.id) {
       setGoogleSearchProjectDetails(res);
-      const competitors = await getCompetitorsByProjectId(res.id);
+      // const competitors = await getCompetitorsByProjectId(res.id);
       // setCompetitors(competitors);
 
       fetchKeywordResults(res.id);

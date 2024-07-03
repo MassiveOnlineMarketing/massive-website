@@ -100,7 +100,6 @@ const ProjectStats = () => {
           <h2 className="mr-auto mb-[20px] text-lg font-semibold text-gray-800">
             Keywords
           </h2>
-          <p className="text-sm text-gray-500 "></p>
         </div>
       </div>
       {/* Other Cards*/}
@@ -145,13 +144,12 @@ const ProjectStats = () => {
       {/* Avg pos Card*/}
       <div className="py-4 px-6 bg-white rounded-xl shadow-sm w-full h-full flex gap-6 items-center">
         <p className="text-4xl font-semibold text-gray-700 w-[60px] h-[60px] flex items-center justify-center">
-          {positionSum / numberOfKeywords}
+          {(positionSum / numberOfKeywords).toFixed(1)}
         </p>
         <div className="h-fit">
           <h2 className="mr-auto mb-[20px] text-lg font-semibold text-gray-800">
             Average Position
           </h2>
-          <p className="text-sm text-gray-500 "></p>
         </div>
       </div>
     </div>

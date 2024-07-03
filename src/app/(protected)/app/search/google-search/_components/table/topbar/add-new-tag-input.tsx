@@ -42,12 +42,10 @@ const AddNewTagInput = ({
 
       if (response === null) {
         const createTagResponse = await createNewTag(inputValue);
-        console.log("Tag created:", createTagResponse);
 
         addTagAndToast(createTagResponse, keywordIds);
         onActionFinished();
       } else {
-        console.log("Tag already exists:", response);
 
         addTagAndToast(response, keywordIds);
         onActionFinished();

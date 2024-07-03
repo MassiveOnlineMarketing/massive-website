@@ -1,5 +1,6 @@
 "use server";
 
+import { db } from "@/lib/db";
 import * as dns from "dns";
 
 // ! Test functions
@@ -48,4 +49,36 @@ async function testUrl({ url }: { url: string }) {
   }
 }
 
-export { verifyDomain, testUrl };
+
+export const getData = async () => {
+  const res = await db.googleSearchProject.findUnique({
+    where : {
+      id : 'cly4wrekt000f11w3qwu1t92n'
+    },
+    include : {
+      keyword: {
+        include: {
+          tags: true,
+          keywordMetrics: {
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 1,
+          },
+          Result: {
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 1,
+          }
+        }
+      }
+    }
+  })
+
+  return res
+}
+
+
+
+export { verifyDomain, testUrl,  };
