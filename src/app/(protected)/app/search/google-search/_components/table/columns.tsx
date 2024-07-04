@@ -149,6 +149,81 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
     ),
     sortingFn: positionSortingFn,
   },
+  // * Avg Monthly Searches
+  {
+    accessorKey: "avgMonthlySearches",
+    id: "avgMonthlySearches",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Avg Monthly Searches" />
+    ),
+    cell: ({ row: { original: {avgMonthlySearches} } }) => (
+      <StandardRowCell value={avgMonthlySearches} />
+    ),
+  },
+  // * Tags
+  {
+    accessorKey: "tags",
+    id: "tags",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Tags" />
+    ),
+    cell: ({ row: { original: { tags } } }) => (
+      <div className="flex flex-wrap gap-2 max-w-[200px]">
+        {
+          tags.map((tag) => (
+            // TODO: design van tags pill
+            <p key={tag.id} className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full text-nowrap">
+              {tag.name}
+            </p>
+          ))
+        }
+      </div>
+    ),
+  },
+  // * Competition
+  {
+    accessorKey: "competition",
+    id: "competition",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Competition" />
+    ),
+    cell: ({ row: { original: {competition} } }) => (
+      <StandardRowCell value={competition} />
+    ),
+  },
+  // * Competition Index
+  {
+    accessorKey: "competitionIndex",
+    id: "competitionIndex",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Competition Index" />
+    ),
+    cell: ({ row: { original: {competitionIndex} } }) => (
+      <StandardRowCell value={competitionIndex} />
+    ),
+  },
+  // * High Top Of Page Bid
+  {
+    accessorKey: "highTopOfBidPage",
+    id: "highTopOfBidPage",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="High Top Of Page Bid" />
+    ),
+    cell: ({ row: { original: {highTopOfBidPage} } }) => (
+      <StandardRowCell value={highTopOfBidPage} />
+    ),
+  },
+  // * Low Top Of Page Bid
+  {
+    accessorKey: "lowTopOfBidPage",
+    id: "lowTopOfBidPage",
+    header: ({ column }) => (
+      <StandardHeaderCell sorting={true} column={column} title="Low Top Of Page Bid" />
+    ),
+    cell: ({ row: { original: {lowTopOfBidPage} } }) => (
+      <StandardRowCell value={lowTopOfBidPage} />
+    ),
+  },
   // * Date Retrieved
   {
     accessorKey: "createdAt",
@@ -160,56 +235,6 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
       <DateRowCell value={createdAt} />
     )
   },
-  {
-    accessorKey: "avgMonthlySearches",
-    id: "avgMonthlySearches",
-    header: ({ column }) => (
-      <StandardHeaderCell sorting={true} column={column} title="Avg Monthly Searches" />
-    ),
-    cell: ({ row: { original: {avgMonthlySearches} } }) => (
-      <StandardRowCell value={avgMonthlySearches} />
-    ),
-  },
-  {
-    accessorKey: "competition",
-    id: "competition",
-    header: ({ column }) => (
-      <StandardHeaderCell sorting={true} column={column} title="Competition" />
-    ),
-    cell: ({ row: { original: {competition} } }) => (
-      <StandardRowCell value={competition} />
-    ),
-  },
-  {
-    accessorKey: "competitionIndex",
-    id: "competitionIndex",
-    header: ({ column }) => (
-      <StandardHeaderCell sorting={true} column={column} title="Competition Index" />
-    ),
-    cell: ({ row: { original: {competitionIndex} } }) => (
-      <StandardRowCell value={competitionIndex} />
-    ),
-  },
-  {
-    accessorKey: "highTopOfBidPage",
-    id: "highTopOfBidPage",
-    header: ({ column }) => (
-      <StandardHeaderCell sorting={true} column={column} title="High Top Of Page Bid" />
-    ),
-    cell: ({ row: { original: {highTopOfBidPage} } }) => (
-      <StandardRowCell value={highTopOfBidPage} />
-    ),
-  },
-  {
-    accessorKey: "lowTopOfBidPage",
-    id: "lowTopOfBidPage",
-    header: ({ column }) => (
-      <StandardHeaderCell sorting={true} column={column} title="Low Top Of Page Bid" />
-    ),
-    cell: ({ row: { original: {lowTopOfBidPage} } }) => (
-      <StandardRowCell value={lowTopOfBidPage} />
-    ),
-  },
   // * Actions
   {
     accessorKey: "actions",
@@ -219,7 +244,6 @@ export const columns = (domainUrl?: string): ColumnDef<LatestResultsDTO>[] => [
     ),
     cell: ({ row }) => {
       const keyword = row.original;
-
       return <KeywordRowActionDropdown keyword={keyword} />;
     },
   },
