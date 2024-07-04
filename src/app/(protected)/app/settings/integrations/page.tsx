@@ -19,6 +19,8 @@ import {
   GreenCheckmarkRound,
 } from "@/assets/icons";
 import SteppedProgressBar from "./_components/google-connection-step-progress";
+import { ShieldCheckIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const Page = () => {
   const accountDetails = useUserDetailsStore((state) => state.accountDetails);
@@ -30,15 +32,25 @@ const Page = () => {
 
   return (
     <>
-      <div className="mb-16">
-        <h2 className="font-semibold text-2xl text-gray-800">
-          Integration & Authorization Settings
-        </h2>
-        <p className="max-w-[650px] text-base leading-6 font-normal text-gray-500">
-          Set the appropriate authorizations to securely access the necessary
-          features and integrations for your workflow
-        </p>
+      <div className="mb-16 flex justify-between">
+        <div>
+          <h2 className="font-semibold text-2xl text-gray-800">
+            Integration & Authorization Settings
+          </h2>
+          <p className="max-w-[650px] text-base leading-6 font-normal text-gray-500">
+            Set the appropriate authorizations to securely access the necessary
+            features and integrations for your workflow
+          </p>
+        </div>
+
+        <div className="max-w-[600px] p-6 bg-gray-50 rounded-xl shadow-base flex gap-2">
+          <ShieldCheckIcon className="min-w-6 h-6 text-green-500 mt-1 flex-0" />
+          <p className="text-sm text-gray-500">
+            Our app’s use and transfer of information received from Google APIs will adhere to the <Link className="text-primary-500" href='https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes'>Google API Services User Data Policy</Link>, including the Limited Use requirements.
+          </p>
+        </div>
       </div>
+
       <div className="mb-6">
         <SteppedProgressBar accountDetails={accountDetails} />
       </div>
@@ -60,7 +72,7 @@ const Page = () => {
           accountDetails={accountDetails}
           currentlyAvailable={true}
         />
-        <GoogleServiceCard
+        {/* <GoogleServiceCard
           scope="https://www.googleapis.com/auth/adwords"
           Icon={GoogleAdsSvg}
           heading="Google Ads"
@@ -68,7 +80,19 @@ const Page = () => {
           decodedToken={decodedToken}
           accountDetails={accountDetails}
           currentlyAvailable={true}
-        />
+        /> */}
+        <IntegrationCard
+          heading="Google Ads"
+          subHeading="Manage your account details and preferences here."
+          Icon={GoogleAdsSvg}
+        >
+          <Button
+            variant="connect"
+            onClick={() => {
+              window.location.href = "http://127.0.0.1:5000/authorize";
+            }}
+          />
+        </IntegrationCard>
       </div>
     </>
   );
