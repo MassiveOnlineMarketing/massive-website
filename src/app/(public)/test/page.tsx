@@ -55,16 +55,16 @@ const page = () => {
       <div className="w-full h-full flex justify-center items-center">
         <div className="grid grid-flow-col gap-12 p-4 bg-gray-50 rounded-2xl shadow-base">
           <div className="w-[460px] h-full flex flex-col gap-2">
-            <p>You will be guided to the Google Consent Screen</p>
+            <Heading level="h2" size='2xl'>You will be guided to the Google Consent Screen</Heading>
             <p>It is important that you sellect all the boxes as shown in the right.</p>
-            <p>We only request the absolute minimum that is needed</p>
-            <Button>Continue</Button>
-            <div className="p-6 bg-white rounded-xl shadow-base flex gap-2 mt-auto">
+            <p>We only request the absolute minimum that is needed.</p>
+            <div className="p-6 mt-auto bg-white rounded-xl shadow-base flex gap-2">
               <ShieldCheckIcon className="min-w-6 h-6 text-green-500 mt-1 flex-0" />
               <p className="text-sm text-gray-500">
                 Our app’s use and transfer of information received from Google APIs will adhere to the <Link className="text-primary-500" href='https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes'>Google API Services User Data Policy</Link>, including the Limited Use requirements.
               </p>
             </div>
+            <Button className="ml-auto" variant='primary' size='md'>Continue</Button>
           </div>
           <div className="w-[460px] opacity-50"> 
             <p className="text-lg">Select what Massive Online Marketing can access</p>
