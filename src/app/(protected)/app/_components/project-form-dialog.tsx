@@ -31,6 +31,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/website/features/toast/use-toast";
 
 import { PlusIcon } from "@heroicons/react/24/outline";
+import { deleteGoogleSearchProject } from "@/dashboard/google-search/actions/delete-google-search-project";
 
 
 interface GoogleSearchProjectFormDialogProps {
@@ -142,6 +143,33 @@ const GoogleSearchProjectFormDialog: React.FC<
 
     return;
   };
+
+  const handleDeleteCompaign = async () => {
+    if (!googleSearchProject) {
+      return;
+    }
+    // Delete Google Search Project
+    const res = await deleteGoogleSearchProject({ projectId: googleSearchProject.id });
+
+    if (res.success) {
+      setOpen(false);
+      reset();
+      toast({
+        description: res.success,
+        variant: "success",
+        icon: "success",
+        duration: 5000,
+      });
+      return;
+    }
+
+    toast({
+      description: res.error,
+      variant: "destructive",
+      icon: "destructive",
+      duration: 5000,
+    });
+  }
 
 
   // Stuff for competitors 
@@ -284,12 +312,23 @@ const GoogleSearchProjectFormDialog: React.FC<
             </>
           )}
 
-          <button
-            type="submit"
-            className="mt-8 px-6 py-2 w-fit flex mx-auto rounded-lg text-lg font-semibold"
-          >
-            {googleSearchProject ? "Update" : "Create"}
-          </button>
+          <div className="flex justify-between mt-8">
+            {googleSearchProject && (
+              <button
+                type="button"
+                className="px-6 py-2 w-fit flex mx-auto rounded-lg text-lg font-semibold"
+                onClick={handleDeleteCompaign}
+              >
+                Delete Campaign
+              </button>
+            )}
+            <button
+              type="submit"
+              className="px-6 py-2 w-fit flex mx-auto rounded-lg text-lg font-semibold"
+            >
+              {googleSearchProject ? "Update" : "Create"}
+            </button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

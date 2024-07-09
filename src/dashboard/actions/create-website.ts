@@ -16,7 +16,7 @@ export const createWebsite = async ({ data }: CreateWebsiteInput) => {
   const session = await auth();
 
   if (!session?.user.id) {
-    return { error: "You must be signed in to update a website" };
+    return { error: "You must be signed in to create a website" };
   }
 
   const validateUrl = await valudateWebsiteUrl({ url: data.domainUrl });

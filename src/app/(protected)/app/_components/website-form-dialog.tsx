@@ -19,10 +19,11 @@ import { updateWebsiteDetails } from "@/dashboard/actions/update-website";
 import { createWebsite } from "@/dashboard/actions/create-website";
 
 // Components
-import { Dialog, DialogContent, DialogHeader } from "@/website/features/dialog/dialog"; 
+import { Dialog, DialogContent, DialogHeader } from "@/website/features/dialog/dialog";
 import { ErrorMessage, InputFieldApp } from "@/components/ui/input/fields";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/input/select";
 import { useToast } from "@/website/features/toast/use-toast";
+import { deleteWebsite } from "@/dashboard/actions/delete-website";
 
 interface WebsiteFormDialogProps {
   open: boolean;
@@ -119,6 +120,32 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
     return;
   };
 
+  const handleDeleteWebsite = async () => {
+    if (!website) {
+      return;
+    }
+    const res = await deleteWebsite({ websiteId: website.id });
+  
+    if (res.success) {
+      setOpen(false);
+      reset();
+      toast({
+        description: res.success,
+        variant: "success",
+        icon: "success",
+        duration: 5000,
+      });
+      return;
+    }
+
+    toast({
+      description: res.error,
+      variant: "destructive",
+      icon: "destructive",
+      duration: 5000,
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
@@ -169,7 +196,7 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
                       !refresh_token
                         ? "Please authenticate Google Search Console Access"
                         : (!sites && "No sites connected to Google Account") ||
-                          "Connect a Website"
+                        "Connect a Website"
                     }
                     className="placeholder-gray-400 text-gray-400"
                   />
@@ -189,7 +216,7 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
               </Select>
             )}
           />
-          
+
           {!refresh_token && (
             <p className="mt-4 w-fit mx-auto text-gray-500 font-normal">
               Authenticate your{" "}
@@ -202,13 +229,17 @@ const WebsiteFormDialog: React.FC<WebsiteFormDialogProps> = ({
               Account
             </p>
           )}
-
-          <button
-            type="submit"
-            className="mt-8 px-6 py-2 w-fit flex mx-auto rounded-lg text-lg font-semibold"
-          >
-            {website ? "Update" : "Create"}
-          </button>
+          <div className="flex justify-between mt-8">
+            {website && (
+              <button type="button" className="px-6 py-2 w-fit flex mx-auto rounded-lg text-lg font-semibold" onClick={handleDeleteWebsite}>Delete Website</button>
+            )}
+            <button
+              type="submit"
+              className="ml-auto px-6 py-2 w-fit flex mx-auto rounded-lg text-lg font-semibold"
+            >
+              {website ? "Update" : "Create"}
+            </button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
