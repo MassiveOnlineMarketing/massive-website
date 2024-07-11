@@ -61,7 +61,7 @@
     "react-responsive": "^9.0.2",
     "react-spinners": "^0.13.8",
     "react-swipeable": "^7.0.1",
-    "recharts": "^2.12.4",
+    "recharts": "^2.12.7",
     "resend": "^3.0.0",
     "slate": "^0.102.0",
     "stripe": "^14.23.0",
